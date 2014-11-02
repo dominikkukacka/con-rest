@@ -9,6 +9,7 @@
     var Schema = mongoose.Schema;
 
     var apiCallSchema = new Schema({
+        name: String,
         url: String,
         method: String,
         data: Schema.Types.Mixed,
@@ -17,7 +18,7 @@
 
     var APICall = mongoose.model('APICall', apiCallSchema);
 
-    function getAPICalls(res) {
+    function getAPICalls(req, res) {
         var deferred = queue.defer();
         APICall.find(deferred.makeNodeResolver());
         deferred.promise.then(function returnResults(results) {
@@ -27,8 +28,9 @@
     }
 
     function registerAPICall(req, res) {
-        var apiCall = new APICall(req.data);
+        var apiCall = new APICall(req.body);
         var deferred = queue.defer();
+        console.log(req.data);
         apiCall.save(deferred.makeNodeResolver());
         deferred.promise.then(function saveNewCall() {
             res.send(apiCall.id);

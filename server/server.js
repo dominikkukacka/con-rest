@@ -15,13 +15,9 @@
     var db = mongoose.connection;
     db.on('error', console.error);
     db.once('open', function initiateServer() {
-        app.get('/api/requests', function getRequests(req, res) {
-            api.getAPICalls(res);
-        });
+        app.get('/api/requests', api.getAPICalls);
 
-        app.post('/api/requests', function postNewRequest(req, res) {
-            api.registerAPICall(req, res);
-        });
+        app.post('/api/requests', api.registerAPICall);
     });
     module.exports = app;
 

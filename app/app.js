@@ -7,5 +7,15 @@
     'use strict';
 
     // `con-rest` angular module registration - COMPLETE!
-    angular.module('con-rest', ['ngRoute']);
+    var app = angular.module('con-rest', ['ngRoute']);
+
+    app.config(function ($routeProvider) {
+        $routeProvider.
+            when('/', {
+                templateUrl: 'pages/workflows.html'
+            }).
+            otherwise({
+                redirectTo: '/'
+            })
+    });
 }(window.angular));

@@ -30,6 +30,7 @@
                 response = res;
             });
             httpBackend.expect('POST', '/api/requests', {
+                name: scope.name,
                 url: scope.url,
                 method: 'GET',
                 data: scope.params,
@@ -99,9 +100,10 @@
             expect(response.status).toEqual(404);
             expect(response.data).toEqual('not found');
             expect(scope.response).toEqual(response);
-        })
+        });
 
         function givenGetCallSettings() {
+            scope.name = 'fakeCall';
             scope.url = 'http://fake.url';
             scope.method = 'GET';
             scope.params = {

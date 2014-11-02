@@ -40,14 +40,16 @@
 
         describe('retrieval of API calls', function retrievalScope() {
             it('should return the registered API calls', function getRegisteredAPICalls(done) {
+                var req;
                 var res;
                 queue().
                     then(function given() {
+                        req = {};
                         res = {};
                         res.send = sinon.spy();
                     }).
                     then(function when() {
-                        return api.getAPICalls(res);
+                        return api.getAPICalls(req, res);
                     }).
                     then(function then(apis) {
                         apis.length.should.be.above(0);
@@ -65,10 +67,13 @@
                 queue().
                     then(function given() {
                         req = {
-                            url: 'fakeUrl',
-                            method: 'GET',
-                            data: { ba: 'nana'},
-                            headers: { he: 'ad'}
+                            body: {
+                                name: 'fakeCall',
+                                url: 'fakeUrl',
+                                method: 'GET',
+                                data: { ba: 'nana'},
+                                headers: { he: 'ad'}
+                            }
                         };
                         res = {};
                         res.send = sinon.spy();
@@ -78,7 +83,7 @@
                     }).
                     then(function then() {
                         res.send.calledOnce.should.be.true;
-                        res.send.args[0][0].should.be.type('string');
+                        res.send.args[0][0].should.be.a.String;
                     }).
                     then(done).
                     catch(done);

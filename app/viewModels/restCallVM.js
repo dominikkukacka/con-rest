@@ -9,16 +9,33 @@
     var app = angular.module('con-rest');
 
     app.controller('restCallVM', function restCallVMScope($scope, $http, events) {
+        // API related properties
         $scope.id = null;
-        $scope.url = null;
+        $scope.name = null;
         $scope.method = null;
         $scope.params = null;
-        $scope.type = null;
         $scope.response = null;
+        $scope.url = null;
+
+        // UI related properties
+        $scope.openMethods = false;
+        $scope.availableMethods = ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS', 'PATCH'];
+
+        // Open the dropdown for methods.
+        $scope.toggleMethodsDropdown = function toggleMethodsDropdown() {
+            $scope.openMethods = !$scope.openMethods;
+        };
+
+        // Select method
+        $scope.selectMethod = function selectMethod(selectedMethod) {
+            $scope.method = selectedMethod;
+            $scope.openMethods = false;
+        };
 
         // Register a new call to be executed.
         $scope.registerCall = function registerCall() {
             $http.post('/api/requests', {
+                name: $scope.name,
                 url: $scope.url,
                 method: $scope.method,
                 data: $scope.params,
