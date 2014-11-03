@@ -13,7 +13,9 @@
             REGISTRATION_SUCCESSFUL: 'registrationSuccessful',
             REGISTRATION_FAILED: 'registrationFailed',
             REQUEST_FAILED: 'requestFailed',
-            RESPONSE_RECEIVED: 'responseReceived'
+            REQUEST_RETRIEVED: 'requestRetrieved',
+            RESPONSE_RECEIVED: 'responseReceived',
+            RETRIEVAL_FAILED: 'retrievalFailed'
         };
     });
 }(window.angular));

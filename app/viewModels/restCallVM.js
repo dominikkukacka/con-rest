@@ -32,6 +32,12 @@
             $scope.openMethods = false;
         };
 
+        // Get the registered call by id.
+        $scope.getCall = function getCall() {
+            $http.get('/api/requests/' + $scope.id).
+                then($scope.populateRequest, $scope.emitRetrievalFailed);
+        };
+
         // Register a new call to be executed.
         $scope.registerCall = function registerCall() {
             $http.post('/api/requests', {
@@ -41,6 +47,15 @@
                 data: $scope.params,
                 headers: $scope.headers
             }).then($scope.emitRegistrationSuccessfull, $scope.emitRegistrationFailed);
+        };
+
+        $scope.populateRequest = function populateRequest(response) {
+            var request = response.data;
+            $scope.name = request.name;
+            $scope.url = request.url;
+            $scope.method = request.method;
+            $scope.params = request.data;
+            $scope.$emit(events.REQUEST_RETRIEVED, request);
         };
 
         // Execute the registered call.
@@ -70,6 +85,11 @@
         $scope.emitRequestFailed = function emitRequestFailed(response) {
             $scope.response = response;
             $scope.$emit(events.REQUEST_FAILED, response);
+        };
+
+        // Notify the parent the retrieval of the request failed.
+        $scope.emitRetrievalFailed = function emitRetrievalFailed(response) {
+            $scope.$emit(events.RETRIEVAL_FAILED, response);
         };
     });
 }(window.angular));

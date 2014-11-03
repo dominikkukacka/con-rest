@@ -102,6 +102,32 @@
             expect(scope.response).toEqual(response);
         });
 
+        it('should get the registered call', function getRequest() {
+            // given
+            var response = null;
+            scope.id = 'abc';
+            httpBackend.expect('GET', '/api/requests/' + scope.id).
+                respond(200, {
+                    name: 'ba',
+                    url: 'http://ba.na.na',
+                    method: 'DELETE',
+                    data: '{ "message": "chomp" }'
+                });
+
+            // when
+            scope.$on(events.REQUEST_RETRIEVED, function requestRetrieved(event, res) {
+                response = res;
+            });
+            scope.getCall();
+
+            // then
+            httpBackend.flush();
+            expect(scope.name).toEqual(response.name);
+            expect(scope.url).toEqual(response.url);
+            expect(scope.method).toEqual(response.method);
+            expect(scope.params).toEqual(response.data);
+        });
+
         function givenGetCallSettings() {
             scope.name = 'fakeCall';
             scope.url = 'http://fake.url';
