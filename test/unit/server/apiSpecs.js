@@ -39,7 +39,7 @@
         });
 
         describe('retrieval of API calls', function retrievalScope() {
-            it('should return the registered API calls', function getRegisteredAPICalls(done) {
+            it('should return all the registered API calls', function getRegisteredAPICalls(done) {
                 var req;
                 var res;
                 queue().
@@ -54,6 +54,33 @@
                     then(function then(apis) {
                         apis.length.should.be.above(0);
                         res.send.args[0][0].length.should.be.above(0);
+                    }).
+                    then(done).
+                    catch(done);
+            });
+
+            it('should return a API call based on id', function getRegisteredAPICallById(done) {
+                var req;
+                var res;
+                queue().
+                    then(function given() {
+                        req = {
+                            params: {
+                                id: '545726928469e940235ce769'
+                            }
+                        };
+                        res = {};
+                        res.send = sinon.spy();
+                    }).
+                    then(function when() {
+                        return api.getAPICallById(req, res);
+                    }).
+                    then(function then() {
+                        var call = res.send.args[0][0];
+                        call.name.should.be.exactly('firstCall');
+                        call.url.should.be.exactly('http://test.one');
+                        call.method.should.be.exactly('GET');
+                        call.data.page.should.be.exactly(2);
                     }).
                     then(done).
                     catch(done);

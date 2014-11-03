@@ -8,6 +8,8 @@
 
     var apiCalls = [
         {
+            _id: '545726928469e940235ce769',
+            name: 'firstCall',
             url: 'http://test.one',
             method: 'GET',
             data: {
