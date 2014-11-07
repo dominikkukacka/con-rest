@@ -18,6 +18,10 @@ module.exports = function (config) {
             'app/bower_components/angular/angular.js',
             'app/bower_components/angular-route/angular-route.js',
             'app/bower_components/angular-mocks/angular-mocks.js',
+            'app/bower_components/angular-aria/angular-aria.min.js',
+            'app/bower_components/angular-animate/angular-animate.min.js',
+            'app/bower_components/hammerjs/hammer.min.js',
+            'app/bower_components/angular-material/angular-material.min.js',
             // App wiring
             'app/app.js',
             // Models

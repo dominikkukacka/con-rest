@@ -7,7 +7,7 @@
     'use strict';
 
     // `con-rest` angular module registration - COMPLETE!
-    var app = angular.module('con-rest', ['ngRoute']);
+    var app = angular.module('con-rest', ['ngRoute', 'ngMaterial']);
 
     app.config(function ($routeProvider) {
         $routeProvider.

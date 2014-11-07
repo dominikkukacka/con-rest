@@ -3,54 +3,47 @@
 <!-- -->
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
-<div class="call-registrator panel panel-primary">
+<md-whiteframe class="call-registrator md-whiteframe-z1"
+               flex layout-fill layout="vertical">
     <div class="panel-heading">
         <h3 class="panel-title">Add API Call</h3>
     </div>
-    <div class="panel-body">
-        <form role="form">
-            <input id="{{'name' + $id}}"
-                   class="form-control input-solo"
-                   type="text"
-                   placeholder="API Call name"
-                   data-ng-model="name"/>
+    <md-content>
+        <md-card>
+            <form role="form">
+                <md-text-float label="API Call name"
+                               ng-model="name"></md-text-float>
 
-            <div class="input-group">
-                <div class="input-group-btn"
-                     data-ng-class="{ open: openMethods }">
-                    <button type="button"
-                            class="btn btn-default dropdown-toggle"
-                            data-ng-click="toggleMethodsDropdown()">{{method || 'method' }} <span
-                            class="caret"></span></button>
-                    <ul class="dropdown-menu"
-                        role="menu">
-                        <li role="presentation"
-                            data-ng-repeat="method in availableMethods"
-                            data-ng-click="selectMethod(method)">
-                            <a role="menuitem"
-                               tabindex="-1"
-                               href="">{{method}}
-                            </a>
-                        </li>
-                    </ul>
+                <div class="row" layout="horizontal">
+                    <div layout="vertical">
+                        <md-text-float label="method"
+                                       ng-model="method"
+                                       data-ng-click="toggleMethodsDropdown()"></md-text-float>
+                        <md-list ng-show="openMethods">
+                            <md-item ng-repeat="method in availableMethods"
+                                     data-ng-click="selectMethod(method)">
+                                <p>{{ method }}</p>
+                                <md-divider ng-if="!$last"></md-divider>
+                            </md-item>
+                        </md-list>
+                    </div>
+
+                    <md-text-float class="long"
+                                   label="url"
+                                   type="url"
+                                   ng-model="url"></md-text-float>
                 </div>
-                <input id="{{'url' + $id}}"
-                       class="form-control"
-                       type="text"
-                       placeholder="url"
-                       data-ng-model="url"/>
-            </div>
 
-            <textarea class="form-control input-solo"
-                      name="{{'params' + $id}}"
-                      id="{{'params' + $id}}"
-                      cols="30" rows="10"
-                      data-ng-model="params"></textarea>
+                <md-text-float label="params"
+                               ng-model="params"
+                               rows="4"
+                               cols="50"
+                               type="textarea"></md-text-float>
 
-            <button class="btn btn-primary"
-                    data-ng-click="registerCall()">
-                Submit
-            </button>
-        </form>
-    </div>
-</div>
+                <md-button class="md-primary md-raised"
+                           ng-click="registerCall()">Submit
+                </md-button>
+            </form>
+        </md-card>
+    </md-content>
+</md-whiteframe>
