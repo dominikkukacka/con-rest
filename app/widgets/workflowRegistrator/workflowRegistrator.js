@@ -3,17 +3,17 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function callRegistratorScope(angular) {
+(function workflowScope(angular) {
     'use strict';
 
     var app = angular.module('con-rest');
 
-    app.directive('callRegistrator', function callRegistratorDirective() {
+    app.directive('workflowRegistrator', function workflowDirective() {
         return {
-            controller: 'restCallVM',
+            controller: 'workFlowVM',
             restrict: 'A',
             scope: {},
-            templateUrl: 'callRegistrator'
+            templateUrl: 'workflowRegistrator'
         };
     });
 }(window.angular));

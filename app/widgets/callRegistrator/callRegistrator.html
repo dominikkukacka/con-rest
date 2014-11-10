@@ -5,45 +5,41 @@
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
 <md-whiteframe class="call-registrator md-whiteframe-z1"
                flex layout-fill layout="vertical">
-    <md-content>
-        <md-card>
-            <md-toolbar>
-                <h3 class="md-toolbar-tools">Add API Call</h3>
-            </md-toolbar>
-            <form role="form">
-                <md-text-float label="API Call name"
-                               ng-model="name"></md-text-float>
+    <md-toolbar>
+        <h3 class="md-toolbar-tools">Add API Call</h3>
+    </md-toolbar>
+    <form role="form">
+        <md-text-float label="API Call name"
+                       ng-model="name"></md-text-float>
 
-                <div class="row" layout="horizontal">
-                    <div layout="vertical">
-                        <md-text-float label="method"
-                                       ng-model="method"
-                                       data-ng-click="toggleMethodsDropdown()"></md-text-float>
-                        <md-list ng-show="openMethods">
-                            <md-item ng-repeat="method in availableMethods"
-                                     data-ng-click="selectMethod(method)">
-                                <p>{{ method }}</p>
-                                <md-divider ng-if="!$last"></md-divider>
-                            </md-item>
-                        </md-list>
-                    </div>
+        <div class="row" layout="horizontal">
+            <div layout="vertical">
+                <md-text-float label="method"
+                               ng-model="method"
+                               data-ng-click="toggleMethodsDropdown()"></md-text-float>
+                <md-list ng-show="openMethods">
+                    <md-item ng-repeat="method in availableMethods"
+                             data-ng-click="selectMethod(method)">
+                        <p>{{ method }}</p>
+                        <md-divider ng-if="!$last"></md-divider>
+                    </md-item>
+                </md-list>
+            </div>
 
-                    <md-text-float class="long"
-                                   label="url"
-                                   type="url"
-                                   ng-model="url"></md-text-float>
-                </div>
+            <md-text-float class="long"
+                           label="url"
+                           type="url"
+                           ng-model="url"></md-text-float>
+        </div>
 
-                <md-text-float label="params"
-                               ng-model="params"
-                               rows="4"
-                               cols="50"
-                               type="textarea"></md-text-float>
+        <md-text-float label="params"
+                       ng-model="params"
+                       rows="4"
+                       cols="50"
+                       type="textarea"></md-text-float>
 
-                <md-button class="md-primary md-raised"
-                           ng-click="registerCall()">Submit
-                </md-button>
-            </form>
-        </md-card>
-    </md-content>
+        <md-button class="md-primary md-raised"
+                   ng-click="registerCall()">Submit
+        </md-button>
+    </form>
 </md-whiteframe>

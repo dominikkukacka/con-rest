@@ -1,0 +1,26 @@
+<!-- con-rest -->
+<!-- Version: 0.0.1 -->
+<!-- -->
+<!-- Author: Andy Tang -->
+<!-- Fork me on Github: https://github.com/EnoF/con-rest -->
+<md-whiteframe class="call-registrator md-whiteframe-z1"
+               flex layout-fill layout="vertical">
+    <md-toolbar>
+        <h3 class="md-toolbar-tools">Create Workflow</h3>
+    </md-toolbar>
+    <form role="form">
+        <md-text-float label="workflow name"
+                       ng-model="name"></md-text-float>
+        <md-button class="md-primary md-raised"
+                   data-ng-click="createNewWorkflow()">Create new
+        </md-button>
+    </form>
+
+    <div data-ng-repeat="call in newCalls">
+        <div data-call-registrator="call"></div>
+    </div>
+
+    <md-button class="md-raised"
+               data-ng-click="addRestCall()">Add REST Call
+    </md-button>
+</md-whiteframe>

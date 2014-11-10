@@ -13,6 +13,7 @@
         $scope.name = null;
         $scope.calls = null;
         $scope.availableCalls = null;
+        $scope.newCalls = [];
 
         $scope.retrievedWorkflow = function retrievedWorkflow(response) {
             $scope.name = response.data.name;
@@ -63,6 +64,10 @@
             } else {
                 $scope.updateWorkflow();
             }
+        };
+
+        $scope.addRestCall = function addRestCall() {
+            $scope.newCalls.push({});
         };
     });
 
