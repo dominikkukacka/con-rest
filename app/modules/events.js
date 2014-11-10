@@ -14,8 +14,12 @@
             REGISTRATION_FAILED: 'registrationFailed',
             REQUEST_FAILED: 'requestFailed',
             REQUEST_RETRIEVED: 'requestRetrieved',
+            REQUESTS_RETRIEVED: 'requestRetrieved',
             RESPONSE_RECEIVED: 'responseReceived',
-            RETRIEVAL_FAILED: 'retrievalFailed'
+            RETRIEVAL_FAILED: 'retrievalFailed',
+            WORKFLOW_CREATED: 'workflowCreated',
+            WORKFLOW_RECEIVED: 'workflowReceived',
+            WORKFLOW_UPDATED: 'workflowUpdated'
         };
     });
 }(window.angular));
