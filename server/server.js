@@ -25,13 +25,13 @@
 
         app.post('/api/requests', api.registerAPICall);
 
-        app.get('/api/workflow/:id', workflow.getWorkflowById);
+        app.get('/api/workflows/:id', workflow.getWorkflowById);
 
-        app.get('/api/workflow/', workflow.getWorkflows);
+        app.get('/api/workflows/', workflow.getWorkflows);
 
-        app.post('/api/workflow', workflow.registerWorkflow);
+        app.post('/api/workflows', workflow.registerWorkflow);
 
-        app.put('/api/workflow/:id', workflow.saveWorkflow);
+        app.put('/api/workflows/:id', workflow.saveWorkflow);
     });
     module.exports = app;
 

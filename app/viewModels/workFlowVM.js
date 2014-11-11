@@ -22,7 +22,7 @@
         };
 
         $scope.getWorkflow = function getWorkflow() {
-            $http.get('/api/workflow/' + $scope.id).
+            $http.get('/api/workflows/' + $scope.id).
                 then($scope.retrievedWorkflow);
         };
 
@@ -32,7 +32,7 @@
         };
 
         $scope.createNewWorkflow = function createNewWorkflow() {
-            $http.post('/api/workflow/', {
+            $http.post('/api/workflows/', {
                 name: $scope.name
             }).then($scope.createdWorkflow);
         };
@@ -42,7 +42,7 @@
         };
 
         $scope.updateWorkflow = function updateWorkflow() {
-            $http.put('/api/workflow/' + $scope.id, {
+            $http.put('/api/workflows/' + $scope.id, {
                 name: $scope.name,
                 calls: $scope.calls
             }).then($scope.workflowUpdated);

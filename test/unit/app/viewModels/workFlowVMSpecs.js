@@ -26,7 +26,7 @@
             var workflowDetails = {
                 name: 'workflowName'
             };
-            httpBackend.expect('POST', '/api/workflow/', workflowDetails).
+            httpBackend.expect('POST', '/api/workflows/', workflowDetails).
                 respond(200, 'someguidid');
 
             // when
@@ -50,7 +50,7 @@
                 calls: ['callid1', 'callid2']
             };
             scope.id = 'abc123';
-            httpBackend.expect('GET', '/api/workflow/' + scope.id).
+            httpBackend.expect('GET', '/api/workflows/' + scope.id).
                 respond(200, responseDetails);
 
             // when
@@ -75,7 +75,7 @@
                 name: scope.name,
                 calls: scope.calls
             };
-            httpBackend.expect('PUT', '/api/workflow/' + scope.id, workflowDetails).
+            httpBackend.expect('PUT', '/api/workflows/' + scope.id, workflowDetails).
                 respond(200, 'ok');
 
             // when
