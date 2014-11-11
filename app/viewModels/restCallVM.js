@@ -23,6 +23,7 @@
         // UI related properties
         $scope.openMethods = false;
         $scope.availableMethods = ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS', 'PATCH'];
+        $scope.showCalls = false;
 
         // Open the dropdown for methods.
         $scope.toggleMethodsDropdown = function toggleMethodsDropdown() {
@@ -33,6 +34,18 @@
         $scope.selectMethod = function selectMethod(selectedMethod) {
             $scope.method = selectedMethod;
             $scope.openMethods = false;
+        };
+
+        // Open the available requests
+        $scope.openAvailableRequests = function openAvailableRequests() {
+            $scope.showCalls = true;
+        };
+
+        // Select call.
+        $scope.selectCall = function selectCall(selectedCall) {
+            $scope.call.name = selectedCall.name;
+            $scope.call._id = selectedCall._id;
+            $scope.showCalls = false;
         };
 
         // Get the registered call by id.

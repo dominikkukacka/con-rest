@@ -24,7 +24,8 @@
             var response = null;
             scope.name = 'workflowName'
             var workflowDetails = {
-                name: 'workflowName'
+                name: 'workflowName',
+                calls: []
             };
             httpBackend.expect('POST', '/api/workflows/', workflowDetails).
                 respond(200, 'someguidid');

@@ -3,7 +3,7 @@
 <!-- -->
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
-<md-whiteframe class="call-registrator md-whiteframe-z1"
+<md-whiteframe class="workflow-registrator md-whiteframe-z1"
                flex layout-padding layout="vertical">
     <md-toolbar>
         <h3 class="md-toolbar-tools">Create Workflow</h3>
@@ -12,6 +12,17 @@
         <form role="form">
             <md-text-float label="workflow name"
                            ng-model="name"></md-text-float>
+
+            <div layout="horizontal">
+                <call-selector ng-repeat="call in calls"
+                               call="call"></call-selector>
+
+                <md-button class="md-fab"
+                           aria-label="add call"
+                           ng-click="addCall()">+
+                </md-button>
+            </div>
+
             <md-button class="md-primary md-raised"
                        data-ng-click="createNewWorkflow()">Create new
             </md-button>

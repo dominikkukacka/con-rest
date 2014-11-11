@@ -1,0 +1,20 @@
+<!-- con-rest -->
+<!-- Version: 0.0.1 -->
+<!-- -->
+<!-- Author: Andy Tang -->
+<!-- Fork me on Github: https://github.com/EnoF/con-rest -->
+<div class="call-selector">
+    <md-text-float label="api call"
+                   ng-model="call.name"
+                   ng-click="openAvailableRequests()"></md-text-float>
+    <md-whiteframe class="md-whiteframe-z5">
+        <md-list ng-show="showCalls">
+            <md-item ng-repeat="call in availableCalls">
+                <md-item-content data-ng-click="selectCall(call)">
+                    <div class="md-tile-left">{{call.method}}</div>
+                    <div class="md-tile-content">{{call.name}}</div>
+                </md-item-content>
+            </md-item>
+        </md-list>
+    </md-whiteframe>
+</div>
