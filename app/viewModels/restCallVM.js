@@ -9,13 +9,16 @@
     var app = angular.module('con-rest');
 
     app.controller('restCallVM', function restCallVMScope($scope, $http, events) {
-        // API related properties
+        // API related properties.
         $scope.id = null;
         $scope.name = null;
         $scope.method = null;
         $scope.params = null;
         $scope.response = null;
         $scope.url = null;
+
+        // A list of all available calls.
+        $scope.availableCalls = null;
 
         // UI related properties
         $scope.openMethods = false;
@@ -36,6 +39,12 @@
         $scope.getCall = function getCall() {
             $http.get('/api/requests/' + $scope.id).
                 then($scope.populateRequest, $scope.emitRetrievalFailed);
+        };
+
+        // Get all the registered calls and populate the requests list.
+        $scope.getAvailableRequests = function getAvailableRequests() {
+            $http.get('/api/requests/').
+                then($scope.retrievedRequests);
         };
 
         // Register a new call to be executed.
@@ -90,6 +99,12 @@
         // Notify the parent the retrieval of the request failed.
         $scope.emitRetrievalFailed = function emitRetrievalFailed(response) {
             $scope.$emit(events.RETRIEVAL_FAILED, response);
+        };
+
+        // Notify the requests have been retrieved.
+        $scope.retrievedRequests = function retrievedRequests(response) {
+            $scope.availableCalls = response.data;
+            $scope.$emit(events.REQUESTS_RETRIEVED, response);
         };
     });
 }(window.angular));

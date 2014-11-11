@@ -12,7 +12,6 @@
         $scope.id = null;
         $scope.name = null;
         $scope.calls = null;
-        $scope.availableCalls = null;
         $scope.newCalls = [];
 
         $scope.retrievedWorkflow = function retrievedWorkflow(response) {
@@ -48,15 +47,7 @@
             }).then($scope.workflowUpdated);
         };
 
-        $scope.retrievedRequests = function retrievedRequests(response) {
-            $scope.availableCalls = response.data;
-            $scope.$emit(events.REQUESTS_RETRIEVED, response);
-        };
 
-        $scope.getAvailableRequests = function getAvailableRequests() {
-            $http.get('/api/requests/').
-                then($scope.retrievedRequests);
-        };
 
         $scope.save = function save() {
             if ($scope.id === null) {

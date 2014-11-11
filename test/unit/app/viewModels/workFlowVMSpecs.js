@@ -90,36 +90,6 @@
             expect(response.data).toEqual('ok');
         });
 
-        it('should get a list of registered api calls', function getApiCall() {
-            // given
-            var response = null;
-            var responseDetails = [
-                {
-                    '_id': '545c8129e0e00d50095212c5',
-                    'name': 'Chikita',
-                    'url': 'http://url.info',
-                    'method': 'GET',
-                    'data': {
-                        'ba': 'nana'
-                    },
-                    '__v': 0
-                }
-            ];
-            httpBackend.expect('GET', '/api/requests/').
-                respond(200, responseDetails);
-
-            // when
-            scope.$on(events.REQUESTS_RETRIEVED, function requestsReceived(event, res) {
-                response = res;
-            });
-            scope.getAvailableRequests();
-
-            // then
-            httpBackend.flush();
-            expect(response.status).toEqual(200);
-            expect(scope.availableCalls).toEqual(response.data);
-        });
-
         describe('saving functionality', function savingSpecs() {
             it('should create a workflow', function createWorkflow() {
                 // given
