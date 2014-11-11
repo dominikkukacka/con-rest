@@ -19,22 +19,22 @@
             headers: null
         },{
             _id: '545726928469e940235ce770',
-            name: 'secondCall',
-            url: 'http://test.one',
+            name: 'queue call #1',
+            url: 'http://httpbin.org/get',
             method: 'GET',
-            data: {
-                page: 2
-            },
-            headers: null
+            headers: {
+                referer: 'http://google.com'
+            }
         },{
             _id: '545726928469e940235ce771',
-            name: 'thirdCall',
-            url: 'http://test.one',
-            method: 'GET',
-            data: {
-                page: 2
-            },
-            headers: null
+            name: 'queue call #2',
+            url: 'http://httpbin.org/get',
+            method: 'GET'
+        },{
+            _id: '545726928469e940235ce772',
+            name: 'queue call #3',
+            url: 'http://httpbin.org/get',
+            method: 'GET'
         }
     ];
 
@@ -47,7 +47,7 @@
         {
             _id: '545726928469e940235ce700',
             name: 'secondWorkflow',
-            calls: ['545726928469e940235ce770', '545726928469e940235ce771']
+            calls: ['545726928469e940235ce770', '545726928469e940235ce771', '545726928469e940235ce772']
         }
     ];
 

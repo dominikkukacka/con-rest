@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function apiScope(mongoose, queue) {
+(function apiScope(mongoose, queue, request) {
     'use strict';
 
     var Schema = mongoose.Schema;
@@ -47,10 +47,33 @@
         return deferred.promise;
     }
 
+    function execute(req, res) {
+
+    }
+
+    function executeAPICall(apiCall) {
+        return function() {
+            var deferred = queue.defer();
+
+            request({
+                url: apiCall.url,
+            }, function(err,response, body) {
+                var data = JSON.parse(body);
+                deferred.resolve({
+                    id: apiCall._id,
+                    data: data
+                });
+            });
+
+            return deferred.promise;
+        }
+    }
+
     module.exports = {
         APICall: APICall,
         getAPICalls: getAPICalls,
         getAPICallById: getAPICallById,
-        registerAPICall: registerAPICall
+        registerAPICall: registerAPICall,
+        executeAPICall: executeAPICall
     };
-}(require('mongoose'), require('q')));
+}(require('mongoose'), require('q'), require('request')));

@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(sinon) {
+(function serverScope(sinon, nock) {
     'use strict';
 
     var mockgoose = require('mockgoose');
@@ -11,10 +11,11 @@
 
     mockgoose(mongoose);
 
+
     var queue = require('q');
     var path = require('path');
-    var workflow = require('../../../server/workflow');;
-
+    var workflow = require('../../../server/workflow');
+    ;
 
 
     describe('con-rest server', function conRestServerScope() {
@@ -80,7 +81,7 @@
                         req = {
                             body: {
                                 name: 'fakeCall',
-                                calls: ['545726927732d940235ce769', '545726927732d940235ce123']
+                                calls: ['545726927732d940235ce769', '545726928469e940235ce770']
                             }
                         };
                         res = {};
@@ -105,7 +106,7 @@
                         req = {
                             body: {
                                 name: 'overwritten',
-                                calls: ['545c8129e0e00d50095212c5', '545c8139e0e00d50095212c6']
+                                calls: ['545726928469e940235ce769', '545726928469e940235ce770']
                             },
                             params: {
                                 id: '545726928469e940235ce769'
@@ -131,6 +132,38 @@
                     catch(done);
             });
         });
+
+        describe('execution of Workflows', function retrievalScope() {
+            it('should return execute a workflow', function getRegisteredWorkflows(done) {
+
+                nock('http://httpbin.org').
+                    get('/get').
+                    times(3).
+                    reply(200, {foo: 'bar'});
+
+                var req;
+                var res;
+                queue().
+                    then(function given() {
+                        req = {
+                            params: {
+                                id: '545726928469e940235ce700'
+                            }
+                        };
+                        res = {};
+                        res.send = sinon.spy();
+                    }).
+                    then(function when() {
+                        return workflow.executeWorkflow(req, res);
+                    }).
+                    then(function then() {
+                        var call = res.send.args[0][0];
+                        Object.keys(call).length.should.be.exactly(3)
+                    }).
+                    then(done).
+                    catch(done);
+            });
+        });
     });
 
-}(require('sinon'), require('should')));
+}(require('sinon'), require('nock')));
