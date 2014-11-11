@@ -276,7 +276,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'setupEnv',
-        'karma:unit'
+        'karma:unit',
+        'simplemocha'
     ]);
 
     grunt.registerTask('server', function serverMode(target) {

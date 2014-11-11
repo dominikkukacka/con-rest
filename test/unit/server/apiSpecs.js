@@ -8,34 +8,18 @@
 
     describe('con-rest server', function conRestServerScope() {
 
-        require('monckoose');
         var mongoose = require('mongoose');
+        var mockgoose = require('mockgoose');
+
+        require('monckoose');
+
         var queue = require('q');
         var path = require('path');
-        var api;
+        var api = require('../../../server/api');
 
-        it('should connect and load the api module', function (done) {
-            var dbOptions = {
-                mocks: require(path.join(__dirname, 'mocks')),
-                debug: false
-            };
-            queue().
-                then(function () {
-                    var deferred = queue.defer();
-                    if (mongoose.connection.readyState) {
-                        deferred.resolve();
-                    } else {
-                        mongoose.connect('mongodb://localhost/mocks', dbOptions, deferred.makeNodeResolver());
-                    }
-                    return deferred.promise;
-                }).
-                then(function () {
-                    mongoose.connection.readyState.should.be.ok;
-                    api = require('../../../server/api');
-                    api.should.be.ok;
-                }).
-                then(done).
-                catch(done);
+        beforeEach(function resetMongo(done) {
+            mockgoose.reset();
+            require(path.join(__dirname, 'mocks'))(done);
         });
 
         describe('retrieval of API calls', function retrievalScope() {

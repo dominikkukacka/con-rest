@@ -3,13 +3,32 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function apiMocksScope(monckoose) {
+(function apiMocksScope(mongoose, api, workflow) {
     'use strict';
+
 
     var apiCalls = [
         {
             _id: '545726928469e940235ce769',
             name: 'firstCall',
+            url: 'http://test.one',
+            method: 'GET',
+            data: {
+                page: 2
+            },
+            headers: null
+        },{
+            _id: '545726928469e940235ce770',
+            name: 'secondCall',
+            url: 'http://test.one',
+            method: 'GET',
+            data: {
+                page: 2
+            },
+            headers: null
+        },{
+            _id: '545726928469e940235ce771',
+            name: 'thirdCall',
             url: 'http://test.one',
             method: 'GET',
             data: {
@@ -23,15 +42,51 @@
         {
             _id: '545726928469e940235ce769',
             name: 'firstWorkflow',
-            calls: ['545c8129e0e00d50095212c5', '545c8139e0e00d50095212c6']
+            calls: ['545726928469e940235ce769', '545726928469e940235ce770']
+        },
+        {
+            _id: '545726928469e940235ce700',
+            name: 'secondWorkflow',
+            calls: ['545726928469e940235ce770', '545726928469e940235ce771']
         }
     ];
 
-    // Make sure the attribute is plural of the collection you try to mock and lowercase.
-    var mock = {
-        apicalls: new monckoose.MonckooseCollection(apiCalls),
-        workflows: new monckoose.MonckooseCollection(workflows)
-    };
 
-    module.exports = mock;
-}(require('monckoose')));
+
+
+    function APIMocks(done) {
+
+        var APICall = mongoose.model('APICall');
+        var Workflow = mongoose.model('Workflow');
+
+        var promisedInserts = apiCalls.length + workflows.length;
+        var executedInserts = 0;
+        var executedDone = false;
+        function finish() {
+            if(!executedDone && executedInserts >= promisedInserts) {
+                executedDone = true;
+                done();
+            }
+        }
+
+        for (var i = 0; i < apiCalls.length; i++) {
+            var data = apiCalls[i];
+            APICall.create(data, function(err, model) {
+                executedInserts++;
+                finish(err);
+            });
+        };
+
+        for (var i = 0; i < workflows.length; i++) {
+            var data = workflows[i];
+            Workflow.create(data, function(err, model) {
+                executedInserts++;
+                finish(err);
+            });
+        };
+
+    }
+
+
+    module.exports = APIMocks;
+}(require('mongoose'), require('../../../server/api.js'), require('../../../server/workflow.js')));
