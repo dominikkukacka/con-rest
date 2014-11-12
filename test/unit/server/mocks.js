@@ -26,13 +26,13 @@
                 referer: 'http://google.com'
             }
         },{
-            _id: '545726928469e940235ce771',
-            name: 'queue call #2',
+            _id: '545726928469e940235ce772',
+            name: 'queue call #3',
             url: 'http://httpbin.org/get',
             method: 'GET'
         },{
-            _id: '545726928469e940235ce772',
-            name: 'queue call #3',
+            _id: '545726928469e940235ce771',
+            name: 'queue call #2',
             url: 'http://httpbin.org/get',
             method: 'GET'
         }

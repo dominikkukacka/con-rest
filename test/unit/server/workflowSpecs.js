@@ -15,7 +15,6 @@
     var queue = require('q');
     var path = require('path');
     var workflow = require('../../../server/workflow');
-    ;
 
 
     describe('con-rest server', function conRestServerScope() {
@@ -154,11 +153,14 @@
                         res.send = sinon.spy();
                     }).
                     then(function when() {
-                        return workflow.executeWorkflow(req, res);
+                        return workflow.executeWorkflowById(req, res);
                     }).
                     then(function then() {
                         var call = res.send.args[0][0];
-                        Object.keys(call).length.should.be.exactly(3)
+                        Object.keys(call).length.should.be.exactly(3);
+                        String(call[0].id).should.be.exactly('545726928469e940235ce770');
+                        String(call[1].id).should.be.exactly('545726928469e940235ce771');
+                        String(call[2].id).should.be.exactly('545726928469e940235ce772');
                     }).
                     then(done).
                     catch(done);

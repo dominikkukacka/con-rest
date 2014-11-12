@@ -59,11 +59,16 @@
     }
 
     function executeAPICall(apiCall) {
-        return function() {
+        return function(parameters) {
             var deferred = queue.defer();
+
+            // console.log(apiCall.name, 'will be executed with', parameters);
 
             request({
                 url: apiCall.url,
+                headers: {
+                    'User-Agent': 'con-rest'
+                }
             }, function(err,response, body) {
 
                 var data = null;
@@ -75,6 +80,7 @@
 
                 deferred.resolve({
                     id: apiCall._id,
+                    apiCall: apiCall,
                     data: data
                 });
             });
@@ -88,6 +94,7 @@
         getAPICalls: getAPICalls,
         getAPICallById: getAPICallById,
         registerAPICall: registerAPICall,
-        executeAPICall: executeAPICall
+        executeAPICall: executeAPICall,
+        executeAPICallById: executeAPICallById
     };
 }(require('mongoose'), require('q'), require('request')));
