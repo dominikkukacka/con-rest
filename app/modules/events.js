@@ -19,7 +19,8 @@
             RETRIEVAL_FAILED: 'retrievalFailed',
             WORKFLOW_CREATED: 'workflowCreated',
             WORKFLOW_RECEIVED: 'workflowReceived',
-            WORKFLOW_UPDATED: 'workflowUpdated'
+            WORKFLOW_UPDATED: 'workflowUpdated',
+            WORKFLOWS_RETRIEVED: 'workflowsRetrieved'
         };
     });
 }(window.angular));

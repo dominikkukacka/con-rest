@@ -9,7 +9,12 @@
     var app = angular.module('con-rest');
 
     app.controller('workFlowVM', function workFlowVM($scope, $http, events) {
-        $scope.id = null;
+        // Set a default empty workflow if not provided.
+        $scope.workflow = $scope.workflow || {
+            id: null
+        };
+
+        // The properties of the workflow which are not yet persisted.
         $scope.name = null;
         $scope.calls = [
             {}
@@ -27,12 +32,14 @@
         };
 
         $scope.getWorkflow = function getWorkflow() {
-            $http.get('/api/workflows/' + $scope.id).
+            $http.get('/api/workflows/' + $scope.workflow.id).
                 then($scope.retrievedWorkflow);
         };
 
         $scope.createdWorkflow = function createdWorkflow(response) {
-            $scope.id = response.data;
+            $scope.workflow.id = response.data;
+            $scope.workflow.name = $scope.name;
+            $scope.workflow.calls = $scope.calls;
             $scope.$emit(events.WORKFLOW_CREATED, response);
         };
 
@@ -55,7 +62,7 @@
         };
 
         $scope.updateWorkflow = function updateWorkflow() {
-            $http.put('/api/workflows/' + $scope.id, {
+            $http.put('/api/workflows/' + $scope.workflow.id, {
                 name: $scope.name,
                 calls: $scope.calls
             }).then($scope.workflowUpdated);
@@ -63,7 +70,7 @@
 
 
         $scope.save = function save() {
-            if ($scope.id === null) {
+            if ($scope.workflow.id === null) {
                 $scope.createNewWorkflow();
             } else {
                 $scope.updateWorkflow();

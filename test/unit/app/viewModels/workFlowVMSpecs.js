@@ -40,7 +40,7 @@
             httpBackend.flush();
             expect(response.status).toEqual(200);
             expect(response.data).toEqual('someguidid');
-            expect(scope.id).toEqual('someguidid');
+            expect(scope.workflow.id).toEqual('someguidid');
         });
 
         it('should load an existing workflow', function addNewWorkFlow() {
@@ -50,8 +50,8 @@
                 name: 'workflow1',
                 calls: ['callid1', 'callid2']
             };
-            scope.id = 'abc123';
-            httpBackend.expect('GET', '/api/workflows/' + scope.id).
+            scope.workflow.id = 'abc123';
+            httpBackend.expect('GET', '/api/workflows/' + scope.workflow.id).
                 respond(200, responseDetails);
 
             // when
@@ -76,7 +76,7 @@
                 name: scope.name,
                 calls: scope.calls
             };
-            httpBackend.expect('PUT', '/api/workflows/' + scope.id, workflowDetails).
+            httpBackend.expect('PUT', '/api/workflows/' + scope.workflow.id, workflowDetails).
                 respond(200, 'ok');
 
             // when
@@ -106,7 +106,7 @@
 
             it('should save the changes on an existing workflow', function saveChanges() {
                 // given
-                scope.id = '12304';
+                scope.workflow.id = '12304';
                 spyOn(scope, 'updateWorkflow');
 
                 // when
