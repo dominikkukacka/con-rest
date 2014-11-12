@@ -21,6 +21,7 @@
 
         app.param('id', String);
 
+        app.get('/api/requests/:id/execute', api.executeAPICallById);
         app.get('/api/requests/:id', api.getAPICallById);
 
         app.post('/api/requests', api.registerAPICall);

@@ -82,7 +82,6 @@
 
         var workflow = null;
 
-
         return queue().
             then(function getWorkflow() {
                 var deferred = queue.defer();

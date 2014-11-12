@@ -47,8 +47,15 @@
         return deferred.promise;
     }
 
-    function execute(req, res) {
-
+    function executeAPICallById(req, res) {
+        var deferred = queue.defer();
+        var id = mongoose.Types.ObjectId(req.params.id);
+        APICall.findById(id, deferred.makeNodeResolver());
+        deferred.promise.then(function returnCall(call) {
+            console.log(call)
+            res.send(call);
+        });
+        return deferred.promise;
     }
 
     function executeAPICall(apiCall) {
@@ -58,7 +65,14 @@
             request({
                 url: apiCall.url,
             }, function(err,response, body) {
-                var data = JSON.parse(body);
+
+                var data = null;
+                try {
+                    data = JSON.parse(body);
+                } catch(e) {
+                    data = body;
+                }
+
                 deferred.resolve({
                     id: apiCall._id,
                     data: data
