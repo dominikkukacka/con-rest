@@ -135,10 +135,11 @@
         describe('execution of Workflows', function retrievalScope() {
             it('should return execute a workflow', function getRegisteredWorkflows(done) {
 
-                nock('http://httpbin.org').
-                    get('/get').
-                    times(3).
-                    reply(200, {foo: 'bar'});
+                for (var i = 0; i <= 2; i++) {
+                    nock('http://httpbin.org').
+                        get('/get').
+                        reply(200, {indicator: 100 + i});
+                }
 
                 var req;
                 var res;
@@ -161,6 +162,15 @@
                         String(call[0].id).should.be.exactly('545726928469e940235ce770');
                         String(call[1].id).should.be.exactly('545726928469e940235ce771');
                         String(call[2].id).should.be.exactly('545726928469e940235ce772');
+
+                        Object.keys(call[0].response).length.should.be.exactly(1);
+                        call[0].response.indicator.should.be.exactly(100);
+
+                        Object.keys(call[1].response).length.should.be.exactly(1);
+                        call[1].response.indicator.should.be.exactly(101);
+
+                        Object.keys(call[2].response).length.should.be.exactly(1);
+                        call[2].response.indicator.should.be.exactly(102);
                     }).
                     then(done).
                     catch(done);

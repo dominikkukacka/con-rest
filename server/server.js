@@ -17,11 +17,11 @@
     var db = mongoose.connection;
     db.on('error', console.error);
     db.once('open', function initiateServer() {
-        app.get('/api/requests/:id/execute', api.executeAPICallById);
         app.get('/api/requests', api.getAPICalls);
 
         app.param('id', String);
 
+        app.get('/api/requests/:id/execute', api.executeAPICallById);
         app.get('/api/requests/:id', api.getAPICallById);
 
         app.post('/api/requests', api.registerAPICall);

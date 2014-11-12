@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(sinon) {
+(function serverScope(sinon, should, api, nock) {
     'use strict';
 
     describe('con-rest server', function conRestServerScope() {
@@ -100,6 +100,77 @@
                     catch(done);
             });
         });
+
+        describe('execution', function retrievalScope() {
+            it('should execute a successful API call', function executeAPICall(done) {
+
+
+                nock('http://httpbin.org').
+                    get('/get').
+                    reply(200, {index: 100});
+
+                var req;
+                var res;
+                queue().
+                    then(function given() {
+                        req = {
+                            params: {
+                                id: '545726928469e940235ce770'
+                            }
+                        };
+                        res = {};
+                        res.send = sinon.spy();
+                    }).
+                    then(function when() {
+                        return api.executeAPICallById(req, res);
+                    }).
+                    then(function then() {
+                        var call = res.send.args[0][0];
+                        call.statusCode.should.be.exactly(200);
+                        String(call.id).should.be.exactly('545726928469e940235ce770');
+                        Object.keys(call.response).length.should.be.exactly(1);
+                        call.response.index.should.be.exactly(100);
+                    }).
+                    then(done).
+                    catch(done);
+            });
+
+            it('should execute a not successful API call', function executeAPICall(done) {
+
+
+                nock('http://httpbin.org').
+                    get('/get').
+                    reply(500);
+
+                var req;
+                var res;
+                queue().
+                    then(function given() {
+                        req = {
+                            params: {
+                                id: '545726928469e940235ce770'
+                            }
+                        };
+                        res = {};
+                        res.send = sinon.spy();
+                    }).
+                    then(function when() {
+                        return api.executeAPICallById(req, res);
+                    }).
+                    then(function then() {
+                        var call = res.send.args[0][0];
+                        console.log(call.response);
+                        call.statusCode.should.be.exactly(500);
+                    }).
+                    then(done).
+                    catch(done);
+            });
+        });
     });
 
-}(require('sinon'), require('should')));
+}(
+    require('sinon'),
+    require('should'),
+    require('../../../server/api'),
+    require('nock')
+));
