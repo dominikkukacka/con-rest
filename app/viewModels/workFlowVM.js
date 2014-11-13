@@ -21,6 +21,12 @@
         ];
         $scope.newCalls = [];
 
+        $scope.editing = false;
+
+        $scope.startEditing = function startEditing(){
+            $scope.editing = true;
+        };
+
         $scope.addCall = function addCall() {
             $scope.calls.push({});
         };

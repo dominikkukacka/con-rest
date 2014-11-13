@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function workflow(angular){
+(function workflow(angular, undefined){
     'use strict';
 
     var app = angular.module('con-rest');
@@ -15,7 +15,13 @@
             scope: {
                 workflow: '=workflow'
             },
-            templateUrl: 'workflow'
+            templateUrl: 'workflow',
+            link: function workflowConstructor(scope){
+                // The workflow is new.
+                if(scope.workflow._id === undefined){
+                    scope.editing = true;
+                }
+            }
         };
     });
 }(window.angular));

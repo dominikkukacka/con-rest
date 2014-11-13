@@ -11,6 +11,12 @@
     app.controller('workflowOverviewVM', function workflowOverviewVM($scope, $http, events) {
         $scope.workflows = [];
 
+        $scope.addWorkflow = function addWorkflow(){
+            $scope.workflows.push({
+                name: 'New Workflow'
+            });
+        };
+
         $scope.workflowsRetrieved = function workflowsRetrieved(response) {
             $scope.workflows = response.data;
             $scope.$emit(events.WORKFLOWS_RETRIEVED, response);

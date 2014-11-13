@@ -3,28 +3,31 @@
 <!-- -->
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
-<md-whiteframe class="workflow-registrator md-whiteframe-z1"
+<md-card class="workflow-registrator"
                flex layout-padding layout="vertical">
     <md-toolbar>
         <h3 class="md-toolbar-tools">Create Workflow</h3>
     </md-toolbar>
-    <div layout="horizontal">
+    <div layout="horizontal" layout-wrap>
         <form role="form">
             <md-text-float label="workflow name"
                            ng-model="name"></md-text-float>
 
-            <div layout="horizontal">
+            <div layout="vertical"
+                 layout-lg="horizontal"
+                 layout-wrap>
                 <call-selector ng-repeat="call in calls"
                                call="call"></call-selector>
 
                 <md-button class="md-fab"
                            aria-label="add call"
-                           ng-click="addCall()">+
+                           ng-click="addCall()">
+                   <md-icon icon="/icons/ic_add_24px.svg"></md-icon>
                 </md-button>
             </div>
 
             <md-button class="md-primary md-raised"
-                       data-ng-click="createNewWorkflow()">Create new
+                       data-ng-click="createNewWorkflow()">Create
             </md-button>
         </form>
 
@@ -36,4 +39,4 @@
     <md-button class="md-raised"
                data-ng-click="addRestCall()">Add REST Call
     </md-button>
-</md-whiteframe>
+</md-card>

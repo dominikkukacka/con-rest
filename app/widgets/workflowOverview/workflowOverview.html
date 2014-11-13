@@ -3,9 +3,15 @@
 <!-- -->
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
-<md-whiteframe class="md-whiteframe-z1"
+<md-whiteframe class="workflow-overview md-whiteframe-z1"
                flex layout-padding layout="vertical">
-    <workflow ng-repeat="workflow in workflows"
-              workflow="workflow">
-    </workflow>
+    <div flex layout="vertical" layout-sm="horizontal" layout-wrap>
+        <workflow ng-repeat="workflow in workflows"
+                  workflow="workflow">
+        </workflow>
+    </div>
+    <md-button class="md-raised md-primary"
+        ng-click="addWorkflow()">
+        Add Workflow
+    </md-button>
 </md-whiteframe>

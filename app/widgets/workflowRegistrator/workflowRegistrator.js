@@ -11,9 +11,14 @@
     app.directive('workflowRegistrator', function workflowDirective() {
         return {
             controller: 'workFlowVM',
-            restrict: 'A',
-            scope: {},
-            templateUrl: 'workflowRegistrator'
+            restrict: 'E',
+            scope: {
+                workflow: '=workflow'
+            },
+            templateUrl: 'workflowRegistrator',
+            link: function workflowRegistratorConstructor(scope){
+                scope.name = scope.workflow.name;
+            }
         };
     });
 }(window.angular));

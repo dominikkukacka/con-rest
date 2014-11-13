@@ -3,9 +3,16 @@
 <!-- -->
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
-<md-card>
-    <h2>{{ workflow.name }}</h2>
-    <p>
-        This workflow has {{ workflow.calls.length }} calls.
-    </p>
-</md-card>
+<section class="workflow">
+    <md-card class="workflow-view"
+             ng-if="!editing"
+             ng-click="startEditing()">
+        <h2>{{ workflow.name }}</h2>
+        <p>
+            This workflow has {{ workflow.calls.length }} calls.
+        </p>
+    </md-card>
+    <workflow-registrator ng-if="editing"
+                          workflow="workflow">
+    </workflow-registrator>
+</section>
