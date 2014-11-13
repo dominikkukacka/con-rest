@@ -7,6 +7,8 @@
     'use strict';
 
     server.use(express.static(__dirname + '/app'));
-    server.listen(3000);
-
-}(require('server'), require('express')));
+    server.use(express.static(__dirname + '/.tmp'));
+    server.listen(9000, function notify() {
+        console.log('Server listening on port 9000');
+    });
+}(require('./server/server.js'), require('express')));

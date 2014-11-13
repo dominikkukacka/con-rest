@@ -70,13 +70,7 @@ module.exports = function (grunt) {
             dev: {
                 options: {
                     port: 9000,
-                    hostname: '0.0.0.0',
-                    bases: [
-                        '<%= app.app %>',
-                        '<%= app.tmp %>'
-                    ],
-                    server: '<%= app.server %>/server.js',
-                    livereload: true
+                    script: './devServer.js'
                 }
             }
         },
@@ -272,7 +266,10 @@ module.exports = function (grunt) {
                     '<%= app.server %>/**/*.js',
                     '<%= app.test %>/unit/server/**/*.js'
                 ],
-                tasks: ['simplemocha']
+                tasks: ['simplemocha', 'express:dev'],
+                options: {
+                    spawn: false // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded
+                }
             }
         }
     });
@@ -286,7 +283,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('setupEnv', [
         'build',
-        'express'
+        'express:dev'
     ]);
 
     grunt.registerTask('test', [
