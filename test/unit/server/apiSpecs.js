@@ -11,8 +11,6 @@
         var mongoose = require('mongoose');
         var mockgoose = require('mockgoose');
 
-        require('monckoose');
-
         var queue = require('q');
         var path = require('path');
         var api = require('../../../server/api');

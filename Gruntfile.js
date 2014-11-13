@@ -81,14 +81,28 @@ module.exports = function (grunt) {
             }
         },
         groc: {
-            options: {
-                out: '<%= app.tmp %>/docs'
+            dev: {
+                options: {
+                    out: '<%= app.tmp %>/docs'
+                },
+                src: [
+                    '<%= app.app %>/viewModels/*.js',
+                    '<%= app.app %>/models/*.js',
+                    '<%= app.server %>/{,*/}*.js',
+                    'README.md'
+                ]
             },
-            javascript: [
-                '<%= app.app %>/viewModels/*.js',
-                '<%= app.app %>/models/*.js',
-                'README.md'
-            ]
+            dist: {
+                options: {
+                    out: './'
+                },
+                src: [
+                    '<%= app.app %>/viewModels/*.js',
+                    '<%= app.app %>/models/*.js',
+                    '<%= app.server %>/{,*/}*.js',
+                    'README.md'
+                ]
+            }
         },
         jshint: {
             options: {
@@ -100,7 +114,8 @@ module.exports = function (grunt) {
                 '<%= app.app %>/models/{,*/}*.js',
                 '<%= app.app %>/directives/{,*/}*.js',
                 '<%= app.app %>/viewModels/{,*/}*.js',
-                '<%= app.app %>/widgets/**/{,*/}*.js'
+                '<%= app.app %>/widgets/**/{,*/}*.js',
+                '<%= app.server %>/{,*/}*.js'
             ]
         },
         karma: {
@@ -283,7 +298,7 @@ module.exports = function (grunt) {
     grunt.registerTask('server', function serverMode(target) {
         var tasks = [
             'setupEnv',
-            'groc',
+            'groc:dev',
             'karma:unitAuto',
             'watch'
         ];

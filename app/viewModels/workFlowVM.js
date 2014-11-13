@@ -19,14 +19,17 @@
         $scope.calls = [
             {}
         ];
+
+        // New calls created while configuring the workflow.
         $scope.newCalls = [];
 
         $scope.editing = false;
 
-        $scope.startEditing = function startEditing(){
+        $scope.startEditing = function startEditing() {
             $scope.editing = true;
         };
 
+        // Add an additional REST call to the workflow.
         $scope.addCall = function addCall() {
             $scope.calls.push({});
         };
@@ -49,6 +52,7 @@
             $scope.$emit(events.WORKFLOW_CREATED, response);
         };
 
+        // The workflow we create only needs the id of the calls.
         $scope.createNewWorkflow = function createNewWorkflow() {
             var calls = [];
             for (var i = 0; i < $scope.calls.length; i++) {
@@ -63,10 +67,12 @@
             }).then($scope.createdWorkflow);
         };
 
+        // The workflow can't be updated at this moment, will be implemented in the near future.
         $scope.workflowUpdated = function workflowUpdated(response) {
             $scope.$emit(events.WORKFLOW_UPDATED, response);
         };
 
+        // The workflow can't be updated at this moment, will be implemented in the near future.
         $scope.updateWorkflow = function updateWorkflow() {
             $http.put('/api/workflows/' + $scope.workflow.id, {
                 name: $scope.name,
@@ -74,7 +80,7 @@
             }).then($scope.workflowUpdated);
         };
 
-
+        // Saving would result in a POST for new workflows, but a PUT for an existing workflows.
         $scope.save = function save() {
             if ($scope.workflow.id === null) {
                 $scope.createNewWorkflow();

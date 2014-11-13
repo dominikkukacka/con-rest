@@ -10,7 +10,9 @@
 
     var workflowSchema = new Schema({
         name: String,
-        calls: [{type: Schema.Types.ObjectId, ref: 'APICall'}]
+        calls: [
+            {type: Schema.Types.ObjectId, ref: 'APICall'}
+        ]
     });
 
     var Workflow = mongoose.model('Workflow', workflowSchema);
@@ -71,29 +73,27 @@
             });
     }
 
-    function executeWorkflowById(req, res) {
-        var deferred = queue.defer();
-        var id = mongoose.Types.ObjectId(req.params.id);
-        // Workflow.findById(id).exec().then(function(){
-        // }).exec(deferred.makeNodeResolver());
-        // deferred.promise.then(function returnCall(call) {
-        //     res.send(call);
-        // });
+    function getSorted(arr, sortArr) {
+        var sorted = [];
+        for (var i = 0; i < sortArr.length; i++) {
+            var id = sortArr[i];
 
-        function getSorted(arr, sortArr) {
-            var sorted = [];
-            for (var i = 0; i < sortArr.length; i++) {
-                var id = sortArr[i];
+            var filtered = filterOnId(arr, id);
 
-                var filtered = arr.filter(function(obj) {
-                    return String(obj._id) === String(id);
-                });
-
-                sorted.push(filtered[0]);
-            };
-
-            return sorted;
+            sorted.push(filtered[0]);
         }
+        return sorted;
+    }
+
+    function filterOnId(arr, id) {
+        return arr.filter(function filterOnId(obj) {
+            return String(obj._id) === String(id);
+        });
+    }
+
+    function executeWorkflowById(req, res) {
+        var id = mongoose.Types.ObjectId(req.params.id);
+
 
         var workflow = null;
         var callIndex = 0;
@@ -132,16 +132,8 @@
 
                     apiCallQueue = apiCallQueue.
                         then(api.executeAPICall(call)).
-                        then(function(data) {
-                            var deferred = queue.defer();
-
-                            data.index = callIndex++;
-                            callResults[data.id] = data;
-                            deferred.resolve(data);
-
-                            return deferred.promise;
-                        });
-                };
+                        then(registerAPICallExecution(queue, callIndex, callResults));
+                }
 
                 apiCallQueue.then(function () {
                     deferred.resolve();
@@ -149,14 +141,25 @@
 
                 return deferred.promise;
             }).
-            then(function results() {
+            then(function displayResults() {
                 var results = [];
-                for(var i in callResults) {
+                for (var i in callResults) {
                     results.push(callResults[i]);
                 }
                 res.send(results);
             });
+    }
 
+    function registerAPICallExecution(queue, callIndex, callResults) {
+        return function registeredAPICall(data) {
+            var deferred = queue.defer();
+
+            data.index = callIndex++;
+            callResults[data.id] = data;
+            deferred.resolve(data);
+
+            return deferred.promise;
+        };
     }
 
     module.exports = {

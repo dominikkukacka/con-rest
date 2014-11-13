@@ -48,32 +48,27 @@
     }
 
     function executeAPICallById(req, res) {
-        var deferred = queue.defer();
         var id = mongoose.Types.ObjectId(req.params.id);
-
         return queue().
-            then(function() {
+            then(function () {
                 var deferred = queue.defer();
                 APICall.findById(id, deferred.makeNodeResolver());
                 return deferred.promise;
             }).then(function returnCall(call) {
                 var deferred = queue.defer();
-
                 queue().
                     then(executeAPICall(call)).
-                    then(function(data) {
+                    then(function (data) {
                         res.send(data);
                         deferred.resolve(data);
-                    })
+                    });
 
                 return deferred.promise;
-
             });
-        return deferred.promise;
     }
 
     function executeAPICall(apiCall) {
-        return function(parameters) {
+        return function () {
             var deferred = queue.defer();
 
             // console.log(apiCall.name, 'will be executed with', parameters);
@@ -83,12 +78,12 @@
                 headers: {
                     'User-Agent': 'con-rest'
                 }
-            }, function(err,response, body) {
+            }, function (err, response, body) {
 
                 var data = null;
                 try {
                     data = JSON.parse(body);
-                } catch(e) {
+                } catch (e) {
                     data = body;
                 }
 
@@ -101,7 +96,7 @@
             });
 
             return deferred.promise;
-        }
+        };
     }
 
     module.exports = {
