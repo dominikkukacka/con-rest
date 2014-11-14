@@ -9,9 +9,9 @@
     var app = angular.module('con-rest');
 
     app.controller('restCallVM', function restCallVMScope($scope, $http, events) {
-        // API related properties.
-        $scope.id = null;
-
+        // The id can be provided by the parent.
+        $scope.id = $scope.id || null;
+        
         // Request can be passed a long or it could be empty.
         $scope.request = $scope.request || {
             name: null,
@@ -86,6 +86,7 @@
             $scope.request.url = request.url;
             $scope.request.method = request.method;
             $scope.request.params = request.data;
+            $scope.request.headers = request.headers;
             // emit the model.
             $scope.$emit(events.REQUEST_RETRIEVED, $scope.request);
         };
