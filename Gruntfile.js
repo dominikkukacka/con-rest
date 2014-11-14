@@ -266,7 +266,14 @@ module.exports = function (grunt) {
                     '<%= app.server %>/**/*.js',
                     '<%= app.test %>/unit/server/**/*.js'
                 ],
-                tasks: ['simplemocha', 'express:dev'],
+                tasks: ['simplemocha']
+            },
+            serverReload: {
+                files: [
+                    '<%= app.server %>/**/*.js',
+                    '<%= app.test %>/unit/server/**/*.js'
+                ],
+                tasks: ['express:dev'],
                 options: {
                     spawn: false // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded
                 }
