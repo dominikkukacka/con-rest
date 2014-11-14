@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function executionSpecScope(sinon, nock) {
+(function workflowExecutionSpecScope(sinon, nock) {
     'use strict';
 
     var mockgoose = require('mockgoose');
@@ -14,18 +14,18 @@
 
     var queue = require('q');
     var path = require('path');
-    var execution = require('../../../server/execution');
+    var workflowExecution = require('../../../server/workflowExecution');
 
 
-    describe('con-rest execution', function conRestExecutionScope() {
+    describe('con-rest workflowExecution', function conRestworkflowExecutionScope() {
 
         beforeEach(function resetMongo(done) {
             mockgoose.reset();
             require(path.join(__dirname, 'mocks'))(done);
         });
 
-        describe('retrieval of executions', function retrievalScope() {
-            it('should return all the registered executions', function getRegisteredexecutions(done) {
+        describe('retrieval of workflowExecutions', function retrievalScope() {
+            it('should return all the registered workflowExecutions', function getRegisteredworkflowExecutions(done) {
                 var req;
                 var res;
                 queue().
@@ -35,35 +35,37 @@
                         res.send = sinon.spy();
                     }).
                     then(function when() {
-                        return execution.getExecutions(req, res);
+                        return workflowExecution.getWorkflowExecutions(req, res);
                     }).
-                    then(function then(executions) {
-                        executions.length.should.be.above(0);
+                    then(function then(workflowExecutions) {
+                        var call = res.send.args[0][0];
+                        workflowExecutions.length.should.be.above(0);
                         res.send.args[0][0].length.should.be.above(0);
                     }).
                     then(done).
                     catch(done);
             });
 
-            it('should return a execution based on id', function getRegisteredexecutionById(done) {
+            it('should return a workflowExecution based on id', function getRegisteredworkflowExecutionById(done) {
                 var req;
                 var res;
                 queue().
                     then(function given() {
                         req = {
                             params: {
-                                id: '5464b1e2f8243a3c32180004'
+                                id: '5464b1e2f8243a3c32170001'
                             }
                         };
                         res = {};
                         res.send = sinon.spy();
                     }).
                     then(function when() {
-                        return execution.getExecutionById(req, res);
+                        return workflowExecution.getWorkflowExecutionById(req, res);
                     }).
                     then(function then() {
                         var call = res.send.args[0][0];
-                        call.id.should.be.exactly('5464b1e2f8243a3c32180004');
+                        call.id.should.be.exactly('5464b1e2f8243a3c32170001');
+                        call.executions.length.should.be.exactly(3);
                     }).
                     then(done).
                     catch(done);
@@ -71,7 +73,7 @@
         });
 
         xdescribe('saving', function registrationScope() {
-            it('should register an new execution', function registerexecution(done) {
+            it('should register an new workflowExecution', function registerworkflowExecution(done) {
                 var req;
                 var res;
                 queue().
@@ -86,7 +88,7 @@
                         res.send = sinon.spy();
                     }).
                     then(function when() {
-                        return execution.registerexecution(req, res);
+                        return workflowExecution.registerworkflowExecution(req, res);
                     }).
                     then(function then() {
                         res.send.calledOnce.should.be.true;
@@ -96,7 +98,7 @@
                     catch(done);
             });
 
-            it('should overwrite an existing execution', function saveExistingexecution(done) {
+            it('should overwrite an existing workflowExecution', function saveExistingworkflowExecution(done) {
                 var req;
                 var res;
                 queue().
@@ -114,17 +116,17 @@
                         res.send = sinon.spy();
                     }).
                     then(function when() {
-                        return execution.saveexecution(req, res);
+                        return workflowExecution.saveworkflowExecution(req, res);
                     }).
                     then(function then() {
                         res.send.calledOnce.should.be.true;
                         res.send.args[0][0].should.be.a.String;
                     }).
                     then(function when() {
-                        return execution.getexecutionById(req);
+                        return workflowExecution.getworkflowExecutionById(req);
                     }).
-                    then(function then(execution) {
-                        execution.name.should.be.exactly('overwritten');
+                    then(function then(workflowExecution) {
+                        workflowExecution.name.should.be.exactly('overwritten');
                     }).
                     then(done).
                     catch(done);

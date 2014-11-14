@@ -51,6 +51,18 @@
         }
     ];
 
+    var workflowExecutions = [
+        {
+            _id: '5464b1e2f8243a3c32170001',
+            workflow: '545726928469e940235ce700',
+            executions: [
+                '5464b1e2f8243a3c32180001',
+                '5464b1e2f8243a3c32180002',
+                '5464b1e2f8243a3c32180003'
+            ]
+        }
+    ];
+
     var executions = [
         // executed through workflow
         {
@@ -61,7 +73,7 @@
             reponse: {index: 100}
         },
         {
-            _id: '5464b1e2f8243a3c32180002',
+            _id: '5464b1e2f8243a3c32180001',
             workflow: '545726928469e940235ce700',
             apiCall: '545726928469e940235ce771',
             statusCode: 200,
@@ -77,7 +89,7 @@
 
         // directly executed
         {
-            _id: '5464b1e2f8243a3c32180003',
+            _id: '5464b1e2f8243a3c32180004',
             apiCall: '545726928469e940235ce770',
             statusCode: 200,
             reponse: {index: 100}
@@ -86,44 +98,22 @@
     ];
 
 
-    /*
-{
-            _id: '5464b1e2f8243a3c32180000',
-            workflow: '545726928469e940235ce700',
-            response: [
-                {
-                    apiCall: '545726928469e940235ce770',
-                    statusCode: 200,
-                    reponse: {}
-                },
-                {
-                    apiCall: '545726928469e940235ce771',
-                    statusCode: 200,
-                    reponse: {}
-                },
-                {
-                    apiCall: '545726928469e940235ce772',
-                    statusCode: 200,
-                    reponse: {}
-                }
-            ]
-        }
-
-    */
-
-
-
-
     function APIMocks(done) {
 
         var APICall = mongoose.model('APICall');
         var Workflow = mongoose.model('Workflow');
-        var Execution = mongoose.model('Workflow');
+        var Execution = mongoose.model('Execution');
+        var WorkflowExecution = mongoose.model('WorkflowExecution');
 
-        var promisedInserts = apiCalls.length + workflows.length + executions.length;
+        var promisedInserts =
+            apiCalls.length +
+            workflows.length +
+            executions.length +
+            workflowExecutions.length;
+
         var executedInserts = 0;
         var executedDone = false;
-        console.log('inserted objects:', promisedInserts);
+
         function finish() {
             if(!executedDone && executedInserts >= promisedInserts) {
                 executedDone = true;
@@ -150,6 +140,14 @@
         for (var i = 0; i < executions.length; i++) {
             var data = executions[i];
             Execution.create(data, function(err, model) {
+                executedInserts++;
+                finish(err);
+            });
+        };
+
+        for (var i = 0; i < workflowExecutions.length; i++) {
+            var data = workflowExecutions[i];
+            WorkflowExecution.create(data, function(err, model) {
                 executedInserts++;
                 finish(err);
             });

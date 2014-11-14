@@ -28,6 +28,7 @@
 
         app.get('/api/workflows/:id/execute', workflow.executeWorkflowById);
         app.get('/api/workflows/:id', workflow.getWorkflowById);
+        app.get('/api/workflows/:id/executions', execution.getExecutionsOfWorkflow);
 
         app.get('/api/workflows/', workflow.getWorkflows);
 
