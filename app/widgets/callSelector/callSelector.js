@@ -19,7 +19,7 @@
             controller: 'restCallVM',
             restrict: 'E',
             scope: {
-                call: '=call'
+                request: '=request'
             },
             templateUrl: 'callSelector',
             link: function constructor(scope) {

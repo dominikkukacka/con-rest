@@ -11,11 +11,16 @@
     app.controller('restCallVM', function restCallVMScope($scope, $http, events) {
         // API related properties.
         $scope.id = null;
-        $scope.name = null;
-        $scope.method = null;
-        $scope.params = null;
+
+        // Request can be passed a long or it could be empty.
+        $scope.request = $scope.request || {
+            name: null,
+            url: null,
+            method: null,
+            data: null,
+            headers: null
+        };
         $scope.response = null;
-        $scope.url = null;
 
         // A list of all available calls.
         $scope.availableCalls = null;
@@ -32,7 +37,7 @@
 
         // Select method
         $scope.selectMethod = function selectMethod(selectedMethod) {
-            $scope.method = selectedMethod;
+            $scope.request.method = selectedMethod;
             $scope.openMethods = false;
         };
 
@@ -41,10 +46,10 @@
             $scope.showCalls = true;
         };
 
-        // Select call.
+        // Select call, this is not the requst.
         $scope.selectCall = function selectCall(selectedCall) {
-            $scope.call.name = selectedCall.name;
-            $scope.call._id = selectedCall._id;
+            $scope.request.name = selectedCall.name;
+            $scope.request._id = selectedCall._id;
             $scope.showCalls = false;
         };
 
@@ -63,21 +68,26 @@
         // Register a new call to be executed.
         $scope.registerCall = function registerCall() {
             $http.post('/api/requests', {
-                name: $scope.name,
-                url: $scope.url,
-                method: $scope.method,
-                data: $scope.params,
-                headers: $scope.headers
+                name: $scope.request.name,
+                url: $scope.request.url,
+                method: $scope.request.method,
+                data: $scope.request.params,
+                headers: $scope.request.headers
             }).then($scope.emitRegistrationSuccessfull, $scope.emitRegistrationFailed);
         };
 
+        // The request should set the attributes so the pointer will be to the same
+        // model. This will allow the other consumers of this model to receive the update
+        // aswell.
         $scope.populateRequest = function populateRequest(response) {
             var request = response.data;
-            $scope.name = request.name;
-            $scope.url = request.url;
-            $scope.method = request.method;
-            $scope.params = request.data;
-            $scope.$emit(events.REQUEST_RETRIEVED, request);
+            $scope.request._id = request._id;
+            $scope.request.name = request.name;
+            $scope.request.url = request.url;
+            $scope.request.method = request.method;
+            $scope.request.params = request.data;
+            // emit the model.
+            $scope.$emit(events.REQUEST_RETRIEVED, $scope.request);
         };
 
         // Execute the registered call.

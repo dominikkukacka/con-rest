@@ -10,12 +10,12 @@
     </md-toolbar>
     <form role="form">
         <md-text-float label="API Call name"
-                       ng-model="name"></md-text-float>
+                       ng-model="request.name"></md-text-float>
 
         <div class="row" layout="horizontal">
             <div layout="vertical">
                 <md-text-float label="method"
-                               ng-model="method"
+                               ng-model="request.method"
                                data-ng-click="toggleMethodsDropdown()"></md-text-float>
                 <md-list ng-show="openMethods">
                     <md-item ng-repeat="method in availableMethods"
@@ -29,11 +29,11 @@
             <md-text-float class="long"
                            label="url"
                            type="url"
-                           ng-model="url"></md-text-float>
+                           ng-model="request.url"></md-text-float>
         </div>
 
         <md-text-float label="params"
-                       ng-model="params"
+                       ng-model="request.params"
                        rows="4"
                        cols="50"
                        type="textarea"></md-text-float>

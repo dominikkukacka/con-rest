@@ -4,7 +4,7 @@
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
 <md-card class="workflow-registrator"
-               flex layout-padding layout="vertical">
+         flex layout-padding layout="vertical">
     <md-toolbar>
         <h3 class="md-toolbar-tools">Create Workflow</h3>
     </md-toolbar>
@@ -17,12 +17,12 @@
                  layout-lg="horizontal"
                  layout-wrap>
                 <call-selector ng-repeat="call in calls"
-                               call="call"></call-selector>
+                               request="call"></call-selector>
 
                 <md-button class="md-fab"
                            aria-label="add call"
                            ng-click="addCall()">
-                   <md-icon icon="/icons/ic_add_24px.svg"></md-icon>
+                    <md-icon icon="/icons/ic_add_24px.svg"></md-icon>
                 </md-button>
             </div>
 

@@ -30,11 +30,11 @@
                 response = res;
             });
             httpBackend.expect('POST', '/api/requests', {
-                name: scope.name,
-                url: scope.url,
-                method: 'GET',
-                data: scope.params,
-                headers: scope.headers
+                name: scope.request.name,
+                url: scope.request.url,
+                method: scope.request.method,
+                data: scope.request.params,
+                headers: scope.request.headers
             }).respond(200, 'someguidid');
             scope.registerCall();
 
@@ -106,13 +106,15 @@
             // given
             var response = null;
             scope.id = 'abc';
+            var expectedResponse = {
+                _id: scope.id,
+                name: 'ba',
+                url: 'http://ba.na.na',
+                method: 'DELETE',
+                data: '{ "message": "chomp" }'
+            };
             httpBackend.expect('GET', '/api/requests/' + scope.id).
-                respond(200, {
-                    name: 'ba',
-                    url: 'http://ba.na.na',
-                    method: 'DELETE',
-                    data: '{ "message": "chomp" }'
-                });
+                respond(200, expectedResponse);
 
             // when
             scope.$on(events.REQUEST_RETRIEVED, function requestRetrieved(event, res) {
@@ -122,10 +124,11 @@
 
             // then
             httpBackend.flush();
-            expect(scope.name).toEqual(response.name);
-            expect(scope.url).toEqual(response.url);
-            expect(scope.method).toEqual(response.method);
-            expect(scope.params).toEqual(response.data);
+            expect(scope.request._id).toEqual(expectedResponse._id);
+            expect(scope.request.name).toEqual(expectedResponse.name);
+            expect(scope.request.url).toEqual(expectedResponse.url);
+            expect(scope.request.method).toEqual(expectedResponse.method);
+            expect(scope.request.params).toEqual(expectedResponse.data);
         });
 
         it('should get a list of registered api calls', function getApiCall() {
@@ -159,13 +162,13 @@
         });
 
         function givenGetCallSettings() {
-            scope.name = 'fakeCall';
-            scope.url = 'http://fake.url';
-            scope.method = 'GET';
-            scope.params = {
+            scope.request.name = 'fakeCall';
+            scope.request.url = 'http://fake.url';
+            scope.request.method = 'GET';
+            scope.request.params = {
                 ba: 'nana'
             };
-            scope.headers = {
+            scope.request.headers = {
                 foo: 'bar'
             };
         }
