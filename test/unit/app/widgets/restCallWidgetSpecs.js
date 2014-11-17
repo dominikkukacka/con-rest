@@ -11,6 +11,7 @@
         var $httpBackend;
         var $compile;
         var events;
+        var parentScope;
 
         beforeEach(module('con-rest'));
 
@@ -19,11 +20,11 @@
             $httpBackend = _$httpBackend_;
             $compile = _$compile_;
             events = _events_;
+            parentScope = $rootScope.$new();
         }));
 
         it('should load the restCall when an id has been provided', function loadRestCall() {
             // given
-            var parentScope = $rootScope.$new();
             parentScope.id = 'someid';
             var directive = angular.element('<rest-call id="' + parentScope.id + '"></rest-call>');
             var expectedRequest = {
@@ -50,12 +51,22 @@
         });
 
         it('should directly enter editing mode when no id and rest call model is provided', function startEditing() {
+            // given
+            var directive = angular.element('<rest-call></rest-call>');
 
+            // when
+            var scope = initalizeDirective(parentScope, directive);
+
+            // then
+            expect(scope.request.name).toEqual(null);
+            expect(scope.request.url).toEqual(null);
+            expect(scope.request.method).toEqual(null);
+            expect(scope.request.params).toEqual(null);
+            expect(scope.request.headers).toEqual(null);
         });
 
         it('should display the provided rest call', function providedCall() {
             // given
-            var parentScope = $rootScope.$new();
             parentScope.restCall = {
                 name: 'fakeCall',
                 url: 'https://fake.url',
