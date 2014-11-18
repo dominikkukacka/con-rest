@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution) {
+(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution, workflowExecution) {
     'use strict';
 
     var app = express();
@@ -28,7 +28,7 @@
 
         app.get('/api/workflows/:id/execute', workflow.executeWorkflowById);
         app.get('/api/workflows/:id', workflow.getWorkflowById);
-        app.get('/api/workflows/:id/executions', execution.getExecutionsOfWorkflow);
+        app.get('/api/workflows/:id/executions', workflowExecution.getWorkflowExecutionsByWorkflowId);
 
         app.get('/api/workflows/', workflow.getWorkflows);
 
@@ -42,4 +42,4 @@
     module.exports = app;
 
 }(require('express'), require('body-parser'), require('./api.js'), require('./workflow.js'),
-    require('mongoose'), require('express-params'), require('./execution.js')));
+    require('mongoose'), require('express-params'), require('./execution.js'), require('./workflowExecution.js')));

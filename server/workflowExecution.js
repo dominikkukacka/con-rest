@@ -10,7 +10,8 @@
 
     var workflowExecutionCallSchema = new Schema({
         workflow: {type: Schema.Types.ObjectId, ref: 'Workflow'},
-        executions: [{type: Schema.Types.ObjectId, ref: 'Execution'}]
+        executions: [{type: Schema.Types.ObjectId, ref: 'Execution'}],
+        executedAt: Date
     });
 
     var WorkflowExecution = mongoose.model('WorkflowExecution', workflowExecutionCallSchema);
@@ -34,12 +35,15 @@
         return deferred.promise;
     }
 
-    function getWorkflowExecutionsOfWorkflow(req, res) {
+    function getWorkflowExecutionsByWorkflowId(req, res) {
         var deferred = queue.defer();
         var id = mongoose.Types.ObjectId(req.params.id);
 
         WorkflowExecution.
-            findById(id).
+            find({
+                workflow: id
+            }).
+            populate('executions').
             exec(deferred.makeNodeResolver());
 
         deferred.promise.then(function returnCall(call) {
@@ -52,6 +56,6 @@
         WorkflowExecution: WorkflowExecution,
         getWorkflowExecutions: getWorkflowExecutions,
         getWorkflowExecutionById: getWorkflowExecutionById,
-        getWorkflowExecutionsOfWorkflow: getWorkflowExecutionsOfWorkflow
+        getWorkflowExecutionsByWorkflowId: getWorkflowExecutionsByWorkflowId
     };
 }(require('mongoose'), require('q')));

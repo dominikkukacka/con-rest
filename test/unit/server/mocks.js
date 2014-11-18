@@ -55,6 +55,7 @@
         {
             _id: '5464b1e2f8243a3c32170001',
             workflow: '545726928469e940235ce700',
+            executedAt: new Date(),
             executions: [
                 '5464b1e2f8243a3c32180001',
                 '5464b1e2f8243a3c32180002',
