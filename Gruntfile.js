@@ -109,7 +109,8 @@ module.exports = function (grunt) {
                 '<%= app.app %>/directives/{,*/}*.js',
                 '<%= app.app %>/viewModels/{,*/}*.js',
                 '<%= app.app %>/widgets/**/{,*/}*.js',
-                '<%= app.server %>/{,*/}*.js'
+                '<%= app.server %>/{,*/}*.js',
+                '!<%= app.app %>/modules/mdTextFloat.js'
             ]
         },
         karma: {
@@ -248,18 +249,30 @@ module.exports = function (grunt) {
                     '<%= app.app %>/styles/*.less',
                     '<%= app.app %>/widgets/**/*.less'
                 ],
-                tasks: ['less:main']
+                tasks: ['less:main'],
+                options: {
+                    // Start a live reload server on the default port 35729
+                    livereload: true
+                }
             },
             ngTemplates: {
                 files: ['<%= app.app %>/widgets/**/*.html'],
-                tasks: ['ngtemplates']
+                tasks: ['ngtemplates'],
+                options: {
+                    // Start a live reload server on the default port 35729
+                    livereload: true
+                }
             },
             testsApp: {
                 files: [
                     '<%= app.app %>/**/*.js',
                     '<%= app.test %>/unit/app/**/*.js'
                 ],
-                tasks: ['karma:unitAuto:run']
+                tasks: ['karma:unitAuto:run'],
+                options: {
+                    // Start a live reload server on the default port 35729
+                    livereload: true
+                }
             },
             testsServer: {
                 files: [

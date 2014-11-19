@@ -1,5 +1,1 @@
-<!-- con-rest -->
-<!-- Version: 0.0.1 -->
-<!-- -->
-<!-- Author: Andy Tang -->
-<!-- Fork me on Github: https://github.com/EnoF/con-rest --><md-card>    <h2>{{ request.name }}</h2></md-card>
+<!-- con-rest --><!-- Version: 0.0.1 --><!-- --><!-- Author: Andy Tang --><!-- Fork me on Github: https://github.com/EnoF/con-rest --><md-card>    <h2>{{ request.name }}</h2>    <md-content layout-wrap layout="rows">        <md-item flex="80">            <h4>url</h4>            <p>{{ request.url }}</p>        </md-item>        <md-item flex="20">            <h4>method</h4>            <p>{{ request.method }}</p>        </md-item>        <md-item flex="90">            <h4>data</h4>            <pre>{{ request.params || 'empty' }}</pre>        </md-item>        <md-item flex="90">            <h4>headers</h4>            <pre>{{ request.headers || 'empty' }}</pre>        </md-item>    </md-content></md-card>

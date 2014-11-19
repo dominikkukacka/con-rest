@@ -8,9 +8,11 @@
              ng-if="!editing"
              ng-click="startEditing()">
         <h2>{{ workflow.name }}</h2>
-        <p>
-            This workflow has {{ workflow.calls.length }} calls.
-        </p>
+
+        <div layout="rows" layout-phone="column">
+            <rest-call ng-repeat="call in workflow.calls"
+                       id="{{call}}"></rest-call>
+        </div>
     </md-card>
     <workflow-registrator ng-if="editing"
                           workflow="workflow">

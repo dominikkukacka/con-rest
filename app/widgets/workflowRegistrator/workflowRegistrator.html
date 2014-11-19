@@ -4,17 +4,17 @@
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
 <md-card class="workflow-registrator"
-         flex layout-padding layout="vertical">
+         flex layout-padding layout="column">
     <md-toolbar>
         <h3 class="md-toolbar-tools">Create Workflow</h3>
     </md-toolbar>
-    <div layout="horizontal" layout-wrap>
+    <div layout="row" layout-wrap>
         <form role="form">
             <md-text-float label="workflow name"
                            ng-model="name"></md-text-float>
 
-            <div layout="vertical"
-                 layout-lg="horizontal"
+            <div layout="column"
+                 layout-tablet="row"
                  layout-wrap>
                 <call-selector ng-repeat="call in calls"
                                request="call"></call-selector>

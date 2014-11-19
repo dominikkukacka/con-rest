@@ -4,7 +4,7 @@
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
 <md-whiteframe class="call-registrator md-whiteframe-z1"
-               flex layout-padding layout="vertical">
+               flex layout-padding layout="column">
     <md-toolbar>
         <h3 class="md-toolbar-tools">Add API Call</h3>
     </md-toolbar>
@@ -12,8 +12,8 @@
         <md-text-float label="API Call name"
                        ng-model="request.name"></md-text-float>
 
-        <div class="row" layout="horizontal">
-            <div layout="vertical">
+        <div class="row" layout="row">
+            <div layout="column">
                 <md-text-float label="method"
                                ng-model="request.method"
                                data-ng-click="toggleMethodsDropdown()"></md-text-float>
