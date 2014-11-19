@@ -43,7 +43,6 @@
             find({
                 workflow: id
             }).
-            // populate('executions').
             exec(deferred.makeNodeResolver());
 
         deferred.promise.then(function returnCall(call) {

@@ -18,6 +18,8 @@
 
     var APICall = mongoose.model('APICall', apiCallSchema);
 
+    var Execution = mongoose.model('Execution');
+
     function getAPICalls(req, res) {
         var deferred = queue.defer();
         APICall.find(deferred.makeNodeResolver());
@@ -31,6 +33,21 @@
         var deferred = queue.defer();
         var id = mongoose.Types.ObjectId(req.params.id);
         APICall.findById(id, deferred.makeNodeResolver());
+        deferred.promise.then(function returnCall(call) {
+            res.send(call);
+        });
+        return deferred.promise;
+    }
+
+    function getExecutionsByAPICallId(req, res) {
+        var deferred = queue.defer();
+        var id = mongoose.Types.ObjectId(req.params.id);
+        Execution.
+            find({
+                apiCall: id
+            }).
+            exec(deferred.makeNodeResolver());
+
         deferred.promise.then(function returnCall(call) {
             res.send(call);
         });
@@ -58,6 +75,7 @@
                 var deferred = queue.defer();
                 queue().
                     then(executeAPICall(call)).
+                    then(saveExecution()).
                     then(function (data) {
                         res.send(data);
                         deferred.resolve(data);
@@ -75,7 +93,7 @@
                 'user-agent': 'con-rest'
             };
 
-            if(apiCall.headers) {
+            if (apiCall.headers) {
                 headers = _.extend(headers, apiCall.headers);
             }
 
@@ -109,12 +127,33 @@
         };
     }
 
+    function saveExecution() {
+        return function saveExecution(result) {
+            var deferred = queue.defer();
+
+            var execution = new Execution({
+                workflow: null,
+                apiCall: result.apiCall._id,
+                statusCode: result.statusCode,
+                response: result.response,
+                headers: result.headers,
+                data: result.data
+            });
+
+            execution.save(function resolveWithResult() {
+                deferred.resolve(result);
+            });
+            return deferred.promise;
+        };
+    }
+
     module.exports = {
         APICall: APICall,
         getAPICalls: getAPICalls,
         getAPICallById: getAPICallById,
         registerAPICall: registerAPICall,
         executeAPICall: executeAPICall,
-        executeAPICallById: executeAPICallById
+        executeAPICallById: executeAPICallById,
+        getExecutionsByAPICallId: getExecutionsByAPICallId
     };
-}(require('mongoose'), require('q'), require('request'), require('underscore')));
+}(require('mongoose'), require('q'), require('request'), require('underscore'), require('./execution')));
