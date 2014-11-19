@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function apiScope(mongoose, queue, request) {
+(function apiScope(mongoose, queue, request, _) {
     'use strict';
 
     var Schema = mongoose.Schema;
@@ -71,27 +71,37 @@
         return function () {
             var deferred = queue.defer();
 
-            // console.log(apiCall.name, 'will be executed with', parameters);
+            var headers = {
+                'user-agent': 'con-rest'
+            };
+
+            if(apiCall.headers) {
+                headers = _.extend(headers, apiCall.headers);
+            }
+
+            var data = apiCall.data || null;
 
             request({
+                method: apiCall.method,
                 url: apiCall.url,
-                headers: {
-                    'User-Agent': 'con-rest'
-                }
+                headers: headers,
+                data: data
             }, function (err, response, body) {
 
-                var data = null;
+                var parsedBody = null;
                 try {
-                    data = JSON.parse(body);
+                    parsedBody = JSON.parse(body);
                 } catch (e) {
-                    data = body;
+                    parsedBody = body;
                 }
 
                 deferred.resolve({
                     id: apiCall._id,
                     statusCode: response.statusCode,
                     apiCall: apiCall,
-                    response: data
+                    response: parsedBody,
+                    headers: headers,
+                    data: data
                 });
             });
 
@@ -107,4 +117,4 @@
         executeAPICall: executeAPICall,
         executeAPICallById: executeAPICallById
     };
-}(require('mongoose'), require('q'), require('request')));
+}(require('mongoose'), require('q'), require('request'), require('underscore')));

@@ -16,7 +16,10 @@
     });
 
     var Workflow = mongoose.model('Workflow', workflowSchema);
+
     var APICall = mongoose.model('APICall');
+    var Execution = mongoose.model('Execution');
+    var WorkflowExecution = mongoose.model('WorkflowExecution');
 
     function getWorkflows(req, res) {
         var deferred = queue.defer();
@@ -123,7 +126,7 @@
 
                 return deferred.promise;
             }).
-            then(function mergeAndReturn(retrievedCalls) {
+            then(function mergeAndRun(retrievedCalls) {
                 var deferred = queue.defer();
 
                 var apiCallQueue = queue();
@@ -142,12 +145,68 @@
                 return deferred.promise;
             }).
             then(function displayResults() {
+                var deferred = queue.defer();
+
                 var results = [];
+                var executionSaving = queue();
+
                 for (var i in callResults) {
-                    results.push(callResults[i]);
+                    var result = callResults[i];
+
+                    executionSaving = executionSaving.
+                        then(saveExecution(workflow, result)).
+                        then(pushResult(results));
+
                 }
-                res.send(results);
+
+                executionSaving.then(function() {
+                    var executionIds = results.map(function(execution) {
+                        return execution._id;
+                    });
+
+                    var workflowExecution = new WorkflowExecution({
+                        workflow: workflow._id,
+                        executedAt: new Date(),
+                        executions: executionIds
+                    });
+
+                    workflowExecution.save(deferred.makeNodeResolver());
+
+                }).
+                then(function() {
+                    res.send(results);
+                    deferred.resolve();
+                });
+
+
+                return deferred.promise;
             });
+    }
+
+    function pushResult(results) {
+        return function(entry) {
+            results.push(entry);
+        };
+    }
+
+    function saveExecution(workflow, result) {
+        return function saveExecution() {
+            var deferred = queue.defer();
+
+            var execution = new Execution({
+                workflow: workflow._id,
+                apiCall: result.apiCall._id,
+                statusCode: result.statusCode,
+                response: result.response,
+                headers: result.headers,
+                data: result.data
+            });
+
+            execution.save(function(err, data) {
+                deferred.resolve(data);
+            });
+            return deferred.promise;
+        };
     }
 
     function registerAPICallExecution(queue, callIndex, callResults) {
@@ -156,8 +215,8 @@
 
             data.index = callIndex++;
             callResults[data.id] = data;
-            deferred.resolve(data);
 
+            deferred.resolve(data);
             return deferred.promise;
         };
     }
@@ -169,4 +228,4 @@
         saveWorkflow: saveWorkflow,
         executeWorkflowById: executeWorkflowById
     };
-}(require('mongoose'), require('q'), require('./api.js')));
+}(require('mongoose'), require('q'), require('./api.js'), require('./execution.js'), require('./workflowExecution')));

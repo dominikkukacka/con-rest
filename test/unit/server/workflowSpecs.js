@@ -16,6 +16,9 @@
     var path = require('path');
     var workflow = require('../../../server/workflow');
 
+    var Execution = mongoose.model('Execution');
+    var WorkflowExecution = mongoose.model('WorkflowExecution');
+
 
     describe('con-rest server', function conRestServerScope() {
 
@@ -133,7 +136,7 @@
         });
 
         describe('execution of Workflows', function retrievalScope() {
-            it('should return execute a workflow', function getRegisteredWorkflows(done) {
+            it('should execute a workflow', function getRegisteredWorkflows(done) {
 
                 for (var i = 0; i <= 2; i++) {
                     nock('http://httpbin.org').
@@ -143,6 +146,7 @@
 
                 var req;
                 var res;
+                var startCount = 0;
                 queue().
                     then(function given() {
                         req = {
@@ -153,15 +157,20 @@
                         res = {};
                         res.send = sinon.spy();
                     }).
-                    then(function when() {
+                    then(function () {
+                        return Execution.count().exec();
+                    }).
+                    then(function when(count) {
+                        startCount = count;
                         return workflow.executeWorkflowById(req, res);
                     }).
                     then(function then() {
+
                         var call = res.send.args[0][0];
                         Object.keys(call).length.should.be.exactly(3);
-                        String(call[0].id).should.be.exactly('545726928469e940235ce770');
-                        String(call[1].id).should.be.exactly('545726928469e940235ce771');
-                        String(call[2].id).should.be.exactly('545726928469e940235ce772');
+                        String(call[0].apiCall).should.be.exactly('545726928469e940235ce770');
+                        String(call[1].apiCall).should.be.exactly('545726928469e940235ce771');
+                        String(call[2].apiCall).should.be.exactly('545726928469e940235ce772');
 
                         Object.keys(call[0].response).length.should.be.exactly(1);
                         call[0].response.indicator.should.be.exactly(100);
@@ -171,6 +180,12 @@
 
                         Object.keys(call[2].response).length.should.be.exactly(1);
                         call[2].response.indicator.should.be.exactly(102);
+
+                        // Check Mongo if three executions inserted
+                        Execution.count().exec(function (err, endCount) {
+                            endCount.should.be.exactly(startCount + 3);
+                        });
+
                     }).
                     then(done).
                     catch(done);

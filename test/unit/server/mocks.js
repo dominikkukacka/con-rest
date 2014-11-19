@@ -34,7 +34,10 @@
             _id: '545726928469e940235ce771',
             name: 'queue call #2',
             url: 'http://httpbin.org/get',
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'user-agent': 'TestUserAgent'
+            }
         }
     ];
 
@@ -71,21 +74,21 @@
             workflow: '545726928469e940235ce700',
             apiCall: '545726928469e940235ce770',
             statusCode: 200,
-            reponse: {index: 100}
+            reponse: {indicator: 100}
         },
         {
-            _id: '5464b1e2f8243a3c32180001',
+            _id: '5464b1e2f8243a3c32180002',
             workflow: '545726928469e940235ce700',
             apiCall: '545726928469e940235ce771',
             statusCode: 200,
-            reponse: {index: 101}
+            reponse: {indicator: 101}
         },
         {
             _id: '5464b1e2f8243a3c32180003',
             workflow: '545726928469e940235ce700',
             apiCall: '545726928469e940235ce772',
             statusCode: 200,
-            reponse: {index: 102}
+            reponse: {indicator: 102}
         },
 
         // directly executed
@@ -93,7 +96,7 @@
             _id: '5464b1e2f8243a3c32180004',
             apiCall: '545726928469e940235ce770',
             statusCode: 200,
-            reponse: {index: 100}
+            reponse: {indicator: 100}
         }
 
     ];

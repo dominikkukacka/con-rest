@@ -43,6 +43,23 @@
             find({
                 workflow: id
             }).
+            // populate('executions').
+            exec(deferred.makeNodeResolver());
+
+        deferred.promise.then(function returnCall(call) {
+            res.send(call);
+        });
+        return deferred.promise;
+    }
+
+    function getExecutionsFromWorkflowId(req, res) {
+        var deferred = queue.defer();
+        var workflowExecutionId = mongoose.Types.ObjectId(req.params.workflowExecutionId);
+
+        WorkflowExecution.
+            find({
+                _id: workflowExecutionId
+            }).
             populate('executions').
             exec(deferred.makeNodeResolver());
 
@@ -56,6 +73,7 @@
         WorkflowExecution: WorkflowExecution,
         getWorkflowExecutions: getWorkflowExecutions,
         getWorkflowExecutionById: getWorkflowExecutionById,
-        getWorkflowExecutionsByWorkflowId: getWorkflowExecutionsByWorkflowId
+        getWorkflowExecutionsByWorkflowId: getWorkflowExecutionsByWorkflowId,
+        getExecutionsFromWorkflowId: getExecutionsFromWorkflowId
     };
 }(require('mongoose'), require('q')));

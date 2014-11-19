@@ -69,67 +69,6 @@
                     catch(done);
             });
         });
-
-        xdescribe('saving', function registrationScope() {
-            it('should register an new execution', function registerexecution(done) {
-                var req;
-                var res;
-                queue().
-                    then(function given() {
-                        req = {
-                            body: {
-                                name: 'fakeCall',
-                                calls: ['545726927732d940235ce769', '545726928469e940235ce770']
-                            }
-                        };
-                        res = {};
-                        res.send = sinon.spy();
-                    }).
-                    then(function when() {
-                        return execution.registerexecution(req, res);
-                    }).
-                    then(function then() {
-                        res.send.calledOnce.should.be.true;
-                        res.send.args[0][0].should.be.a.String;
-                    }).
-                    then(done).
-                    catch(done);
-            });
-
-            it('should overwrite an existing execution', function saveExistingexecution(done) {
-                var req;
-                var res;
-                queue().
-                    then(function given() {
-                        req = {
-                            body: {
-                                name: 'overwritten',
-                                calls: ['545726928469e940235ce769', '545726928469e940235ce770']
-                            },
-                            params: {
-                                id: '545726928469e940235ce769'
-                            }
-                        };
-                        res = {};
-                        res.send = sinon.spy();
-                    }).
-                    then(function when() {
-                        return execution.saveexecution(req, res);
-                    }).
-                    then(function then() {
-                        res.send.calledOnce.should.be.true;
-                        res.send.args[0][0].should.be.a.String;
-                    }).
-                    then(function when() {
-                        return execution.getexecutionById(req);
-                    }).
-                    then(function then(execution) {
-                        execution.name.should.be.exactly('overwritten');
-                    }).
-                    then(done).
-                    catch(done);
-            });
-        });
     });
 
 }(require('sinon'), require('nock')));

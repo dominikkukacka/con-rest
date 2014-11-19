@@ -71,67 +71,6 @@
                     catch(done);
             });
         });
-
-        xdescribe('saving', function registrationScope() {
-            it('should register an new workflowExecution', function registerworkflowExecution(done) {
-                var req;
-                var res;
-                queue().
-                    then(function given() {
-                        req = {
-                            body: {
-                                name: 'fakeCall',
-                                calls: ['545726927732d940235ce769', '545726928469e940235ce770']
-                            }
-                        };
-                        res = {};
-                        res.send = sinon.spy();
-                    }).
-                    then(function when() {
-                        return workflowExecution.registerworkflowExecution(req, res);
-                    }).
-                    then(function then() {
-                        res.send.calledOnce.should.be.true;
-                        res.send.args[0][0].should.be.a.String;
-                    }).
-                    then(done).
-                    catch(done);
-            });
-
-            it('should overwrite an existing workflowExecution', function saveExistingworkflowExecution(done) {
-                var req;
-                var res;
-                queue().
-                    then(function given() {
-                        req = {
-                            body: {
-                                name: 'overwritten',
-                                calls: ['545726928469e940235ce769', '545726928469e940235ce770']
-                            },
-                            params: {
-                                id: '545726928469e940235ce769'
-                            }
-                        };
-                        res = {};
-                        res.send = sinon.spy();
-                    }).
-                    then(function when() {
-                        return workflowExecution.saveworkflowExecution(req, res);
-                    }).
-                    then(function then() {
-                        res.send.calledOnce.should.be.true;
-                        res.send.args[0][0].should.be.a.String;
-                    }).
-                    then(function when() {
-                        return workflowExecution.getworkflowExecutionById(req);
-                    }).
-                    then(function then(workflowExecution) {
-                        workflowExecution.name.should.be.exactly('overwritten');
-                    }).
-                    then(done).
-                    catch(done);
-            });
-        });
     });
 
 }(require('sinon'), require('nock')));

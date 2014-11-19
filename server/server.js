@@ -26,9 +26,10 @@
 
         app.post('/api/requests', api.registerAPICall);
 
-        app.get('/api/workflows/:id/execute', workflow.executeWorkflowById);
         app.get('/api/workflows/:id', workflow.getWorkflowById);
         app.get('/api/workflows/:id/executions', workflowExecution.getWorkflowExecutionsByWorkflowId);
+        app.get('/api/workflows/:workflowId/executions/:workflowExecutionId', workflowExecution.getExecutionsFromWorkflowId);
+        app.post('/api/workflows/:id/executions', workflow.executeWorkflowById);
 
         app.get('/api/workflows/', workflow.getWorkflows);
 
