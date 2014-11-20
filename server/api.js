@@ -137,7 +137,8 @@
                 statusCode: result.statusCode,
                 response: result.response,
                 headers: result.headers,
-                data: result.data
+                data: result.data,
+                executedAt: new Date()
             });
 
             execution.save(function resolveWithResult() {

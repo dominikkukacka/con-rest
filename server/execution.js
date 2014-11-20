@@ -14,7 +14,8 @@
         statusCode: Number,
         response: Schema.Types.Mixed,
         headers: Schema.Types.Mixed,
-        data: Schema.Types.Mixed
+        data: Schema.Types.Mixed,
+        executedAt: Date
     });
 
     var Execution = mongoose.model('Execution', executionCallSchema);
