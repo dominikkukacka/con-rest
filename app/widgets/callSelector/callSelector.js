@@ -3,12 +3,6 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-
-// con-rest
-// Version: 0.0.1
-//
-// Author: Andy Tang
-// Fork me on Github: https://github.com/EnoF/con-rest
 (function callSelectorScope(angular) {
     'use strict';
 

@@ -11,7 +11,7 @@
     app.directive('callRegistrator', function callRegistratorDirective() {
         return {
             controller: 'restCallVM',
-            restrict: 'A',
+            restrict: 'EA',
             scope: {},
             templateUrl: 'callRegistrator'
         };

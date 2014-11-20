@@ -3,12 +3,12 @@
 <!-- -->
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
-<md-whiteframe class="call-registrator md-whiteframe-z1"
-               flex layout-padding layout="column">
+<md-card class="call-registrator md-whiteframe-z1"
+         flex layout="column">
     <md-toolbar>
         <h3 class="md-toolbar-tools">Add API Call</h3>
     </md-toolbar>
-    <form role="form">
+    <form role="form" layout-padding>
         <md-text-float label="API Call name"
                        ng-model="request.name"></md-text-float>
 
@@ -42,4 +42,4 @@
                    ng-click="registerCall()">Submit
         </md-button>
     </form>
-</md-whiteframe>
+</md-card>
