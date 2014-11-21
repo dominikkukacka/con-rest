@@ -62,7 +62,7 @@
                         call.name.should.be.exactly('firstCall');
                         call.url.should.be.exactly('http://test.one');
                         call.method.should.be.exactly('GET');
-                        call.data.page.should.be.exactly(2);
+                        call.formData.page.should.be.exactly(2);
                     }).
                     then(done).
                     catch(done);

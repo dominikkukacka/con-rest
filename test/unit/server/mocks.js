@@ -13,7 +13,7 @@
             name: 'firstCall',
             url: 'http://test.one',
             method: 'GET',
-            data: {
+            formData: {
                 page: 2
             },
             headers: null

@@ -12,7 +12,8 @@
         name: String,
         url: String,
         method: String,
-        data: Schema.Types.Mixed,
+        formData: Schema.Types.Mixed,
+        payload: Schema.Types.Mixed,
         headers: Schema.Types.Mixed
     });
 
@@ -105,13 +106,25 @@
                 headers = _.extend(headers, apiCall.headers);
             }
 
-            var data = apiCall.data || null;
+            var formData = apiCall.formData || null;
+
+            // it takes either an JSON object or a string,
+            // a JSON object will be stringified
+            var payload = null;
+            if(apiCall.payload) {
+                try {
+                    payload = JSON.stringify(apiCall.payload);
+                } catch (e) {
+                    payload = apiCall.payload;
+                }
+            }
 
             request({
                 method: apiCall.method,
                 url: apiCall.url,
                 headers: headers,
-                data: data
+                data: formData,
+                body: payload
             }, function (err, response, body) {
 
                 if (err) {
@@ -132,7 +145,8 @@
                     apiCall: apiCall,
                     response: parsedBody,
                     headers: headers,
-                    data: data
+                    payload: payload,
+                    formData: formData
                 });
             });
 
@@ -150,7 +164,8 @@
                 statusCode: result.statusCode,
                 response: result.response,
                 headers: result.headers,
-                data: result.data,
+                formData: result.formData,
+                payload: result.payload,
                 executedAt: new Date()
             });
 
