@@ -11,7 +11,8 @@
     app.controller('workFlowVM', function workFlowVM($scope, $http, events) {
         // Set a default empty workflow if not provided.
         $scope.workflow = $scope.workflow || {
-            id: null
+            id: null,
+            calls: []
         };
 
         // The properties of the workflow which are not yet persisted.

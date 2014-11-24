@@ -6,7 +6,11 @@
 <md-card class="workflow-registrator"
          flex layout-padding layout="column">
     <md-toolbar>
-        <h3 class="md-toolbar-tools">Create Workflow</h3>
+        <h3 class="md-toolbar-tools"
+            ng-if="workflow._id">Edit Workflow</h3>
+
+        <h3 class="md-toolbar-tools"
+            ng-if="!workflow._id">Create Workflow</h3>
     </md-toolbar>
     <div layout="row" layout-wrap>
         <form role="form">
