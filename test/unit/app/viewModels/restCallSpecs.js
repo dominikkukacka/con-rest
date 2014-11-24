@@ -161,6 +161,40 @@
             expect(scope.availableCalls).toEqual(response.data);
         });
 
+        it('should set the attributes of the provided request', function providedRequest() {
+            // given
+            scope.request = {
+                id: '545c8129e0e00d50095212c5'
+            };
+            var response = null;
+            var responseDetails = [
+                {
+                    '_id': '545c8129e0e00d50095212c5',
+                    'name': 'Chikita',
+                    'url': 'http://url.info',
+                    'method': 'GET',
+                    'data': {
+                        'ba': 'nana'
+                    },
+                    '__v': 0
+                }
+            ];
+            httpBackend.expect('GET', '/api/requests/').
+                respond(200, responseDetails);
+
+            // when
+            scope.$on(events.REQUESTS_RETRIEVED, function requestsReceived(event, res) {
+                response = res;
+            });
+            scope.getAvailableRequests();
+
+            // then
+            httpBackend.flush();
+            expect(response.status).toEqual(200);
+            expect(scope.request.name).toEqual(response.data[0].name);
+            expect(scope.availableCalls).toEqual(response.data);
+        });
+
         function givenGetCallSettings() {
             scope.request.name = 'fakeCall';
             scope.request.url = 'http://fake.url';

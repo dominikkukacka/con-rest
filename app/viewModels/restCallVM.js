@@ -11,7 +11,7 @@
     app.controller('restCallVM', function restCallVMScope($scope, $http, events) {
         // The id can be provided by the parent.
         $scope.id = $scope.id || null;
-        
+
         // Request can be passed a long or it could be empty.
         $scope.request = $scope.request || {
             name: null,
@@ -128,6 +128,15 @@
         // Notify the requests have been retrieved.
         $scope.retrievedRequests = function retrievedRequests(response) {
             $scope.availableCalls = response.data;
+            if ($scope.request.id) {
+                for (var i = 0; i < response.data.length; i++) {
+                    var call = response.data[i];
+                    if (call._id === $scope.request.id) {
+                        $scope.request.name = call.name;
+                        break;
+                    }
+                }
+            }
             $scope.$emit(events.REQUESTS_RETRIEVED, response);
         };
     });
