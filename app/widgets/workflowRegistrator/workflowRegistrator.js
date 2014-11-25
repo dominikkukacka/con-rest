@@ -15,19 +15,7 @@
             scope: {
                 workflow: '=workflow'
             },
-            templateUrl: 'workflowRegistrator',
-            link: function workflowRegistratorConstructor(scope) {
-                scope.name = scope.workflow.name;
-
-                // create call register object
-                if (scope.workflow.calls.length > 0) {
-                    for (var i = 0; i < scope.workflow.calls.length; i++) {
-                        scope.calls[i] = {
-                            id: scope.workflow.calls[i]
-                        };
-                    }
-                }
-            }
+            templateUrl: 'workflowRegistrator'
         };
     });
 }(window.angular));

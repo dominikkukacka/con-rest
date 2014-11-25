@@ -164,7 +164,7 @@
         it('should set the attributes of the provided request', function providedRequest() {
             // given
             scope.request = {
-                id: '545c8129e0e00d50095212c5'
+                _id: '545c8129e0e00d50095212c5'
             };
             var response = null;
             var responseDetails = [

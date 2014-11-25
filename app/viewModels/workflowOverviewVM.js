@@ -11,14 +11,29 @@
     app.controller('workflowOverviewVM', function workflowOverviewVM($scope, $http, events) {
         $scope.workflows = [];
 
-        $scope.addWorkflow = function addWorkflow(){
+        $scope.addWorkflow = function addWorkflow() {
             $scope.workflows.push({
-                name: 'New Workflow'
+                name: 'New Workflow',
+                calls: []
             });
         };
 
+        $scope.convertCallsToModel = function convertCallsToModel(workflows) {
+            angular.forEach(workflows, function iterator(workflow) {
+                var convertedCalls = [];
+                angular.forEach(workflow.calls, function iterator(call) {
+                    this.push({
+                        _id: call
+                    });
+                }, convertedCalls);
+                workflow.calls = convertedCalls;
+            });
+            return workflows;
+        };
+
         $scope.workflowsRetrieved = function workflowsRetrieved(response) {
-            $scope.workflows = response.data;
+            $scope.workflows = $scope.convertCallsToModel(response.data);
+
             $scope.$emit(events.WORKFLOWS_RETRIEVED, response);
         };
 

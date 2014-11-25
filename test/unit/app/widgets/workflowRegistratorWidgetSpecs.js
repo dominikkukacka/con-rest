@@ -45,8 +45,8 @@
             var scope = initalizeDirective(parentScope, directive);
 
             // then
-            expect(scope.calls[0].id).toEqual(parentScope.workflow.calls[0]);
-            expect(scope.calls[1].id).toEqual(parentScope.workflow.calls[1]);
+            expect(scope.workflow.calls[0]).toEqual(parentScope.workflow.calls[0]);
+            expect(scope.workflow.calls[1]).toEqual(parentScope.workflow.calls[1]);
             expect(scope.workflow).toEqual(parentScope.workflow);
         });
 

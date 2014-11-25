@@ -19,12 +19,25 @@
             });
         }));
 
+        it('should add an empty workflow ready to be saved', function addEmptyWorkflow() {
+            // given
+            scope.workflows = [];
+
+            // when
+            scope.addWorkflow();
+
+            // then
+            expect(scope.workflows[0].name).toEqual('New Workflow');
+            expect(scope.workflows[0].calls instanceof Array).toEqual(true);
+        });
+
         it('should load all workflows', function loadExistingWorkflows() {
             // given
             var response = null;
             var workflows = [
                 {
-
+                    name: 'somename',
+                    calls: ['someid', 'moreids']
                 }
             ]
             httpBackend.expect('GET', '/api/workflows/').
@@ -39,8 +52,9 @@
             // then
             httpBackend.flush();
             expect(response.status).toEqual(200);
-            expect(response.data).toEqual(workflows);
-            expect(scope.workflows).toEqual(workflows);
+            expect(scope.workflows[0].name).toEqual(workflows[0].name);
+            expect(scope.workflows[0].calls[0]._id).toEqual(workflows[0].calls[0]);
+            expect(scope.workflows[0].calls[1]._id).toEqual(workflows[0].calls[1]);
         });
     });
 }());

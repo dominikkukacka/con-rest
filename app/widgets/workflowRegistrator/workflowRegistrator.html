@@ -15,12 +15,12 @@
     <div layout="row" layout-wrap>
         <form role="form">
             <md-text-float label="workflow name"
-                           ng-model="name"></md-text-float>
+                           ng-model="workflow.name"></md-text-float>
 
             <div layout="column"
                  layout-tablet="row"
                  layout-wrap>
-                <call-selector ng-repeat="call in calls"
+                <call-selector ng-repeat="call in workflow.calls"
                                request="call"></call-selector>
 
                 <md-button class="md-fab"

@@ -128,10 +128,10 @@
         // Notify the requests have been retrieved.
         $scope.retrievedRequests = function retrievedRequests(response) {
             $scope.availableCalls = response.data;
-            if ($scope.request.id) {
+            if ($scope.request._id) {
                 for (var i = 0; i < response.data.length; i++) {
                     var call = response.data[i];
-                    if (call._id === $scope.request.id) {
+                    if (call._id === $scope.request._id) {
                         $scope.request.name = call.name;
                         break;
                     }

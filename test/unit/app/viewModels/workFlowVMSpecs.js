@@ -22,7 +22,7 @@
         it('should create a new workflow', function createNewWorkFlow() {
             // given
             var response = null;
-            scope.name = 'workflowName'
+            scope.workflow.name = 'workflowName';
             var workflowDetails = {
                 name: 'workflowName',
                 calls: []
@@ -40,7 +40,7 @@
             httpBackend.flush();
             expect(response.status).toEqual(200);
             expect(response.data).toEqual('someguidid');
-            expect(scope.workflow.id).toEqual('someguidid');
+            expect(scope.workflow._id).toEqual('someguidid');
         });
 
         it('should load an existing workflow', function addNewWorkFlow() {
@@ -50,8 +50,8 @@
                 name: 'workflow1',
                 calls: ['callid1', 'callid2']
             };
-            scope.workflow.id = 'abc123';
-            httpBackend.expect('GET', '/api/workflows/' + scope.workflow.id).
+            scope.workflow._id = 'abc123';
+            httpBackend.expect('GET', '/api/workflows/' + scope.workflow._id).
                 respond(200, responseDetails);
 
             // when
@@ -63,27 +63,31 @@
             // then
             httpBackend.flush();
             expect(response.status).toEqual(200);
-            expect(scope.name).toEqual(responseDetails.name);
-            expect(scope.calls).toEqual(responseDetails.calls);
+            expect(scope.workflow.name).toEqual(responseDetails.name);
+            expect(scope.workflow.calls[0]._id).toEqual(responseDetails.calls[0]);
+            expect(scope.workflow.calls[1]._id).toEqual(responseDetails.calls[1]);
         });
 
         it('should save changes to an existing workflow', function saveExistingWorkflow() {
             // given
             var response = null;
-            scope.name = 'workflowName';
-            scope.calls = ['call1', 'call3'];
-            var workflowDetails = {
-                name: scope.name,
-                calls: scope.calls
+            scope.workflow = {
+                _id: 'someid',
+                name: 'workflowName',
+                calls: ['call1', 'call3']
             };
-            httpBackend.expect('PUT', '/api/workflows/' + scope.workflow.id, workflowDetails).
+            var workflowDetails = {
+                name: scope.workflow.name,
+                calls: scope.workflow.calls
+            };
+            httpBackend.expect('PUT', '/api/workflows/' + scope.workflow._id, workflowDetails).
                 respond(200, 'ok');
 
             // when
             scope.$on(events.WORKFLOW_UPDATED, function workFlowCreated(event, res) {
                 response = res;
             });
-            scope.updateWorkflow();
+            scope.save();
 
             // then
             httpBackend.flush();
@@ -94,7 +98,7 @@
         describe('saving functionality', function savingSpecs() {
             it('should create a workflow', function createWorkflow() {
                 // given
-                scope.id = null;
+                scope.workflow._id = null;
                 spyOn(scope, 'createNewWorkflow');
 
                 // when
@@ -106,7 +110,7 @@
 
             it('should save the changes on an existing workflow', function saveChanges() {
                 // given
-                scope.workflow.id = '12304';
+                scope.workflow._id = '12304';
                 spyOn(scope, 'updateWorkflow');
 
                 // when
