@@ -8,7 +8,7 @@
 
     var app = angular.module('con-rest');
 
-    app.controller('restCallVM', function restCallVMScope($scope, $http, events) {
+    app.controller('restCallVM', function restCallVMScope($scope, $http, events, $timeout) {
         // The id can be provided by the parent.
         $scope.id = $scope.id || null;
 
@@ -44,6 +44,15 @@
         // Open the available requests
         $scope.openAvailableRequests = function openAvailableRequests() {
             $scope.showCalls = true;
+        };
+
+        // Close the availabe requests
+        $scope.closeAvailableRequests = function closeAvailableRequests() {
+            $scope.showCalls = false;
+            // The scope is in conflict with the click function when we apply directly.
+            $timeout(function workAroundForBlur() {
+                $scope.$apply();
+            }, 100);
         };
 
         // Select call, this is not the requst.

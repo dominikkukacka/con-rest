@@ -16,9 +16,11 @@
                 request: '=request'
             },
             templateUrl: 'callSelector',
-            link: function constructor(scope) {
+            link: function constructor(scope, element) {
                 // Retrieve the available requests.
                 scope.getAvailableRequests();
+
+                element.find('input').on('blur', scope.closeAvailableRequests);
             }
         };
     });

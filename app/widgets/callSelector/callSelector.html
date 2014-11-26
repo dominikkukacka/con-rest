@@ -9,10 +9,10 @@
                    ng-click="openAvailableRequests()"></md-text-float>
     <md-whiteframe class="md-whiteframe-z5">
         <md-list ng-show="showCalls">
-            <md-item ng-repeat="call in availableCalls">
-                <md-item-content data-ng-click="selectCall(call)">
-                    <div class="md-tile-left">{{call.method}}</div>
-                    <div class="md-tile-content">{{call.name}}</div>
+            <md-item flex ng-repeat="call in availableCalls">
+                <md-item-content ng-click="selectCall(call)">
+                    <div flex>{{call.method}}</div>
+                    <div flex class="md-tile-content"><p>{{call.name}}</p></div>
                 </md-item-content>
             </md-item>
         </md-list>

@@ -39,7 +39,7 @@
             ];
 
             $httpBackend.expect('GET', '/api/requests/').
-                respond(200, availableRequests);
+            respond(200, availableRequests);
 
             // when
             var scope = initalizeDirective(parentScope, directive);
@@ -48,6 +48,35 @@
             // then
             expect(scope.request._id).toEqual(availableRequests[0]._id);
             expect(scope.request.name).toEqual(availableRequests[0].name);
+        });
+
+        it('should close the list when the input element is blurred', function closeOnBlur() {
+            // given
+            parentScope.request = null;
+            var directive = angular.element('<call-selector request="request"></call-selector>');
+            var availableRequests = [
+                {
+                    name: 'fakeCall',
+                    url: 'https://fake.url',
+                    method: 'PUT',
+                    data: { ba: 'nana' },
+                    headers: { to: 'ken' }
+                }
+            ];
+
+            $httpBackend.expect('GET', '/api/requests/').
+                respond(200, availableRequests);
+
+            var scope = initalizeDirective(parentScope, directive);
+            $httpBackend.flush();
+
+            scope.showCalls = true;
+
+            // when
+            directive.find('input').triggerHandler('blur');
+
+            // then
+            expect(scope.showCalls).toEqual(false);
         });
 
         function initalizeDirective(scope, directive) {
