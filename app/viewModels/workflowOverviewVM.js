@@ -25,30 +25,29 @@
                 ok('REMOVE WORKFLOW').
                 cancel('KEEP WORKFLOW').
                 targetEvent(event);
-            $mdDialog.show(confirm).then($scope.removeWorkflowOnConfirm(workflow._id));
+            $mdDialog.show(confirm).then($scope.removeWorkflowOnConfirm(workflow));
         };
 
-        $scope.removeWorkflowOnConfirm = function removeWorkflowOnConfirm(workflowId) {
+        $scope.removeWorkflowOnConfirm = function removeWorkflowOnConfirm(workflow) {
             return function removeWorkflowWrapper() {
-                $scope.removeWorkflow(workflowId);
+                if (workflow._id) {
+                    $scope.removeWorkflow(workflow);
+                } else {
+                    // removeWorkflowFromModel returns a wrapped function.
+                    $scope.removeWorkflowFromModel(workflow)();
+                }
             };
         };
 
-        $scope.removeWorkflow = function removeWorkflow(workflowId) {
-            $http.delete('/api/workflows/' + workflowId).
-                then($scope.removeWorkflowFromModel(workflowId));
-
+        $scope.removeWorkflow = function removeWorkflow(workflow) {
+            $http.delete('/api/workflows/' + workflow._id).
+                then($scope.removeWorkflowFromModel(workflow));
         };
 
-        $scope.removeWorkflowFromModel = function removeWOrkflowFromModel(workflowId) {
+        $scope.removeWorkflowFromModel = function removeWOrkflowFromModel(workflow) {
             return function removeWrapper() {
-                for (var i = 0; i < $scope.workflows.length; i++) {
-                    if ($scope.workflows[i]._id === workflowId) {
-                        $scope.workflows.splice(i, 1);
-
-                        break;
-                    }
-                }
+                var index = $scope.workflows.indexOf(workflow);
+                $scope.workflows.splice(index, 1);
             };
         };
 

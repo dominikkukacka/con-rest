@@ -38,18 +38,19 @@
             // given
             var scope = loadWorkflowOverview();
             var fakeEvent = {};
+            var fakeWorkflow = {
+                _id: 'myFakeId',
+                name: 'workflowname'
+            };
             spyOn($mdDialog, 'show').andCallThrough();
             spyOn(scope, 'removeWorkflowOnConfirm');
 
             // when
-            scope.confirmWorkflowDeletion(fakeEvent, {
-                _id: 'myFakeId',
-                name: 'workflowname'
-            });
+            scope.confirmWorkflowDeletion(fakeEvent, fakeWorkflow);
 
             // then
             expect($mdDialog.show).toHaveBeenCalled();
-            expect(scope.removeWorkflowOnConfirm).toHaveBeenCalledWith('myFakeId');
+            expect(scope.removeWorkflowOnConfirm).toHaveBeenCalledWith(fakeWorkflow);
         });
 
         function loadWorkflowOverview() {

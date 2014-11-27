@@ -75,13 +75,25 @@
                 respond(200, 'ok');
 
             // when
-            scope.removeWorkflow('this one');
+            scope.removeWorkflowOnConfirm(scope.workflows[1])();
             httpBackend.flush();
 
             // then
             expect(scope.workflows.length).toEqual(2);
             expect(scope.workflows[0]._id).toEqual('not this one');
             expect(scope.workflows[1]._id).toEqual('also not this one');
+        });
+
+        it('should remove an unsaved workflow', function removeUnsavedWorkflow() {
+            // given
+            scope.workflows = [];
+            scope.addWorkflow();
+
+            // when
+            scope.removeWorkflowOnConfirm(scope.workflows[0])();
+
+            // then
+            expect(scope.workflows.length).toEqual(0);
         });
     });
 }());
