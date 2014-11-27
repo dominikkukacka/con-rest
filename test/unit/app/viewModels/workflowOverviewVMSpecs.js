@@ -56,5 +56,32 @@
             expect(scope.workflows[0].calls[0]._id).toEqual(workflows[0].calls[0]);
             expect(scope.workflows[0].calls[1]._id).toEqual(workflows[0].calls[1]);
         });
+
+        it('should remove an workflow', function removeWorkflow() {
+            // given
+            scope.workflows = [
+                {
+                    _id: 'not this one'
+                },
+                {
+                    _id: 'this one'
+                },
+                {
+                    _id: 'also not this one'
+                }
+            ];
+
+            httpBackend.expect('DELETE', '/api/workflows/' + 'this one').
+                respond(200, 'ok');
+
+            // when
+            scope.removeWorkflow('this one');
+            httpBackend.flush();
+
+            // then
+            expect(scope.workflows.length).toEqual(2);
+            expect(scope.workflows[0]._id).toEqual('not this one');
+            expect(scope.workflows[1]._id).toEqual('also not this one');
+        });
     });
 }());

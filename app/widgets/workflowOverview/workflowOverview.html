@@ -6,9 +6,14 @@
 <md-whiteframe class="workflow-overview md-whiteframe-z1"
                flex layout-padding layout="column">
     <div flex layout="row" layout-phone="column" layout-wrap>
-        <workflow ng-repeat="workflow in workflows"
-                  workflow="workflow">
-        </workflow>
+        <section ng-repeat="workflow in workflows" layout="row">
+            <workflow workflow="workflow"></workflow>
+            <md-button class="md-fab"
+                       ng-click="confirmWorkflowDeletion($event, workflow)"
+                       aria-label="delete workflow">
+                <md-icon icon="/icons/ic_delete_24px.svg"></md-icon>
+            </md-button>
+        </section>
     </div>
     <md-button class="md-raised md-primary"
                ng-click="addWorkflow()">

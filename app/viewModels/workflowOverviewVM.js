@@ -8,7 +8,7 @@
 
     var app = angular.module('con-rest');
 
-    app.controller('workflowOverviewVM', function workflowOverviewVM($scope, $http, events) {
+    app.controller('workflowOverviewVM', function workflowOverviewVM($scope, $http, $mdDialog, events) {
         $scope.workflows = [];
 
         $scope.addWorkflow = function addWorkflow() {
@@ -16,6 +16,40 @@
                 name: 'New Workflow',
                 calls: []
             });
+        };
+
+        $scope.confirmWorkflowDeletion = function confirmWorkflowDeletion(event, workflow) {
+            var confirm = $mdDialog.confirm().
+                title('Are you sure you want to remove this workflow [' + workflow.name + ']?').
+                content('The workflow will be deleted, but the rest calls will remain.').
+                ok('REMOVE WORKFLOW').
+                cancel('KEEP WORKFLOW').
+                targetEvent(event);
+            $mdDialog.show(confirm).then($scope.removeWorkflowOnConfirm(workflow._id));
+        };
+
+        $scope.removeWorkflowOnConfirm = function removeWorkflowOnConfirm(workflowId) {
+            return function removeWorkflowWrapper() {
+                $scope.removeWorkflow(workflowId);
+            };
+        };
+
+        $scope.removeWorkflow = function removeWorkflow(workflowId) {
+            $http.delete('/api/workflows/' + workflowId).
+                then($scope.removeWorkflowFromModel(workflowId));
+
+        };
+
+        $scope.removeWorkflowFromModel = function removeWOrkflowFromModel(workflowId) {
+            return function removeWrapper() {
+                for (var i = 0; i < $scope.workflows.length; i++) {
+                    if ($scope.workflows[i]._id === workflowId) {
+                        $scope.workflows.splice(i, 1);
+
+                        break;
+                    }
+                }
+            };
         };
 
         $scope.convertCallsToModel = function convertCallsToModel(workflows) {

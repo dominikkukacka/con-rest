@@ -28,6 +28,7 @@
         app.post('/api/requests', api.registerAPICall);
 
         app.get('/api/workflows/:id', workflow.getWorkflowById);
+        app.delete('/api/workflows/:id', workflow.deleteWorkflow);
         app.get('/api/workflows/:id/executions', workflowExecution.getWorkflowExecutionsByWorkflowId);
         app.get('/api/workflows/:workflowId/executions/:workflowExecutionId', workflowExecution.getExecutionsFromWorkflowId);
         app.post('/api/workflows/:id/executions', workflow.executeWorkflowById);

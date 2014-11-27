@@ -135,6 +135,38 @@
             });
         });
 
+        describe('deletion', function detionScope() {
+            it('should delete an existing workflow', function saveExistingWorkflow(done) {
+                var req;
+                var res;
+                queue().
+                    then(function given() {
+                        req = {
+                            params: {
+                                id: '545726928469e940235ce769'
+                            }
+                        };
+                        res = {};
+                        res.send = sinon.spy();
+                    }).
+                    then(function when() {
+                        return workflow.deleteWorkflow(req, res);
+                    }).
+                    then(function then() {
+                        res.send.calledOnce.should.be.true;
+                        res.send.args[0][0].should.be.a.String;
+                    }).
+                    then(function when() {
+                        return workflow.getWorkflowById(req);
+                    }).
+                    then(function then(workflow) {
+                        (workflow === null).should.be.true;
+                    }).
+                    then(done).
+                    catch(done);
+            });
+        });
+
         describe('execution of Workflows', function retrievalScope() {
             it('should execute a workflow', function getRegisteredWorkflows(done) {
 

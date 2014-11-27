@@ -40,6 +40,16 @@
         return deferred.promise;
     }
 
+    function deleteWorkflow(req, res) {
+        var deferred = queue.defer();
+        var id = mongoose.Types.ObjectId(req.params.id);
+        Workflow.findByIdAndRemove(id, deferred.makeNodeResolver());
+        deferred.promise.then(function returnDeleted() {
+            res.send('deleted');
+        });
+        return deferred.promise;
+    }
+
     function registerWorkflow(req, res) {
         var workflow = new Workflow(req.body);
         var deferred = queue.defer();
@@ -159,8 +169,8 @@
 
                 }
 
-                executionSaving.then(function() {
-                    var executionIds = results.map(function(execution) {
+                executionSaving.then(function () {
+                    var executionIds = results.map(function (execution) {
                         return execution._id;
                     });
 
@@ -173,10 +183,10 @@
                     workflowExecution.save(deferred.makeNodeResolver());
 
                 }).
-                then(function() {
-                    res.send(results);
-                    deferred.resolve();
-                });
+                    then(function () {
+                        res.send(results);
+                        deferred.resolve();
+                    });
 
 
                 return deferred.promise;
@@ -184,7 +194,7 @@
     }
 
     function pushResult(results) {
-        return function(entry) {
+        return function (entry) {
             results.push(entry);
         };
     }
@@ -202,7 +212,7 @@
                 data: result.data
             });
 
-            execution.save(function(err, data) {
+            execution.save(function (err, data) {
                 deferred.resolve(data);
             });
             return deferred.promise;
@@ -222,6 +232,7 @@
     }
 
     module.exports = {
+        deleteWorkflow: deleteWorkflow,
         getWorkflows: getWorkflows,
         getWorkflowById: getWorkflowById,
         registerWorkflow: registerWorkflow,
