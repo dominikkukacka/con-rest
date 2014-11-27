@@ -7,27 +7,18 @@
     'use strict';
 
     describe('callSelector widget specs', function callSelectorWidgetSpecs() {
-        var $rootScope;
-        var $httpBackend;
-        var $compile;
-        var $timeout;
-        var events;
-        var parentScope;
+        var testGlobals, $timeout;
 
-        beforeEach(module('con-rest'));
+        beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _$timeout_, _events_) {
-            $rootScope = _$rootScope_;
-            $httpBackend = _$httpBackend_;
-            $compile = _$compile_;
+        beforeEach(inject(function setupTests(testSetup, _$timeout_) {
+            testGlobals = testSetup.setupDirectiveTest();
             $timeout = _$timeout_;
-            events = _events_;
-            parentScope = $rootScope.$new();
         }));
 
         it('should load the call selector and the name should be set accordingly', function loadcallSelector() {
             // given
-            parentScope.request = {_id: 'someid'};
+            testGlobals.parentScope.request = { _id: 'someid' };
             var directive = angular.element('<call-selector request="request"></call-selector>');
             var availableRequests = [
                 {
@@ -40,12 +31,12 @@
                 }
             ];
 
-            $httpBackend.expect('GET', '/api/requests/').
+            testGlobals.$httpBackend.expect('GET', '/api/requests/').
                 respond(200, availableRequests);
 
             // when
-            var scope = initalizeDirective(parentScope, directive);
-            $httpBackend.flush();
+            var scope = testGlobals.initializeDirective(testGlobals.parentScope, directive);
+            testGlobals.$httpBackend.flush();
 
             // then
             expect(scope.request._id).toEqual(availableRequests[0]._id);
@@ -54,7 +45,7 @@
 
         it('should close the list when the input element is blurred', function closeOnBlur() {
             // given
-            parentScope.request = null;
+            testGlobals.parentScope.request = null;
             var directive = angular.element('<call-selector request="request"></call-selector>');
             var availableRequests = [
                 {
@@ -66,11 +57,11 @@
                 }
             ];
 
-            $httpBackend.expect('GET', '/api/requests/').
+            testGlobals.$httpBackend.expect('GET', '/api/requests/').
                 respond(200, availableRequests);
 
-            var scope = initalizeDirective(parentScope, directive);
-            $httpBackend.flush();
+            var scope = testGlobals.initializeDirective(testGlobals.parentScope, directive);
+            testGlobals.$httpBackend.flush();
 
             scope.showCalls = true;
 
@@ -81,12 +72,5 @@
             // then
             expect(scope.showCalls).toEqual(false);
         });
-
-        function initalizeDirective(scope, directive) {
-            $compile(directive)(scope);
-            $rootScope.$digest();
-            // Expose the scope so we can run some tests on it
-            return directive.children().scope();
-        }
     });
 }());
