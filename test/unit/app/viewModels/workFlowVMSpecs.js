@@ -74,11 +74,18 @@
             scope.workflow = {
                 _id: 'someid',
                 name: 'workflowName',
-                calls: ['call1', 'call3']
+                calls: [
+                    {
+                        _id: 'call1'
+                    },
+                    {
+                        _id: 'call3'
+                    }
+                ]
             };
             var workflowDetails = {
                 name: scope.workflow.name,
-                calls: scope.workflow.calls
+                calls: ['call1', 'call3']
             };
             httpBackend.expect('PUT', '/api/workflows/' + scope.workflow._id, workflowDetails).
                 respond(200, 'ok');

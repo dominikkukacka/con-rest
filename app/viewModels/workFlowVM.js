@@ -50,8 +50,7 @@
             $scope.$emit(events.WORKFLOW_CREATED, response);
         };
 
-        // The workflow we create only needs the id of the calls.
-        $scope.createNewWorkflow = function createNewWorkflow() {
+        $scope.extractCalls = function extractCalls() {
             var calls = [];
             for (var i = 0; i < $scope.workflow.calls.length; i++) {
                 var id = $scope.workflow.calls[i]._id;
@@ -59,6 +58,12 @@
                     calls.push(id);
                 }
             }
+            return calls;
+        };
+
+        // The workflow we create only needs the id of the calls.
+        $scope.createNewWorkflow = function createNewWorkflow() {
+            var calls = $scope.extractCalls();
             $http.post('/api/workflows/', {
                 name: $scope.workflow.name,
                 calls: calls
@@ -72,9 +77,10 @@
 
         // The workflow can't be updated at this moment, will be implemented in the near future.
         $scope.updateWorkflow = function updateWorkflow() {
+            var calls = $scope.extractCalls();
             $http.put('/api/workflows/' + $scope.workflow._id, {
                 name: $scope.workflow.name,
-                calls: $scope.workflow.calls
+                calls: calls
             }).then($scope.workflowUpdated);
         };
 
