@@ -31,7 +31,7 @@
         app.delete('/api/workflows/:id', workflow.deleteWorkflow);
         app.get('/api/workflows/:id/executions', workflowExecution.getWorkflowExecutionsByWorkflowId);
         app.get('/api/workflows/:workflowId/executions/:workflowExecutionId', workflowExecution.getExecutionsFromWorkflowId);
-        app.post('/api/workflows/:id/executions', workflow.executeWorkflowById);
+        app.post('/api/workflows/:id/execute', workflow.executeWorkflowById);
 
         app.get('/api/workflows/', workflow.getWorkflows);
 

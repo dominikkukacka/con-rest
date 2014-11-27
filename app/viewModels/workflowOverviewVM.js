@@ -51,6 +51,23 @@
             };
         };
 
+        $scope.executeWorkflow = function executeWorkflow(workflow) {
+            $http.post('/api/workflows/' + workflow._id + '/execute').
+                then($scope.workflowExecuted(workflow), $scope.workflowExecutionFailed(workflow));
+        };
+
+        $scope.workflowExecuted = function workflowExecuted(workflow) {
+            return function wrapperWorkflowExecuted() {
+                workflow.success = true;
+            };
+        };
+
+        $scope.workflowExecutionFailed = function workflowExecutionFailed(workflow) {
+            return function wrapperWorkflowFailed() {
+                workflow.success = false;
+            };
+        };
+
         $scope.convertCallsToModel = function convertCallsToModel(workflows) {
             angular.forEach(workflows, function iterator(workflow) {
                 var convertedCalls = [];

@@ -150,6 +150,8 @@
 
                 apiCallQueue.then(function () {
                     deferred.resolve();
+                }).catch(function error(err) {
+                    deferred.reject(err);
                 });
 
                 return deferred.promise;
@@ -182,14 +184,16 @@
 
                     workflowExecution.save(deferred.makeNodeResolver());
 
-                }).
-                    then(function () {
-                        res.send(results);
-                        deferred.resolve();
-                    });
+                }).then(function () {
+                    res.send(results);
+                    deferred.resolve();
+                });
 
 
                 return deferred.promise;
+            }).
+            catch(function error(err) {
+                res.status(500).send(err.toString());
             });
     }
 

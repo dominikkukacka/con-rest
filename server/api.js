@@ -79,6 +79,14 @@
                     then(function (data) {
                         res.send(data);
                         deferred.resolve(data);
+                    }).
+                    fail(function error(err) {
+                        res.status(500).send(err);
+                        deferred.reject(err);
+                    }).
+                    catch(function error(err) {
+                        res.status(500).send(err);
+                        deferred.reject(err);
                     });
 
                 return deferred.promise;
@@ -105,6 +113,11 @@
                 headers: headers,
                 data: data
             }, function (err, response, body) {
+
+                if (err) {
+                    deferred.reject(err);
+                    return;
+                }
 
                 var parsedBody = null;
                 try {

@@ -95,5 +95,43 @@
             // then
             expect(scope.workflows.length).toEqual(0);
         });
+
+        it('should execute a workflow', function executeWorkflow() {
+            // given
+            scope.workflows = [
+                {
+                    _id: 'executeme'
+                }
+            ];
+
+            httpBackend.expect('POST', '/api/workflows/executeme/execute').
+                respond(200, 'ok');
+
+            // when
+            scope.executeWorkflow(scope.workflows[0]);
+            httpBackend.flush();
+
+            // then
+            expect(scope.workflows[0].success).toEqual(true);
+        });
+
+        it('should fail an execution of an workflow', function executionFailed(){
+            // given
+            scope.workflows = [
+                {
+                    _id: 'executeme'
+                }
+            ];
+
+            httpBackend.expect('POST', '/api/workflows/executeme/execute').
+                respond(400, 'bad request');
+
+            // when
+            scope.executeWorkflow(scope.workflows[0]);
+            httpBackend.flush();
+
+            // then
+            expect(scope.workflows[0].success).toEqual(false);
+        });
     });
 }());
