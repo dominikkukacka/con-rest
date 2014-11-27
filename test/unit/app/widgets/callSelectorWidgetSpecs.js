@@ -7,25 +7,17 @@
     'use strict';
 
     describe('callSelector widget specs', function callSelectorWidgetSpecs() {
-        var $rootScope;
-        var $httpBackend;
-        var $compile;
-        var events;
-        var parentScope;
+        var testGlobals;
 
-        beforeEach(module('con-rest'));
+        beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _events_) {
-            $rootScope = _$rootScope_;
-            $httpBackend = _$httpBackend_;
-            $compile = _$compile_;
-            events = _events_;
-            parentScope = $rootScope.$new();
+        beforeEach(inject(function setupTests(testSetup) {
+            testGlobals = testSetup.setupDirectiveTest();
         }));
 
         it('should load the call selector and the name should be set accordingly', function loadcallSelector() {
             // given
-            parentScope.request = { _id: 'someid' };
+            testGlobals.parentScope.request = { _id: 'someid' };
             var directive = angular.element('<call-selector request="request"></call-selector>');
             var availableRequests = [
                 {
@@ -38,23 +30,16 @@
                 }
             ];
 
-            $httpBackend.expect('GET', '/api/requests/').
+            testGlobals.$httpBackend.expect('GET', '/api/requests/').
                 respond(200, availableRequests);
 
             // when
-            var scope = initalizeDirective(parentScope, directive);
-            $httpBackend.flush();
+            var scope = testGlobals.initializeDirective(testGlobals.parentScope, directive);
+            testGlobals.$httpBackend.flush();
 
             // then
             expect(scope.request._id).toEqual(availableRequests[0]._id);
             expect(scope.request.name).toEqual(availableRequests[0].name);
         });
-
-        function initalizeDirective(scope, directive) {
-            $compile(directive)(scope);
-            $rootScope.$digest();
-            // Expose the scope so we can run some tests on it
-            return directive.children().scope();
-        }
     });
 }());
