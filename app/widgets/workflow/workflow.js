@@ -3,12 +3,12 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function workflow(angular, undefined){
+(function workflow(angular, undefined) {
     'use strict';
 
     var app = angular.module('con-rest');
 
-    app.directive('workflow', function workflowDirective(){
+    app.directive('workflow', function workflowDirective() {
         return {
             controller: 'workFlowVM',
             restrict: 'E',
@@ -16,9 +16,9 @@
                 workflow: '=workflow'
             },
             templateUrl: 'workflow',
-            link: function workflowConstructor(scope){
+            link: function workflowConstructor(scope) {
                 // The workflow is new.
-                if(scope.workflow._id === undefined){
+                if (scope.workflow._id === undefined) {
                     scope.editing = true;
                 }
             }

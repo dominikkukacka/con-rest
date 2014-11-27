@@ -115,7 +115,7 @@
             expect(scope.workflows[0].success).toEqual(true);
         });
 
-        it('should fail an execution of an workflow', function executionFailed(){
+        it('should fail an execution of an workflow', function executionFailed() {
             // given
             scope.workflows = [
                 {

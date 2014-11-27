@@ -85,8 +85,8 @@
                                 name: 'fakeCall',
                                 url: 'fakeUrl',
                                 method: 'GET',
-                                data: { ba: 'nana'},
-                                headers: { he: 'ad'}
+                                data: {ba: 'nana'},
+                                headers: {he: 'ad'}
                             }
                         };
                         res = {};
@@ -172,7 +172,7 @@
 
                 nock('http://httpbin.org').
                     post('/post').
-                    reply(200, function(url,data) {
+                    reply(200, function (url, data) {
                         data.should.containEql('Content-Disposition: form-data');
                         data.should.containEql('name="password"');
                         data.should.containEql('name="username"');
@@ -214,9 +214,9 @@
 
                 nock('http://httpbin.org').
                     post('/post').
-                    reply(200, function(url,data) {
+                    reply(200, function (url, data) {
                         var data = JSON.parse(data);
-                        data.should.containEql({password:'123',username:'max'});
+                        data.should.containEql({password: '123', username: 'max'});
                         return {index: 200};
                     });
 

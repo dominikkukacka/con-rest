@@ -18,7 +18,7 @@
                 page: 2
             },
             headers: null
-        },{
+        }, {
             _id: '545726928469e940235ce770',
             name: 'queue call #1',
             url: 'http://httpbin.org/get',
@@ -26,12 +26,12 @@
             headers: {
                 referer: 'http://google.com'
             }
-        },{
+        }, {
             _id: '545726928469e940235ce772',
             name: 'queue call #3',
             url: 'http://httpbin.org/get',
             method: 'GET'
-        },{
+        }, {
             _id: '545726928469e940235ce771',
             name: 'queue call #2',
             url: 'http://httpbin.org/get',
@@ -144,7 +144,7 @@
         var executedDone = false;
 
         function finish() {
-            if(!executedDone && executedInserts >= promisedInserts) {
+            if (!executedDone && executedInserts >= promisedInserts) {
                 executedDone = true;
                 done();
             }
@@ -152,35 +152,39 @@
 
         for (var i = 0; i < apiCalls.length; i++) {
             var data = apiCalls[i];
-            APICall.create(data, function(err, model) {
+            APICall.create(data, function (err, model) {
                 executedInserts++;
                 finish(err);
             });
-        };
+        }
+        ;
 
         for (var i = 0; i < workflows.length; i++) {
             var data = workflows[i];
-            Workflow.create(data, function(err, model) {
+            Workflow.create(data, function (err, model) {
                 executedInserts++;
                 finish(err);
             });
-        };
+        }
+        ;
 
         for (var i = 0; i < executions.length; i++) {
             var data = executions[i];
-            Execution.create(data, function(err, model) {
+            Execution.create(data, function (err, model) {
                 executedInserts++;
                 finish(err);
             });
-        };
+        }
+        ;
 
         for (var i = 0; i < workflowExecutions.length; i++) {
             var data = workflowExecutions[i];
-            WorkflowExecution.create(data, function(err, model) {
+            WorkflowExecution.create(data, function (err, model) {
                 executedInserts++;
                 finish(err);
             });
-        };
+        }
+        ;
 
     }
 

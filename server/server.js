@@ -22,6 +22,7 @@
         app.param('id', String);
 
         app.get('/api/requests/:id', api.getAPICallById);
+        app.delete('/api/requests/:id', api.deleteAPICall);
         app.get('/api/requests/:id/executions', api.getExecutionsByAPICallId);
         app.post('/api/requests/:id/executions', api.executeAPICallById);
 

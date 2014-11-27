@@ -44,7 +44,7 @@
                 then($scope.removeWorkflowFromModel(workflow));
         };
 
-        $scope.removeWorkflowFromModel = function removeWOrkflowFromModel(workflow) {
+        $scope.removeWorkflowFromModel = function removeWorkflowFromModel(workflow) {
             return function removeWrapper() {
                 var index = $scope.workflows.indexOf(workflow);
                 $scope.workflows.splice(index, 1);

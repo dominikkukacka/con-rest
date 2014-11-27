@@ -19,6 +19,11 @@
             url: '/registerCall',
             templateUrl: 'pages/registerCall.html',
             label: 'register call'
+        },
+        {
+            url: '/restcalls',
+            templateUrl: 'pages/restCalls.html',
+            label: 'rest calls'
         }
     ];
 
