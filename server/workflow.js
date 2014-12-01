@@ -131,7 +131,6 @@
             then(function orderCalls(retrievedCalls) {
                 var deferred = queue.defer();
                 var calls = getSorted(retrievedCalls, workflow.calls);
-
                 deferred.resolve(calls);
 
                 return deferred.promise;
@@ -213,6 +212,7 @@
                 statusCode: result.statusCode,
                 response: result.response,
                 headers: result.headers,
+                type: result.type,
                 data: result.data
             });
 

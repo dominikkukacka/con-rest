@@ -12,10 +12,13 @@
         name: String,
         url: String,
         method: String,
-        formData: Schema.Types.Mixed,
-        payload: Schema.Types.Mixed,
+        type: String,
+        data: Schema.Types.Mixed,
         headers: Schema.Types.Mixed
     });
+
+    var PAYLOAD = 'payload';
+    var FORM_DATA = 'formData';
 
     var APICall = mongoose.model('APICall', apiCallSchema);
 
@@ -106,27 +109,29 @@
                 headers = _.extend(headers, apiCall.headers);
             }
 
-            var formData = apiCall.formData || null;
+            var options = {
+                method: apiCall.method,
+                url: apiCall.url,
+                headers: headers
+            };
 
-            // it takes either an JSON object or a string,
-            // a JSON object will be stringified
-            var payload = null;
-            if(apiCall.payload) {
-                try {
-                    payload = JSON.stringify(apiCall.payload);
-                } catch (e) {
-                    payload = apiCall.payload;
+            var type = apiCall.type || null;
+            var data = apiCall.data || null;
+
+            if(data) {
+                if(type === PAYLOAD) {
+                    try {
+                        options.body = JSON.stringify(data);
+                        options.json = true;
+                    } catch (e) {
+                        options.body = data;
+                    }
+                } else if(type === FORM_DATA) {
+                    options.formData = data;
                 }
             }
 
-            request({
-                method: apiCall.method,
-                url: apiCall.url,
-                headers: headers,
-                data: formData,
-                body: payload
-            }, function (err, response, body) {
-
+            request(options, function (err, response, body) {
                 if (err) {
                     deferred.reject(err);
                     return;
@@ -145,8 +150,8 @@
                     apiCall: apiCall,
                     response: parsedBody,
                     headers: headers,
-                    payload: payload,
-                    formData: formData
+                    type: type,
+                    data: data
                 });
             });
 
@@ -164,8 +169,8 @@
                 statusCode: result.statusCode,
                 response: result.response,
                 headers: result.headers,
-                formData: result.formData,
-                payload: result.payload,
+                type: result.type,
+                data: result.data,
                 executedAt: new Date()
             });
 
