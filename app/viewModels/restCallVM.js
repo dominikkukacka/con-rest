@@ -48,9 +48,9 @@
 
         // Close the availabe requests
         $scope.closeAvailableRequests = function closeAvailableRequests() {
-            $scope.showCalls = false;
             // The scope is in conflict with the click function when we apply directly.
             $timeout(function workAroundForBlur() {
+                $scope.showCalls = false;
                 $scope.$apply();
             }, 100);
         };

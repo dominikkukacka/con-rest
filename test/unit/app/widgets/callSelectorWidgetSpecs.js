@@ -10,15 +10,17 @@
         var $rootScope;
         var $httpBackend;
         var $compile;
+        var $timeout;
         var events;
         var parentScope;
 
         beforeEach(module('con-rest'));
 
-        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _events_) {
+        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _$timeout_, _events_) {
             $rootScope = _$rootScope_;
             $httpBackend = _$httpBackend_;
             $compile = _$compile_;
+            $timeout = _$timeout_;
             events = _events_;
             parentScope = $rootScope.$new();
         }));
@@ -39,7 +41,7 @@
             ];
 
             $httpBackend.expect('GET', '/api/requests/').
-            respond(200, availableRequests);
+                respond(200, availableRequests);
 
             // when
             var scope = initalizeDirective(parentScope, directive);
@@ -74,6 +76,7 @@
 
             // when
             directive.find('input').triggerHandler('blur');
+            $timeout.flush();
 
             // then
             expect(scope.showCalls).toEqual(false);
