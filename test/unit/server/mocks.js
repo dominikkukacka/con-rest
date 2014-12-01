@@ -13,6 +13,7 @@
             name: 'firstCall',
             url: 'http://test.one',
             method: 'GET',
+            type: 'formData',
             data: {
                 page: 2
             },
@@ -37,6 +38,30 @@
             method: 'GET',
             headers: {
                 'user-agent': 'TestUserAgent'
+            }
+        },
+
+        {
+            _id: '545726928469e940235ce800',
+            name: 'data test #1',
+            url: 'http://httpbin.org/post',
+            method: 'POST',
+            type: 'formData',
+            data: {
+                username: 'max',
+                password: '123'
+            }
+        },
+
+        {
+            _id: '545726928469e940235ce900',
+            name: 'data test #2',
+            url: 'http://httpbin.org/post',
+            method: 'POST',
+            type: 'payload',
+            data: {
+                username: 'max',
+                password: '123'
             }
         }
     ];

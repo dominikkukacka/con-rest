@@ -14,7 +14,8 @@
         statusCode: Number,
         response: Schema.Types.Mixed,
         headers: Schema.Types.Mixed,
-        data: Schema.Types.Mixed,
+        formData: Schema.Types.Mixed,
+        payload: Schema.Types.Mixed,
         executedAt: Date
     });
 

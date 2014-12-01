@@ -12,9 +12,13 @@
         name: String,
         url: String,
         method: String,
+        type: String,
         data: Schema.Types.Mixed,
         headers: Schema.Types.Mixed
     });
+
+    var PAYLOAD = 'payload';
+    var FORM_DATA = 'formData';
 
     var APICall = mongoose.model('APICall', apiCallSchema);
 
@@ -105,15 +109,29 @@
                 headers = _.extend(headers, apiCall.headers);
             }
 
-            var data = apiCall.data || null;
-
-            request({
+            var options = {
                 method: apiCall.method,
                 url: apiCall.url,
-                headers: headers,
-                data: data
-            }, function (err, response, body) {
+                headers: headers
+            };
 
+            var type = apiCall.type || null;
+            var data = apiCall.data || null;
+
+            if(data) {
+                if(type === PAYLOAD) {
+                    try {
+                        options.body = JSON.stringify(data);
+                        options.json = true;
+                    } catch (e) {
+                        options.body = data;
+                    }
+                } else if(type === FORM_DATA) {
+                    options.formData = data;
+                }
+            }
+
+            request(options, function (err, response, body) {
                 if (err) {
                     deferred.reject(err);
                     return;
@@ -132,6 +150,7 @@
                     apiCall: apiCall,
                     response: parsedBody,
                     headers: headers,
+                    type: type,
                     data: data
                 });
             });
@@ -150,6 +169,7 @@
                 statusCode: result.statusCode,
                 response: result.response,
                 headers: result.headers,
+                type: result.type,
                 data: result.data,
                 executedAt: new Date()
             });
