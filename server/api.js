@@ -25,7 +25,7 @@
     var Execution = mongoose.model('Execution');
 
     // Receive all stored REST calls from the database.
-    // Response is "Status: 200 OK" and an array of JSON objects. Example:
+    // Response is "Status: 200 OK" and an array of JSON objects. Response example:
 
     //     [{
     //         "_id":"547874b2281a1fbc22e2284b",
@@ -47,7 +47,7 @@
     }
 
     // Receive specific REST call from the database by its ID
-    // Response is "Status: 200 OK" and a JSON object. Example:
+    // Response is "Status: 200 OK" and a JSON object. Response example:
 
     //     {
     //         "_id":"547874b2281a1fbc22e2284b",
@@ -81,6 +81,25 @@
         return deferred.promise;
     }
 
+    // Receive all executions of a specific REST call by its ID
+    // Response is "Status: 200 OK" and an array of JSON objects. Sample response:
+
+    //     [{
+    //         "_id": "547d9969c48ab5b029856df6",
+    //         "workflow": null,
+    //         "apiCall": "547874b2281a1fbc22e2284b",
+    //         "statusCode":200,
+    //         "response": {
+    //             "sampleResponse": "sampleValue",
+    //             "sampleReference": "anotherValue"
+    //         },
+    //         "headers": {
+    //             "user-agent": "con-rest",
+    //             "sampleAuthorization": "sampleValue"
+    //         },
+    //         "executedAt": "2014-12-02T13:30:55.955Z",
+    //         "__v":0
+    //     }]
     function getExecutionsByAPICallId(req, res) {
         var deferred = queue.defer();
         var id = mongoose.Types.ObjectId(req.params.id);
@@ -97,7 +116,7 @@
     }
 
     // Add new REST call to the database and receive its ID
-    // Response is "Status: 200 OK" and an ID in the body. Request Example:
+    // Response is "Status: 200 OK" and an ID in the body. Request example:
 
     //     {
     //         "name": "newSampleRestCall",
@@ -120,6 +139,40 @@
         return deferred.promise;
     }
 
+    // Execute a REST call from the database using its ID
+    // Response is "Status: 200 OK" and a JSON body. Response Example:
+
+    //     {
+    //         "_id": "547d9969c48ab5b029856df6",
+    //         "statusCode": 200,
+    //         "apiCall": {
+    //             "_id":"547874b2281a1fbc22e2284b",
+    //             "name": "newSampleRestCall",
+    //             "url": "http://new.sample.api/call",
+    //             "method": "POST",
+    //             "headers": {
+    //                 "sampleAuthorization":"sampleValue"
+    //             }
+    //             "type":"payload",
+    //             "data": {
+    //                 "sampleParam":"sampleValue",
+    //                 "testParam":2
+    //             }
+    //         },
+    //         "response": {
+    //             "sampleResponse": "sampleValue",
+    //             "sampleReference": "anotherValue"
+    //         },
+    //         "headers": {
+    //             "user-agent": "con-rest",
+    //             "sampleAuthorization": "sampleValue"
+    //         },
+    //         "type": "payload",
+    //         "data": {
+    //             "sampleParam":"sampleValue",
+    //             "testParam":2
+    //         }
+    //     }
     function executeAPICallById(req, res) {
         var id = mongoose.Types.ObjectId(req.params.id);
         return queue().
@@ -149,6 +202,7 @@
             });
     }
 
+    // Executes REST call from database
     function executeAPICall(apiCall) {
         return function () {
             var deferred = queue.defer();
@@ -210,6 +264,7 @@
         };
     }
 
+    // Saves result of REST call execution in database
     function saveExecution() {
         return function saveExecution(result) {
             var deferred = queue.defer();
