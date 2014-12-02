@@ -23,24 +23,24 @@
         it('should delete a rest call', function requestRestCallDeletion() {
             // given
             var scope = loadRestCallOverview();
-            var fakeEvent = {};
-            var fakeRestCall = testGlobals.createDefaultRequest();
+            var expectedEvent = {};
+            var expectedRequest = testGlobals.createDefaultRequest();
 
             spyOn($mdDialog, 'show').andCallThrough();
             spyOn(scope, 'removeRestCallOnConfirm');
 
             // when
-            scope.confirmRestCallDeletion(fakeEvent, fakeRestCall);
+            scope.confirmRestCallDeletion(expectedEvent, expectedRequest);
 
             // then
             expect($mdDialog.show).toHaveBeenCalled();
-            expect(scope.removeRestCallOnConfirm).toHaveBeenCalledWith(fakeRestCall);
+            expect(scope.removeRestCallOnConfirm).toHaveBeenCalledWith(expectedRequest);
         });
 
         function loadRestCallOverview() {
             // given
             var directive = angular.element('<rest-call-overview></rest-call-overview>');
-            var expectedWorkflow = testGlobals.createDefaultWorkflow();
+            var expectedWorkflow = testGlobals.createDefaultRequests();
 
             $httpBackend.expect('GET', '/api/requests/').
                 respond(200, expectedWorkflow);

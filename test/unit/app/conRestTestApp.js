@@ -16,9 +16,13 @@
                 parentScope: $rootScope.$new(),
                 initializeDirective: initializeDirective,
                 createDefaultRequest: createDefaultRequest,
+                createDefaultRequests: createDefaultRequests,
                 createDefaultWorkflow: createDefaultWorkflow,
+                createDefaultWorkflows: createDefaultWorkflows,
                 createEmptyRequest: createEmptyRequest,
-                expectRequest: expectRequest
+                expectRequest: expectRequest,
+                expectWorkflow: expectWorkflow,
+                expectWorkflows: expectWorkflows
             };
         }
 
@@ -51,8 +55,26 @@
             };
         }
 
-        function createDefaultWorkflow() {
+        function createDefaultRequests() {
             return [createDefaultRequest()];
+        }
+
+        function createDefaultWorkflow() {
+            return {
+                _id: 'flowid',
+                name: 'flow',
+                calls: createDefaultRequests()
+            };
+        }
+
+        function createResponseWorkflow() {
+            var workflow = createDefaultWorkflow();
+            workflow.calls = ['callid1', 'callid2'];
+            return workflow;
+        }
+
+        function createDefaultWorkflows() {
+            return [createResponseWorkflow()];
         }
 
         function expectRequest(request) {
@@ -65,6 +87,32 @@
                     expect(request.headers).toEqual(expectedRequest.headers);
                 }
             };
+        }
+
+        function expectWorkflow(workflow) {
+            return {
+                toMatch: function toMatch(expectedWorkflow) {
+                    expect(workflow.name).toEqual(expectedWorkflow.name);
+                    for (var i = 0; i < workflow.calls.length; i++) {
+                        var call = workflow.calls[i];
+                        var expectedCall = expectedWorkflow.calls[i];
+                        expect(call._id).toEqual(expectedCall);
+                    }
+                }
+            }
+        }
+
+        function expectWorkflows(workflows) {
+            return {
+                toMatch: function toMatch(expectedWorkflows) {
+                    expect(workflows.length).toEqual(expectedWorkflows.length);
+                    for (var i = 0; i < workflows.length; i++) {
+                        var workflow = workflows[i];
+                        var expectedWorkflow = expectedWorkflows[i];
+                        expectWorkflow(workflow).toMatch(expectedWorkflow);
+                    }
+                }
+            }
         }
 
         return {
