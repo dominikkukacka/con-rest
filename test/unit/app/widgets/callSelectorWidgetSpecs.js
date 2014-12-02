@@ -25,7 +25,7 @@
 
         it('should load the call selector and the name should be set accordingly', function loadcallSelector() {
             // given
-            parentScope.request = { _id: 'someid' };
+            parentScope.request = {_id: 'someid'};
             var directive = angular.element('<call-selector request="request"></call-selector>');
             var availableRequests = [
                 {
@@ -33,13 +33,13 @@
                     name: 'fakeCall',
                     url: 'https://fake.url',
                     method: 'PUT',
-                    data: { ba: 'nana' },
-                    headers: { to: 'ken' }
+                    data: {ba: 'nana'},
+                    headers: {to: 'ken'}
                 }
             ];
 
             $httpBackend.expect('GET', '/api/requests/').
-            respond(200, availableRequests);
+                respond(200, availableRequests);
 
             // when
             var scope = initalizeDirective(parentScope, directive);
@@ -59,8 +59,8 @@
                     name: 'fakeCall',
                     url: 'https://fake.url',
                     method: 'PUT',
-                    data: { ba: 'nana' },
-                    headers: { to: 'ken' }
+                    data: {ba: 'nana'},
+                    headers: {to: 'ken'}
                 }
             ];
 

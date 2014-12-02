@@ -15,7 +15,7 @@
 
         beforeEach(module('con-rest'));
 
-        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _events_){
+        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _events_) {
             $rootScope = _$rootScope_;
             $httpBackend = _$httpBackend_;
             $compile = _$compile_;
@@ -31,8 +31,8 @@
                 name: 'fakeCall',
                 url: 'https://fake.url',
                 method: 'PUT',
-                data: { ba: 'nana' },
-                headers: { to: 'ken' }
+                data: {ba: 'nana'},
+                headers: {to: 'ken'}
             };
 
             $httpBackend.expect('GET', '/api/requests/' + parentScope.id).
@@ -46,7 +46,7 @@
             expect(scope.request.name).toEqual(expectedRequest.name);
             expect(scope.request.url).toEqual(expectedRequest.url);
             expect(scope.request.method).toEqual(expectedRequest.method);
-            expect(scope.request.params).toEqual(expectedRequest.data);
+            expect(scope.request.data).toEqual(expectedRequest.data);
             expect(scope.request.headers).toEqual(expectedRequest.headers);
         });
 
@@ -61,7 +61,7 @@
             expect(scope.request.name).toEqual(null);
             expect(scope.request.url).toEqual(null);
             expect(scope.request.method).toEqual(null);
-            expect(scope.request.params).toEqual(null);
+            expect(scope.request.data).toEqual(null);
             expect(scope.request.headers).toEqual(null);
         });
 
@@ -71,8 +71,8 @@
                 name: 'fakeCall',
                 url: 'https://fake.url',
                 method: 'PUT',
-                data: { ba: 'nana' },
-                headers: { to: 'ken' }
+                data: {ba: 'nana'},
+                headers: {to: 'ken'}
             };
             var directive = angular.element('<rest-call rest-call="restCall"></rest-call>');
 

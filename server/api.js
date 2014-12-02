@@ -43,6 +43,16 @@
         return deferred.promise;
     }
 
+    function deleteAPICall(req, res) {
+        var deferred = queue.defer();
+        var id = mongoose.Types.ObjectId(req.params.id);
+        APICall.findByIdAndRemove(id, deferred.makeNodeResolver());
+        deferred.promise.then(function returnDeleted() {
+            res.send('deleted');
+        });
+        return deferred.promise;
+    }
+
     function getExecutionsByAPICallId(req, res) {
         var deferred = queue.defer();
         var id = mongoose.Types.ObjectId(req.params.id);
@@ -118,15 +128,15 @@
             var type = apiCall.type || null;
             var data = apiCall.data || null;
 
-            if(data) {
-                if(type === PAYLOAD) {
+            if (data) {
+                if (type === PAYLOAD) {
                     try {
                         options.body = JSON.stringify(data);
                         options.json = true;
                     } catch (e) {
                         options.body = data;
                     }
-                } else if(type === FORM_DATA) {
+                } else if (type === FORM_DATA) {
                     options.formData = data;
                 }
             }
@@ -182,6 +192,7 @@
     }
 
     module.exports = {
+        deleteAPICall: deleteAPICall,
         APICall: APICall,
         getAPICalls: getAPICalls,
         getAPICallById: getAPICallById,

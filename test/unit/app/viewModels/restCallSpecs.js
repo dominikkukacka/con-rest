@@ -33,7 +33,7 @@
                 name: scope.request.name,
                 url: scope.request.url,
                 method: scope.request.method,
-                data: scope.request.params,
+                data: scope.request.data,
                 headers: scope.request.headers
             }).respond(200, 'someguidid');
             scope.registerCall();
@@ -128,7 +128,7 @@
             expect(scope.request.name).toEqual(expectedResponse.name);
             expect(scope.request.url).toEqual(expectedResponse.url);
             expect(scope.request.method).toEqual(expectedResponse.method);
-            expect(scope.request.params).toEqual(expectedResponse.data);
+            expect(scope.request.data).toEqual(expectedResponse.data);
         });
 
         it('should get a list of registered api calls', function getApiCall() {
@@ -199,7 +199,7 @@
             scope.request.name = 'fakeCall';
             scope.request.url = 'http://fake.url';
             scope.request.method = 'GET';
-            scope.request.params = {
+            scope.request.data = {
                 ba: 'nana'
             };
             scope.request.headers = {

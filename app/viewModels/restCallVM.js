@@ -80,7 +80,7 @@
                 name: $scope.request.name,
                 url: $scope.request.url,
                 method: $scope.request.method,
-                data: $scope.request.params,
+                data: $scope.request.data,
                 headers: $scope.request.headers
             }).then($scope.emitRegistrationSuccessfull, $scope.emitRegistrationFailed);
         };
@@ -94,7 +94,7 @@
             $scope.request.name = request.name;
             $scope.request.url = request.url;
             $scope.request.method = request.method;
-            $scope.request.params = request.data;
+            $scope.request.data = request.data;
             $scope.request.headers = request.headers;
             // emit the model.
             $scope.$emit(events.REQUEST_RETRIEVED, $scope.request);
