@@ -12,28 +12,24 @@
         var $compile;
         var events;
         var parentScope;
+        var testGlobals;
 
-        beforeEach(module('con-rest'));
+        beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _events_) {
+        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _events_, testSetup) {
             $rootScope = _$rootScope_;
             $httpBackend = _$httpBackend_;
             $compile = _$compile_;
             events = _events_;
             parentScope = $rootScope.$new();
+            testGlobals = testSetup.setupDirectiveTest();
         }));
 
         it('should load the restCall when an id has been provided', function loadRestCall() {
             // given
             parentScope.id = 'someid';
             var directive = angular.element('<rest-call id="' + parentScope.id + '"></rest-call>');
-            var expectedRequest = {
-                name: 'fakeCall',
-                url: 'https://fake.url',
-                method: 'PUT',
-                data: {ba: 'nana'},
-                headers: {to: 'ken'}
-            };
+            var expectedRequest = testGlobals.createDefaultRequest();
 
             $httpBackend.expect('GET', '/api/requests/' + parentScope.id).
                 respond(200, expectedRequest);
@@ -43,37 +39,24 @@
             $httpBackend.flush();
 
             // then
-            expect(scope.request.name).toEqual(expectedRequest.name);
-            expect(scope.request.url).toEqual(expectedRequest.url);
-            expect(scope.request.method).toEqual(expectedRequest.method);
-            expect(scope.request.data).toEqual(expectedRequest.data);
-            expect(scope.request.headers).toEqual(expectedRequest.headers);
+            testGlobals.expectRequest(scope.request).toEqual(expectedRequest);
         });
 
         it('should directly enter editing mode when no id and rest call model is provided', function startEditing() {
             // given
             var directive = angular.element('<rest-call></rest-call>');
+            var expectedRequest = testGlobals.createEmptyRequest();
 
             // when
             var scope = initalizeDirective(parentScope, directive);
 
             // then
-            expect(scope.request.name).toEqual(null);
-            expect(scope.request.url).toEqual(null);
-            expect(scope.request.method).toEqual(null);
-            expect(scope.request.data).toEqual(null);
-            expect(scope.request.headers).toEqual(null);
+            testGlobals.expectRequest(scope.request).toEqual(expectedRequest);
         });
 
         it('should display the provided rest call', function providedCall() {
             // given
-            parentScope.restCall = {
-                name: 'fakeCall',
-                url: 'https://fake.url',
-                method: 'PUT',
-                data: {ba: 'nana'},
-                headers: {to: 'ken'}
-            };
+            parentScope.restCall = testGlobals.createDefaultRequest();
             var directive = angular.element('<rest-call rest-call="restCall"></rest-call>');
 
             // when

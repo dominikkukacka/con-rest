@@ -14,7 +14,10 @@
                 $rootScope: $rootScope,
                 $httpBackend: $httpBackend,
                 parentScope: $rootScope.$new(),
-                initializeDirective: initializeDirective
+                initializeDirective: initializeDirective,
+                createDefaultRequest: createDefaultRequest,
+                createEmptyRequest: createEmptyRequest,
+                expectRequest: expectRequest
             };
         }
 
@@ -23,6 +26,40 @@
             $rootScope.$digest();
             // Expose the scope to run tests on
             return directive.children().scope();
+        }
+
+        function createDefaultRequest() {
+            return {
+                _id: 'someid',
+                name: 'fakeCall',
+                url: 'https://fake.url',
+                method: 'PUT',
+                data: { ba: 'nana' },
+                headers: { to: 'ken' }
+            };
+        }
+
+        function createEmptyRequest() {
+            return {
+                _id: null,
+                name: null,
+                url: null,
+                method: null,
+                data: null,
+                headers: null
+            };
+        }
+
+        function expectRequest(request) {
+            return {
+                toEqual: function toEqual(expectedRequest) {
+                    expect(request.name).toEqual(expectedRequest.name);
+                    expect(request.url).toEqual(expectedRequest.url);
+                    expect(request.method).toEqual(expectedRequest.method);
+                    expect(request.data).toEqual(expectedRequest.data);
+                    expect(request.headers).toEqual(expectedRequest.headers);
+                }
+            };
         }
 
         return {

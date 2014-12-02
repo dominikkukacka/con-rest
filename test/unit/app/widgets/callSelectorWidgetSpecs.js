@@ -21,14 +21,7 @@
             testGlobals.parentScope.request = { _id: 'someid' };
             var directive = angular.element('<call-selector request="request"></call-selector>');
             var availableRequests = [
-                {
-                    _id: 'someid',
-                    name: 'fakeCall',
-                    url: 'https://fake.url',
-                    method: 'PUT',
-                    data: {ba: 'nana'},
-                    headers: {to: 'ken'}
-                }
+                testGlobals.createDefaultRequest()
             ];
 
             testGlobals.$httpBackend.expect('GET', '/api/requests/').
@@ -48,13 +41,7 @@
             testGlobals.parentScope.request = null;
             var directive = angular.element('<call-selector request="request"></call-selector>');
             var availableRequests = [
-                {
-                    name: 'fakeCall',
-                    url: 'https://fake.url',
-                    method: 'PUT',
-                    data: {ba: 'nana'},
-                    headers: {to: 'ken'}
-                }
+                testGlobals.createDefaultRequest()
             ];
 
             testGlobals.$httpBackend.expect('GET', '/api/requests/').
