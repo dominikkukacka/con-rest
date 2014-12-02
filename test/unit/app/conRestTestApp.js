@@ -16,6 +16,7 @@
                 parentScope: $rootScope.$new(),
                 initializeDirective: initializeDirective,
                 createDefaultRequest: createDefaultRequest,
+                createDefaultWorkflow: createDefaultWorkflow,
                 createEmptyRequest: createEmptyRequest,
                 expectRequest: expectRequest
             };
@@ -48,6 +49,10 @@
                 data: null,
                 headers: null
             };
+        }
+
+        function createDefaultWorkflow() {
+            return [createDefaultRequest()];
         }
 
         function expectRequest(request) {
