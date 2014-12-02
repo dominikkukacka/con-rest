@@ -7,13 +7,18 @@
     'use strict';
 
     describe('callSelector widget specs', function callSelectorWidgetSpecs() {
-        var testGlobals, $timeout;
+        var testGlobals;
+        var parentScope;
+        var $httpBackend;
+        var $timeout;
 
         beforeEach(module('con-rest-test'));
 
         beforeEach(inject(function setupTests(testSetup, _$timeout_) {
             testGlobals = testSetup.setupDirectiveTest();
             $timeout = _$timeout_;
+            parentScope = testGlobals.parentScope;
+            $httpBackend = testGlobals.$httpBackend;
         }));
 
         it('should load the call selector and the name should be set accordingly', function loadcallSelector() {
@@ -24,12 +29,12 @@
                 testGlobals.createDefaultRequest()
             ];
 
-            testGlobals.$httpBackend.expect('GET', '/api/requests/').
+            $httpBackend.expect('GET', '/api/requests/').
                 respond(200, availableRequests);
 
             // when
             var scope = testGlobals.initializeDirective(testGlobals.parentScope, directive);
-            testGlobals.$httpBackend.flush();
+            $httpBackend.flush();
 
             // then
             expect(scope.request._id).toEqual(availableRequests[0]._id);
@@ -38,17 +43,17 @@
 
         it('should close the list when the input element is blurred', function closeOnBlur() {
             // given
-            testGlobals.parentScope.request = null;
+            parentScope.request = null;
             var directive = angular.element('<call-selector request="request"></call-selector>');
             var availableRequests = [
                 testGlobals.createDefaultRequest()
             ];
 
-            testGlobals.$httpBackend.expect('GET', '/api/requests/').
+            $httpBackend.expect('GET', '/api/requests/').
                 respond(200, availableRequests);
 
-            var scope = testGlobals.initializeDirective(testGlobals.parentScope, directive);
-            testGlobals.$httpBackend.flush();
+            var scope = testGlobals.initializeDirective(parentScope, directive);
+            $httpBackend.flush();
 
             scope.showCalls = true;
 

@@ -7,27 +7,21 @@
     'use strict';
 
     describe('restCall widget specs', function restCallWidgetSpecs() {
-        var $rootScope;
         var $httpBackend;
-        var $compile;
-        var events;
         var parentScope;
         var testGlobals;
 
         beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _events_, testSetup) {
-            $rootScope = _$rootScope_;
-            $httpBackend = _$httpBackend_;
-            $compile = _$compile_;
-            events = _events_;
-            parentScope = $rootScope.$new();
+        beforeEach(inject(function setupTests(testSetup) {
             testGlobals = testSetup.setupDirectiveTest();
+            parentScope = testGlobals.parentScope;
+            $httpBackend = testGlobals.$httpBackend;
         }));
 
         it('should load the restCall when an id has been provided', function loadRestCall() {
             // given
-            parentScope.id = 'someid';
+            testGlobals.parentScope.id = 'someid';
             var directive = angular.element('<rest-call id="' + parentScope.id + '"></rest-call>');
             var expectedRequest = testGlobals.createDefaultRequest();
 
@@ -35,7 +29,7 @@
                 respond(200, expectedRequest);
 
             // when
-            var scope = initalizeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(parentScope, directive);
             $httpBackend.flush();
 
             // then
@@ -48,7 +42,7 @@
             var expectedRequest = testGlobals.createEmptyRequest();
 
             // when
-            var scope = initalizeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(parentScope, directive);
 
             // then
             testGlobals.expectRequest(scope.request).toEqual(expectedRequest);
@@ -60,21 +54,10 @@
             var directive = angular.element('<rest-call rest-call="restCall"></rest-call>');
 
             // when
-            var scope = initalizeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(parentScope, directive);
 
             // then
-            expect(scope.request.name).toEqual(parentScope.restCall.name);
-            expect(scope.request.url).toEqual(parentScope.restCall.url);
-            expect(scope.request.method).toEqual(parentScope.restCall.method);
-            expect(scope.request.data).toEqual(parentScope.restCall.data);
-            expect(scope.request.headers).toEqual(parentScope.restCall.headers);
+            testGlobals.expectRequest(scope.request).toEqual(parentScope.restCall);
         });
-
-        function initalizeDirective(scope, directive) {
-            $compile(directive)(scope);
-            $rootScope.$digest();
-            // Expose the scope so we can run some tests on it
-            return directive.children().scope();
-        }
     });
 }());
