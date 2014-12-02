@@ -1,0 +1,244 @@
+<!DOCTYPE html><html lang="en"><head><title>server/workflow</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="server/workflow"><meta name="groc-project-path" content="server/workflow.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">server/workflow.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><p>con-rest
+Version: 0.0.1
+Author: Andy Tang
+Fork me on Github: https://github.com/EnoF/con-rest</p></div></div><div class="code"><div class="wrapper"><span class="p">(</span><span class="kd">function</span> <span class="nx">apiScope</span><span class="p">(</span><span class="nx">mongoose</span><span class="p">,</span> <span class="nx">queue</span><span class="p">,</span> <span class="nx">api</span><span class="p">)</span> <span class="p">{</span>
+    <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">Schema</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">workflowSchema</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Schema</span><span class="p">({</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="nb">String</span><span class="p">,</span>
+        <span class="nx">calls</span><span class="o">:</span> <span class="p">[</span>
+            <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="nx">Schema</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">,</span> <span class="nx">ref</span><span class="o">:</span> <span class="s1">&#39;APICall&#39;</span><span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">});</span>
+
+    <span class="kd">var</span> <span class="nx">Workflow</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s1">&#39;Workflow&#39;</span><span class="p">,</span> <span class="nx">workflowSchema</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">APICall</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s1">&#39;APICall&#39;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">Execution</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s1">&#39;Execution&#39;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">WorkflowExecution</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s1">&#39;WorkflowExecution&#39;</span><span class="p">);</span>
+
+    <span class="kd">function</span> <span class="nx">getWorkflows</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+        <span class="nx">Workflow</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">returnResults</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+        <span class="p">});</span>
+        <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">getWorkflowById</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+        <span class="nx">Workflow</span><span class="p">.</span><span class="nx">findById</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">returnCall</span><span class="p">(</span><span class="nx">call</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">call</span><span class="p">);</span>
+        <span class="p">});</span>
+        <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">deleteWorkflow</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+        <span class="nx">Workflow</span><span class="p">.</span><span class="nx">findByIdAndRemove</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">returnDeleted</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;deleted&#39;</span><span class="p">);</span>
+        <span class="p">});</span>
+        <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">registerWorkflow</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">workflow</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Workflow</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+        <span class="nx">workflow</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+        <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">saveNewCall</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">workflow</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+        <span class="p">});</span>
+        <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">saveWorkflow</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">details</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">workflow</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nx">queue</span><span class="p">().</span>
+            <span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">getExistingWorkflow</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+                <span class="nx">Workflow</span><span class="p">.</span><span class="nx">findById</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+                <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+            <span class="p">}).</span>
+            <span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">modifyWorkflow</span><span class="p">(</span><span class="nx">retrievedWorkflow</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+                <span class="nx">workflow</span> <span class="o">=</span> <span class="nx">retrievedWorkflow</span><span class="p">;</span>
+                <span class="nx">workflow</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">details</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+                <span class="nx">workflow</span><span class="p">.</span><span class="nx">calls</span> <span class="o">=</span> <span class="nx">details</span><span class="p">.</span><span class="nx">calls</span><span class="p">;</span>
+                <span class="nx">workflow</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+                <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+            <span class="p">}).</span>
+            <span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">returnTrue</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+                <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">workflow</span><span class="p">);</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;ok&#39;</span><span class="p">);</span>
+                <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+            <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">getSorted</span><span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="nx">sortArr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">sorted</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">sortArr</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">sortArr</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+
+            <span class="kd">var</span> <span class="nx">filtered</span> <span class="o">=</span> <span class="nx">filterOnId</span><span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="nx">id</span><span class="p">);</span>
+
+            <span class="nx">sorted</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">filtered</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">sorted</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">filterOnId</span><span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span> <span class="nx">filterOnId</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">String</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">_id</span><span class="p">)</span> <span class="o">===</span> <span class="nb">String</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">executeWorkflowById</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+
+
+        <span class="kd">var</span> <span class="nx">workflow</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">callIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">callResults</span> <span class="o">=</span> <span class="p">{};</span>
+
+        <span class="k">return</span> <span class="nx">queue</span><span class="p">().</span>
+            <span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">getWorkflow</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+                <span class="nx">Workflow</span><span class="p">.</span><span class="nx">findById</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+                <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+            <span class="p">}).</span>
+            <span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">getCalls</span><span class="p">(</span><span class="nx">retrievedWorkflow</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+                <span class="nx">workflow</span> <span class="o">=</span> <span class="nx">retrievedWorkflow</span><span class="p">;</span>
+
+                <span class="nx">APICall</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span>
+                    <span class="nx">_id</span><span class="o">:</span> <span class="p">{</span><span class="nx">$in</span><span class="o">:</span> <span class="nx">workflow</span><span class="p">.</span><span class="nx">calls</span><span class="p">}</span>
+                <span class="p">}).</span><span class="nx">exec</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+
+                <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+            <span class="p">}).</span>
+            <span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">orderCalls</span><span class="p">(</span><span class="nx">retrievedCalls</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+                <span class="kd">var</span> <span class="nx">calls</span> <span class="o">=</span> <span class="nx">getSorted</span><span class="p">(</span><span class="nx">retrievedCalls</span><span class="p">,</span> <span class="nx">workflow</span><span class="p">.</span><span class="nx">calls</span><span class="p">);</span>
+                <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">calls</span><span class="p">);</span>
+
+                <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+            <span class="p">}).</span>
+            <span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">mergeAndRun</span><span class="p">(</span><span class="nx">retrievedCalls</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+
+                <span class="kd">var</span> <span class="nx">apiCallQueue</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">();</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">retrievedCalls</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">call</span> <span class="o">=</span> <span class="nx">retrievedCalls</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+
+                    <span class="nx">apiCallQueue</span> <span class="o">=</span> <span class="nx">apiCallQueue</span><span class="p">.</span>
+                        <span class="nx">then</span><span class="p">(</span><span class="nx">api</span><span class="p">.</span><span class="nx">executeAPICall</span><span class="p">(</span><span class="nx">call</span><span class="p">)).</span>
+                        <span class="nx">then</span><span class="p">(</span><span class="nx">registerAPICallExecution</span><span class="p">(</span><span class="nx">queue</span><span class="p">,</span> <span class="nx">callIndex</span><span class="p">,</span> <span class="nx">callResults</span><span class="p">));</span>
+                <span class="p">}</span>
+
+                <span class="nx">apiCallQueue</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+                <span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span> <span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+                <span class="p">});</span>
+
+                <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+            <span class="p">}).</span>
+            <span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="nx">displayResults</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+
+                <span class="kd">var</span> <span class="nx">results</span> <span class="o">=</span> <span class="p">[];</span>
+                <span class="kd">var</span> <span class="nx">executionSaving</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">();</span>
+
+                <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">callResults</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">callResults</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+
+                    <span class="nx">executionSaving</span> <span class="o">=</span> <span class="nx">executionSaving</span><span class="p">.</span>
+                        <span class="nx">then</span><span class="p">(</span><span class="nx">saveExecution</span><span class="p">(</span><span class="nx">workflow</span><span class="p">,</span> <span class="nx">result</span><span class="p">)).</span>
+                        <span class="nx">then</span><span class="p">(</span><span class="nx">pushResult</span><span class="p">(</span><span class="nx">results</span><span class="p">));</span>
+
+                <span class="p">}</span>
+
+                <span class="nx">executionSaving</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">executionIds</span> <span class="o">=</span> <span class="nx">results</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">execution</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">return</span> <span class="nx">execution</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
+                    <span class="p">});</span>
+
+                    <span class="kd">var</span> <span class="nx">workflowExecution</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WorkflowExecution</span><span class="p">({</span>
+                        <span class="nx">workflow</span><span class="o">:</span> <span class="nx">workflow</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span>
+                        <span class="nx">executedAt</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(),</span>
+                        <span class="nx">executions</span><span class="o">:</span> <span class="nx">executionIds</span>
+                    <span class="p">});</span>
+
+                    <span class="nx">workflowExecution</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">deferred</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">());</span>
+
+                <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+                    <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+                <span class="p">});</span>
+
+
+                <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+            <span class="p">}).</span>
+            <span class="k">catch</span><span class="p">(</span><span class="kd">function</span> <span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">500</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+            <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">pushResult</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">entry</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">results</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">entry</span><span class="p">);</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">saveExecution</span><span class="p">(</span><span class="nx">workflow</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kd">function</span> <span class="nx">saveExecution</span><span class="p">()</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+
+            <span class="kd">var</span> <span class="nx">execution</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Execution</span><span class="p">({</span>
+                <span class="nx">workflow</span><span class="o">:</span> <span class="nx">workflow</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span>
+                <span class="nx">apiCall</span><span class="o">:</span> <span class="nx">result</span><span class="p">.</span><span class="nx">apiCall</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span>
+                <span class="nx">statusCode</span><span class="o">:</span> <span class="nx">result</span><span class="p">.</span><span class="nx">statusCode</span><span class="p">,</span>
+                <span class="nx">response</span><span class="o">:</span> <span class="nx">result</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span>
+                <span class="nx">headers</span><span class="o">:</span> <span class="nx">result</span><span class="p">.</span><span class="nx">headers</span><span class="p">,</span>
+                <span class="nx">type</span><span class="o">:</span> <span class="nx">result</span><span class="p">.</span><span class="nx">type</span><span class="p">,</span>
+                <span class="nx">data</span><span class="o">:</span> <span class="nx">result</span><span class="p">.</span><span class="nx">data</span>
+            <span class="p">});</span>
+
+            <span class="nx">execution</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+            <span class="p">});</span>
+            <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">registerAPICallExecution</span><span class="p">(</span><span class="nx">queue</span><span class="p">,</span> <span class="nx">callIndex</span><span class="p">,</span> <span class="nx">callResults</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kd">function</span> <span class="nx">registeredAPICall</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+
+            <span class="nx">data</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="nx">callIndex</span><span class="o">++</span><span class="p">;</span>
+            <span class="nx">callResults</span><span class="p">[</span><span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">data</span><span class="p">;</span>
+
+            <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">deleteWorkflow</span><span class="o">:</span> <span class="nx">deleteWorkflow</span><span class="p">,</span>
+        <span class="nx">getWorkflows</span><span class="o">:</span> <span class="nx">getWorkflows</span><span class="p">,</span>
+        <span class="nx">getWorkflowById</span><span class="o">:</span> <span class="nx">getWorkflowById</span><span class="p">,</span>
+        <span class="nx">registerWorkflow</span><span class="o">:</span> <span class="nx">registerWorkflow</span><span class="p">,</span>
+        <span class="nx">saveWorkflow</span><span class="o">:</span> <span class="nx">saveWorkflow</span><span class="p">,</span>
+        <span class="nx">executeWorkflowById</span><span class="o">:</span> <span class="nx">executeWorkflowById</span>
+    <span class="p">};</span>
+<span class="p">}(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">),</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">),</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./api.js&#39;</span><span class="p">),</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./execution.js&#39;</span><span class="p">),</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./workflowExecution&#39;</span><span class="p">)));</span></div></div></div></div></body></html>

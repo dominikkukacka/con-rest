@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="en"><head><title>app/viewModels/restCallOverviewVM</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../"><meta name="groc-document-path" content="app/viewModels/restCallOverviewVM"><meta name="groc-project-path" content="app/viewModels/restCallOverviewVM.js"><link rel="stylesheet" type="text/css" media="all" href="../../assets/style.css"><script type="text/javascript" src="../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/viewModels/restCallOverviewVM.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><p>Created by Stefan Schacherl on 27.11.2014.</p></div></div><div class="code"><div class="wrapper"><span class="p">(</span><span class="kd">function</span> <span class="nx">restCallOverviewVM</span><span class="p">(</span><span class="nx">angular</span><span class="p">)</span> <span class="p">{</span>
+    <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;con-rest&#39;</span><span class="p">);</span>
+
+    <span class="nx">app</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;restCallOverviewVM&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">restCallOverviewVM</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$http</span><span class="p">,</span> <span class="nx">$mdDialog</span><span class="p">,</span> <span class="nx">events</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">restCalls</span> <span class="o">=</span> <span class="p">[];</span>
+
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">addRestCall</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">addRestCall</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">restCalls</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+                <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;New API call&#39;</span><span class="p">,</span>
+                <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="nx">data</span><span class="o">:</span> <span class="p">{},</span>
+                <span class="nx">headers</span><span class="o">:</span> <span class="p">{}</span>
+            <span class="p">});</span>
+        <span class="p">};</span>
+
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">confirmRestCallDeletion</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">confirmRestCallDeletion</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">restCall</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">confirm</span> <span class="o">=</span> <span class="nx">$mdDialog</span><span class="p">.</span><span class="nx">confirm</span><span class="p">().</span>
+                <span class="nx">title</span><span class="p">(</span><span class="s1">&#39;Are you sure you want to remove this API call [&#39;</span> <span class="o">+</span> <span class="nx">restCall</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;]?&#39;</span><span class="p">).</span>
+                <span class="nx">content</span><span class="p">(</span><span class="s1">&#39;The API call will be deleted permanently!&#39;</span><span class="p">).</span>
+                <span class="nx">ok</span><span class="p">(</span><span class="s1">&#39;REMOVE API CALL&#39;</span><span class="p">).</span>
+                <span class="nx">cancel</span><span class="p">(</span><span class="s1">&#39;KEEP API CALL&#39;</span><span class="p">).</span>
+                <span class="nx">targetEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+            <span class="nx">$mdDialog</span><span class="p">.</span><span class="nx">show</span><span class="p">(</span><span class="nx">confirm</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">removeRestCallOnConfirm</span><span class="p">(</span><span class="nx">restCall</span><span class="p">));</span>
+        <span class="p">};</span>
+
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">removeRestCallOnConfirm</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">removeRestCallOnConfirm</span><span class="p">(</span><span class="nx">restCall</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kd">function</span> <span class="nx">removeRestCallWrapper</span><span class="p">()</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">restCall</span><span class="p">.</span><span class="nx">_id</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">$scope</span><span class="p">.</span><span class="nx">removeRestCall</span><span class="p">(</span><span class="nx">restCall</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">$scope</span><span class="p">.</span><span class="nx">removeRestCallFromModel</span><span class="p">(</span><span class="nx">restCall</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">removeRestCall</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">removeRestCall</span><span class="p">(</span><span class="nx">restCall</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">$http</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s1">&#39;/api/requests/&#39;</span> <span class="o">+</span> <span class="nx">restCall</span><span class="p">.</span><span class="nx">_id</span><span class="p">).</span>
+                <span class="nx">then</span><span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">removeRestCallFromModel</span><span class="p">(</span><span class="nx">restCall</span><span class="p">));</span>
+        <span class="p">};</span>
+
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">removeRestCallFromModel</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">removeRestCallFromModel</span><span class="p">(</span><span class="nx">restCall</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kd">function</span> <span class="nx">removeWrapper</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">restCalls</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">restCall</span><span class="p">);</span>
+                <span class="nx">$scope</span><span class="p">.</span><span class="nx">restCalls</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">getRestCalls</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">getRestCalls</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/api/requests/&#39;</span><span class="p">).</span>
+                <span class="nx">then</span><span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">restCallsRetrieved</span><span class="p">);</span>
+        <span class="p">};</span>
+
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">restCallsRetrieved</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">restCallsRetrieved</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">restCalls</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+            <span class="nx">$scope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="nx">events</span><span class="p">.</span><span class="nx">REQUESTS_RETRIEVED</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+        <span class="p">};</span>
+
+    <span class="p">});</span>
+<span class="p">}(</span><span class="nb">window</span><span class="p">.</span><span class="nx">angular</span><span class="p">));</span></div></div></div></div></body></html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="en"><head><title>app/viewModels/navigationVM</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../"><meta name="groc-document-path" content="app/viewModels/navigationVM"><meta name="groc-project-path" content="app/viewModels/navigationVM.js"><link rel="stylesheet" type="text/css" media="all" href="../../assets/style.css"><script type="text/javascript" src="../../assets/behavior.js"></script><body><div id="meta"><div class="file-path">app/viewModels/navigationVM.js</div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><p>con-rest
+Version: 0.0.1
+Author: Andy Tang
+Fork me on Github: https://github.com/EnoF/con-rest</p></div></div><div class="code"><div class="wrapper"><span class="p">(</span><span class="kd">function</span> <span class="nx">navigationVM</span><span class="p">(</span><span class="nx">angular</span><span class="p">)</span> <span class="p">{</span>
+    <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;con-rest&#39;</span><span class="p">);</span>
+
+    <span class="nx">app</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;navigationVM&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">navigationVMScope</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$mdSidenav</span><span class="p">,</span> <span class="nx">sitemap</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">menu</span> <span class="o">=</span> <span class="nx">sitemap</span><span class="p">;</span>
+
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">showNavigation</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">showNavigation</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">$mdSidenav</span><span class="p">(</span><span class="s1">&#39;navigation&#39;</span><span class="p">).</span><span class="nx">open</span><span class="p">();</span>
+        <span class="p">};</span>
+
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">hideNavigation</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">hideNavigation</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">$mdSidenav</span><span class="p">(</span><span class="s1">&#39;navigation&#39;</span><span class="p">).</span><span class="nx">close</span><span class="p">();</span>
+        <span class="p">};</span>
+    <span class="p">});</span>
+<span class="p">}(</span><span class="nb">window</span><span class="p">.</span><span class="nx">angular</span><span class="p">));</span></div></div></div></div></body></html>
