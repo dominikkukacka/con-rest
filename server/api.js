@@ -155,7 +155,6 @@
                 }
 
                 deferred.resolve({
-                    id: apiCall._id,
                     statusCode: response.statusCode,
                     apiCall: apiCall,
                     response: parsedBody,
@@ -175,7 +174,7 @@
 
             var execution = new Execution({
                 workflow: null,
-                apiCall: result.apiCall._id,
+                apiCall: result.apiCall,
                 statusCode: result.statusCode,
                 response: result.response,
                 headers: result.headers,
@@ -184,8 +183,10 @@
                 executedAt: new Date()
             });
 
-            execution.save(function resolveWithResult() {
-                deferred.resolve(result);
+            execution.save(function resolveWithResult(err, data) {
+                var returnData = _.clone(data);
+                returnData.apiCall = result.apiCall;
+                deferred.resolve(returnData);
             });
             return deferred.promise;
         };

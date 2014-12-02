@@ -66,7 +66,7 @@
             // given
             var response = null;
             scope.id = 'abc';
-            httpBackend.expect('POST', '/api/requests/' + scope.id + '/execute').
+            httpBackend.expect('POST', '/api/requests/' + scope.id + '/executions').
                 respond(200, 'ok');
 
             // when
@@ -86,7 +86,7 @@
             // given
             var response = null;
             scope.id = 'abc';
-            httpBackend.expect('POST', '/api/requests/' + scope.id + '/execute').
+            httpBackend.expect('POST', '/api/requests/' + scope.id + '/executions').
                 respond(404, 'not found');
 
             // when
