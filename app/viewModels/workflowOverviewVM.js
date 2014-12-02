@@ -52,7 +52,7 @@
         };
 
         $scope.executeWorkflow = function executeWorkflow(workflow) {
-            $http.post('/api/workflows/' + workflow._id + '/execute').
+            $http.post('/api/workflows/' + workflow._id + '/executions').
                 then($scope.workflowExecuted(workflow), $scope.workflowExecutionFailed(workflow));
         };
 

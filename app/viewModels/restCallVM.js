@@ -102,7 +102,7 @@
 
         // Execute the registered call.
         $scope.executeCall = function executeCall() {
-            $http.post('/api/requests/' + $scope.id + '/execute').
+            $http.post('/api/requests/' + $scope.id + '/executions').
                 then($scope.emitResponse, $scope.emitRequestFailed);
         };
 
