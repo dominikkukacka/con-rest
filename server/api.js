@@ -24,6 +24,19 @@
 
     var Execution = mongoose.model('Execution');
 
+    // Receive all stored REST calls from the database.
+    // Response is "Status: 200 OK" and an array of JSON objects. Example:
+
+    //     [{
+    //         "_id":"547874b2281a1fbc22e2284b",
+    //         "name":"sampleRestCall",
+    //         "url":"http://this.sample.call",
+    //         "method":"POST",
+    //         "type":"formData",
+    //         "data":"{\n\"sampleParam\":\"sampleValue\",\n\"testParam\":\"2\"\n}",
+    //         "headers":"{\n\"sampleAuthorization\":\"sampleValue\"\n}",
+    //         "__v":0
+    //     }]
     function getAPICalls(req, res) {
         var deferred = queue.defer();
         APICall.find(deferred.makeNodeResolver());
@@ -33,6 +46,19 @@
         return deferred.promise;
     }
 
+    // Receive specific REST call from the database by its ID
+    // Response is "Status: 200 OK" and a JSON object. Example:
+
+    //     {
+    //         "_id":"547874b2281a1fbc22e2284b",
+    //         "name":"sampleRestCall",
+    //         "url":"http://this.sample.call",
+    //         "method":"POST",
+    //         "type":"formData",
+    //         "data":"{\n\"sampleParam\":\"sampleValue\",\n\"testParam\":\"2\"\n}",
+    //         "headers":"{\n\"sampleAuthorization\":\"sampleValue\"\n}",
+    //         "__v":0
+    //     }
     function getAPICallById(req, res) {
         var deferred = queue.defer();
         var id = mongoose.Types.ObjectId(req.params.id);
@@ -43,6 +69,8 @@
         return deferred.promise;
     }
 
+    // Delete specific REST call from database by its ID
+    // Response is "Status: 200 OK" and "deleted" in body
     function deleteAPICall(req, res) {
         var deferred = queue.defer();
         var id = mongoose.Types.ObjectId(req.params.id);
@@ -68,6 +96,20 @@
         return deferred.promise;
     }
 
+    // Add new REST call to the database and receive its ID
+    // Response is "Status: 200 OK" and an ID in the body. Request Example:
+
+    //     {
+    //         "name": "newSampleRestCall",
+    //         "url": "http://new.sample.api/call",
+    //         "method": "POST",
+    //         "headers": {
+    //             "sampleAuthorization":"sampleValue" },
+    //         "type":"payload",
+    //         "data": {
+    //             "sampleParam":"sampleValue",
+    //             "testParam":2 }
+    //     }
     function registerAPICall(req, res) {
         var apiCall = new APICall(req.body);
         var deferred = queue.defer();

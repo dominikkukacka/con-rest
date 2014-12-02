@@ -17,28 +17,25 @@
     var db = mongoose.connection;
     db.on('error', console.error);
     db.once('open', function initiateServer() {
-        app.get('/api/requests', api.getAPICalls);
-
         app.param('id', String);
 
+        app.get('/api/requests', api.getAPICalls);
         app.get('/api/requests/:id', api.getAPICallById);
+        app.post('/api/requests', api.registerAPICall);
         app.delete('/api/requests/:id', api.deleteAPICall);
+
         app.get('/api/requests/:id/executions', api.getExecutionsByAPICallId);
         app.post('/api/requests/:id/executions', api.executeAPICallById);
 
-        app.post('/api/requests', api.registerAPICall);
-
+        app.get('/api/workflows/', workflow.getWorkflows);
         app.get('/api/workflows/:id', workflow.getWorkflowById);
+        app.post('/api/workflows', workflow.registerWorkflow);
+        app.put('/api/workflows/:id', workflow.saveWorkflow);
         app.delete('/api/workflows/:id', workflow.deleteWorkflow);
+
         app.get('/api/workflows/:id/executions', workflowExecution.getWorkflowExecutionsByWorkflowId);
         app.get('/api/workflows/:workflowId/executions/:workflowExecutionId', workflowExecution.getExecutionsFromWorkflowId);
         app.post('/api/workflows/:id/executions', workflow.executeWorkflowById);
-
-        app.get('/api/workflows/', workflow.getWorkflows);
-
-        app.post('/api/workflows', workflow.registerWorkflow);
-
-        app.put('/api/workflows/:id', workflow.saveWorkflow);
 
         app.get('/api/executions', execution.getExecutions);
         app.get('/api/executions/:id', execution.getExecutionById);
