@@ -11,14 +11,16 @@
         var $mdDialog;
         var parentScope;
         var testGlobals;
+        var events;
 
         beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function setupTests(_$mdDialog_, testSetup) {
+        beforeEach(inject(function setupTests(_$mdDialog_, testSetup, _events_) {
             $mdDialog = _$mdDialog_;
             testGlobals = testSetup.setupDirectiveTest();
             $httpBackend = testGlobals.$httpBackend;
             parentScope = testGlobals.parentScope;
+            events = _events_;
         }));
 
         it('should load an overview of all registered workflows', loadWorkflowOverview);

@@ -7,34 +7,21 @@
     'use strict';
 
     describe('workflow registrator widget specs', function workflowRegistratorWidgetSpecs() {
-        var $rootScope;
         var $httpBackend;
-        var $compile;
-        var events;
         var parentScope;
+        var testGlobals;
 
-        beforeEach(module('con-rest'));
+        beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _events_) {
-            $rootScope = _$rootScope_;
-            $httpBackend = _$httpBackend_;
-            $compile = _$compile_;
-            events = _events_;
-            parentScope = $rootScope.$new();
+        beforeEach(inject(function setupTests(_events_, testSetup) {
+            testGlobals = testSetup.setupDirectiveTest();
+            parentScope = testGlobals.parentScope;
+            $httpBackend = testGlobals.$httpBackend;
         }));
 
         it('should load the calls in the workflow when an workflow model has been provided', function loadRestCalls() {
             // given
-            parentScope.workflow = {
-                _id: '5462113c71730c681334887a',
-                name: 'First Flow',
-                __v: 0,
-                calls: [
-                    '5461be18868fa2380ebb43b5',
-                    '5461be2b868fa2380ebb43b6'
-                ],
-                $$hashKey: 'object:15'
-            };
+            parentScope.workflow = testGlobals.createDefaultWorkflow();
             var directive = angular.element('<workflow-registrator workflow="workflow"></workflow-registrator>');
 
             // Child widget is calling for all requests
@@ -42,19 +29,10 @@
                 respond(200, []);
 
             // when
-            var scope = initalizeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(parentScope, directive);
 
             // then
-            expect(scope.workflow.calls[0]).toEqual(parentScope.workflow.calls[0]);
-            expect(scope.workflow.calls[1]).toEqual(parentScope.workflow.calls[1]);
-            expect(scope.workflow._id).toEqual(parentScope.workflow._id);
+            testGlobals.expectWorkflows(scope.workflow).toEqual(parentScope.workflow);
         });
-
-        function initalizeDirective(scope, directive) {
-            $compile(directive)(scope);
-            $rootScope.$digest();
-            // Expose the scope so we can run some tests on it
-            return directive.children().scope();
-        }
     });
 }());

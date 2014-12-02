@@ -104,6 +104,14 @@
 
         function expectWorkflows(workflows) {
             return {
+                toEqual: function toEqual(expectedWorkflows) {
+                    expect(workflows.length).toEqual(expectedWorkflows.length);
+                    for (var i = 0; i < workflows.length; i++) {
+                        var workflow = workflows[i];
+                        var expectedWorkflow = expectedWorkflows[i];
+                        expectWorkflow(workflow).toEqual(expectedWorkflow);
+                    }
+                },
                 toMatch: function toMatch(expectedWorkflows) {
                     expect(workflows.length).toEqual(expectedWorkflows.length);
                     for (var i = 0; i < workflows.length; i++) {
