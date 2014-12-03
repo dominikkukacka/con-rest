@@ -8,23 +8,7 @@
 
     var app = angular.module('con-rest-test', ['con-rest']);
 
-    app.factory('testSetup', function testSetupScope($rootScope, $httpBackend, $compile) {
-        function setupDirectiveTest() {
-            return {
-                $rootScope: $rootScope,
-                $httpBackend: $httpBackend,
-                parentScope: $rootScope.$new(),
-                initializeDirective: initializeDirective,
-                createDefaultRequest: createDefaultRequest,
-                createDefaultRequests: createDefaultRequests,
-                createDefaultWorkflow: createDefaultWorkflow,
-                createDefaultWorkflows: createDefaultWorkflows,
-                createEmptyRequest: createEmptyRequest,
-                expectRequest: expectRequest,
-                expectWorkflow: expectWorkflow,
-                expectWorkflows: expectWorkflows
-            };
-        }
+    app.factory('testSetup', function testSetupScope($rootScope, $httpBackend, $compile, $controller, events) {
 
         function initializeDirective(scope, directive) {
             $compile(directive)(scope);
@@ -77,6 +61,22 @@
             return [createResponseWorkflow()];
         }
 
+        function givenRequest(request) {
+            return {
+                isDefault: function isDefault() {
+                    request.name = 'fakeCall';
+                    request.url = 'http://fake.url';
+                    request.method = 'GET';
+                    request.data = {
+                        ba: 'nana'
+                    };
+                    request.headers = {
+                        foo: 'bar'
+                    };
+                }
+            };
+        }
+
         function expectRequest(request) {
             return {
                 toEqual: function toEqual(expectedRequest) {
@@ -123,8 +123,45 @@
             }
         }
 
+        function createDefaultTestGlobals() {
+            return {
+                createDefaultRequest: createDefaultRequest,
+                createDefaultRequests: createDefaultRequests,
+                createDefaultWorkflow: createDefaultWorkflow,
+                createDefaultWorkflows: createDefaultWorkflows,
+                createEmptyRequest: createEmptyRequest,
+                expectRequest: expectRequest,
+                expectWorkflow: expectWorkflow,
+                expectWorkflows: expectWorkflows,
+                givenRequest: givenRequest,
+                $httpBackend: $httpBackend
+            };
+        }
+
+        function setupDirectiveTest() {
+            var testGlobals = createDefaultTestGlobals();
+
+            testGlobals.parentScope = $rootScope.$new();
+            testGlobals.initializeDirective = initializeDirective;
+
+            return testGlobals;
+        }
+
+        function setupControllerTest(controllerName) {
+            var testGlobals = createDefaultTestGlobals();
+
+            testGlobals.scope = $rootScope.$new();
+            testGlobals.events = events;
+
+            $controller(controllerName, {
+                $scope: testGlobals.scope
+            });
+            return testGlobals;
+        }
+
         return {
-            setupDirectiveTest: setupDirectiveTest
+            setupDirectiveTest: setupDirectiveTest,
+            setupControllerTest: setupControllerTest
         };
     });
 }(window.angular));

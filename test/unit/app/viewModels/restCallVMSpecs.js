@@ -8,28 +8,26 @@
 
     describe('Rest Call View Model specs', function restCallVMSpecs() {
 
-        var scope, httpBackend, events;
-        beforeEach(module('con-rest'));
+        var scope, $httpBackend, events, testGlobals;
+        beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function ($controller, $rootScope, $httpBackend, _events_) {
-            scope = $rootScope.$new();
-            httpBackend = $httpBackend;
-            events = _events_;
-            $controller('restCallVM', {
-                $scope: scope
-            });
+        beforeEach(inject(function (testSetup) {
+            testGlobals = testSetup.setupControllerTest('restCallVM');
+            scope = testGlobals.scope;
+            $httpBackend = testGlobals.$httpBackend;
+            events = testGlobals.events;
         }));
 
         it('should register a rest call', function registerRestCall() {
             // given
             var response = null;
-            givenGetCallSettings();
+            testGlobals.givenRequest(scope.request).isDefault();
 
             // when
             scope.$on(events.REGISTRATION_SUCCESSFUL, function registrationSuccessful(event, res) {
                 response = res;
             });
-            httpBackend.expect('POST', '/api/requests', {
+            $httpBackend.expect('POST', '/api/requests', {
                 name: scope.request.name,
                 url: scope.request.url,
                 method: scope.request.method,
@@ -39,7 +37,7 @@
             scope.registerCall();
 
             // then
-            httpBackend.flush();
+            $httpBackend.flush();
             expect(response.status).toEqual(200);
             expect(response.data).toEqual('someguidid');
             expect(scope.request._id).toEqual('someguidid');
@@ -53,11 +51,11 @@
             scope.$on(events.REGISTRATION_FAILED, function requestFailed(event, res) {
                 response = res;
             });
-            httpBackend.when('POST', '/api/requests').respond(400, 'bad request');
+            $httpBackend.when('POST', '/api/requests').respond(400, 'bad request');
             scope.registerCall();
 
             // then
-            httpBackend.flush();
+            $httpBackend.flush();
             expect(response.status).toEqual(400);
             expect(response.data).toEqual('bad request');
         });
@@ -66,7 +64,7 @@
             // given
             var response = null;
             scope.request._id = 'abc';
-            httpBackend.expect('POST', '/api/requests/' + scope.request._id + '/executions').
+            $httpBackend.expect('POST', '/api/requests/' + scope.request._id + '/executions').
                 respond(200, 'ok');
 
             // when
@@ -76,7 +74,7 @@
             scope.executeCall();
 
             // then
-            httpBackend.flush();
+            $httpBackend.flush();
             expect(response.status).toEqual(200);
             expect(response.data).toEqual('ok');
             expect(scope.response).toEqual(response);
@@ -86,7 +84,7 @@
             // given
             var response = null;
             scope.request._id = 'abc';
-            httpBackend.expect('POST', '/api/requests/' + scope.request._id + '/executions').
+            $httpBackend.expect('POST', '/api/requests/' + scope.request._id + '/executions').
                 respond(404, 'not found');
 
             // when
@@ -96,7 +94,7 @@
             scope.executeCall();
 
             // then
-            httpBackend.flush();
+            $httpBackend.flush();
             expect(response.status).toEqual(404);
             expect(response.data).toEqual('not found');
             expect(scope.response).toEqual(response);
@@ -106,14 +104,8 @@
             // given
             var response = null;
             scope.request._id = 'abc';
-            var expectedResponse = {
-                _id: scope.request._id,
-                name: 'ba',
-                url: 'http://ba.na.na',
-                method: 'DELETE',
-                data: '{ "message": "chomp" }'
-            };
-            httpBackend.expect('GET', '/api/requests/' + scope.request._id).
+            var expectedResponse = testGlobals.createDefaultRequest();
+            $httpBackend.expect('GET', '/api/requests/' + scope.request._id).
                 respond(200, expectedResponse);
 
             // when
@@ -123,42 +115,15 @@
             scope.getCall();
 
             // then
-            httpBackend.flush();
-            expect(scope.request._id).toEqual(expectedResponse._id);
-            expect(scope.request.name).toEqual(expectedResponse.name);
-            expect(scope.request.url).toEqual(expectedResponse.url);
-            expect(scope.request.method).toEqual(expectedResponse.method);
-            expect(scope.request.data).toEqual(expectedResponse.data);
-        });
-
-        it('should save the changes on an existing call', function saveChanges() {
-            // given
-            scope.request._id = '547c4ae3341c73f41186a4d6';
-            spyOn(scope, 'updateRestCall');
-
-            // when
-            scope.save();
-
-            // then
-            expect(scope.updateRestCall).toHaveBeenCalled();
+            $httpBackend.flush();
+            testGlobals.expectRequest(scope.request).toEqual(expectedResponse);
         });
 
         it('should get a list of registered api calls', function getApiCall() {
             // given
             var response = null;
-            var responseDetails = [
-                {
-                    '_id': '545c8129e0e00d50095212c5',
-                    'name': 'Chikita',
-                    'url': 'http://url.info',
-                    'method': 'GET',
-                    'data': {
-                        'ba': 'nana'
-                    },
-                    '__v': 0
-                }
-            ];
-            httpBackend.expect('GET', '/api/requests/').
+            var responseDetails = testGlobals.createDefaultRequests();
+            $httpBackend.expect('GET', '/api/requests/').
                 respond(200, responseDetails);
 
             // when
@@ -168,30 +133,17 @@
             scope.getAvailableRequests();
 
             // then
-            httpBackend.flush();
+            $httpBackend.flush();
             expect(response.status).toEqual(200);
             expect(scope.availableCalls).toEqual(response.data);
         });
 
         it('should set the attributes of the provided request', function providedRequest() {
             // given
-            scope.request = {
-                _id: '545c8129e0e00d50095212c5'
-            };
+            scope.request = testGlobals.createDefaultRequest();
             var response = null;
-            var responseDetails = [
-                {
-                    '_id': '545c8129e0e00d50095212c5',
-                    'name': 'Chikita',
-                    'url': 'http://url.info',
-                    'method': 'GET',
-                    'data': {
-                        'ba': 'nana'
-                    },
-                    '__v': 0
-                }
-            ];
-            httpBackend.expect('GET', '/api/requests/').
+            var responseDetails = testGlobals.createDefaultRequests();
+            $httpBackend.expect('GET', '/api/requests/').
                 respond(200, responseDetails);
 
             // when
@@ -201,22 +153,10 @@
             scope.getAvailableRequests();
 
             // then
-            httpBackend.flush();
+            $httpBackend.flush();
             expect(response.status).toEqual(200);
             expect(scope.request.name).toEqual(response.data[0].name);
             expect(scope.availableCalls).toEqual(response.data);
         });
-
-        function givenGetCallSettings() {
-            scope.request.name = 'fakeCall';
-            scope.request.url = 'http://fake.url';
-            scope.request.method = 'GET';
-            scope.request.data = {
-                ba: 'nana'
-            };
-            scope.request.headers = {
-                foo: 'bar'
-            };
-        }
     });
 }());
