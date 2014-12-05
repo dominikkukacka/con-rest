@@ -91,6 +91,14 @@
 
         function expectWorkflow(workflow) {
             return {
+                toEqual: function toEqual(expectedWorkflow) {
+                    expect(workflow.name).toEqual(expectedWorkflow.name);
+                    for (var i = 0; i < workflow.calls.length; i++) {
+                        var call = workflow.calls[i];
+                        var expectedCall = expectedWorkflow.calls[i];
+                        expectRequest(call).toEqual(expectedCall);
+                    }
+                },
                 toMatch: function toMatch(expectedWorkflow) {
                     expect(workflow.name).toEqual(expectedWorkflow.name);
                     for (var i = 0; i < workflow.calls.length; i++) {

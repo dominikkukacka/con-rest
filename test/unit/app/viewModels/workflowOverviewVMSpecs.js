@@ -7,16 +7,14 @@
     'use strict';
 
     describe('workflowOverviewVM specs', function workflowOverviewVMSpecs() {
-        var scope, httpBackend, events;
-        beforeEach(module('con-rest'));
+        var scope, $httpBackend, events, testGlobals;
+        beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function ($controller, $rootScope, $httpBackend, _events_) {
-            scope = $rootScope.$new();
-            httpBackend = $httpBackend;
-            events = _events_;
-            $controller('workflowOverviewVM', {
-                $scope: scope
-            });
+        beforeEach(inject(function (testSetup) {
+            testGlobals = testSetup.setupControllerTest('workflowOverviewVM');
+            scope = testGlobals.scope;
+            $httpBackend = testGlobals.$httpBackend;
+            events = testGlobals.events;
         }));
 
         it('should add an empty workflow ready to be saved', function addEmptyWorkflow() {
@@ -34,13 +32,8 @@
         it('should load all workflows', function loadExistingWorkflows() {
             // given
             var response = null;
-            var workflows = [
-                {
-                    name: 'somename',
-                    calls: ['someid', 'moreids']
-                }
-            ]
-            httpBackend.expect('GET', '/api/workflows/').
+            var workflows = testGlobals.createDefaultWorkflows();
+            $httpBackend.expect('GET', '/api/workflows/').
                 respond(200, workflows);
 
             // when
@@ -50,11 +43,9 @@
             scope.getWorkflows();
 
             // then
-            httpBackend.flush();
+            $httpBackend.flush();
             expect(response.status).toEqual(200);
-            expect(scope.workflows[0].name).toEqual(workflows[0].name);
-            expect(scope.workflows[0].calls[0]._id).toEqual(workflows[0].calls[0]);
-            expect(scope.workflows[0].calls[1]._id).toEqual(workflows[0].calls[1]);
+            testGlobals.expectWorkflows(scope.workflows).toMatch(workflows);
         });
 
         it('should remove an workflow', function removeWorkflow() {
@@ -71,12 +62,12 @@
                 }
             ];
 
-            httpBackend.expect('DELETE', '/api/workflows/' + 'this one').
+            $httpBackend.expect('DELETE', '/api/workflows/' + 'this one').
                 respond(200, 'ok');
 
             // when
             scope.removeWorkflowOnConfirm(scope.workflows[1])();
-            httpBackend.flush();
+            $httpBackend.flush();
 
             // then
             expect(scope.workflows.length).toEqual(2);
@@ -98,18 +89,14 @@
 
         it('should execute a workflow', function executeWorkflow() {
             // given
-            scope.workflows = [
-                {
-                    _id: 'executeme'
-                }
-            ];
+            scope.workflows = testGlobals.createDefaultWorkflows();
 
-            httpBackend.expect('POST', '/api/workflows/executeme/executions').
+            $httpBackend.expect('POST', '/api/workflows/flowid/executions').
                 respond(200, 'ok');
 
             // when
             scope.executeWorkflow(scope.workflows[0]);
-            httpBackend.flush();
+            $httpBackend.flush();
 
             // then
             expect(scope.workflows[0].success).toEqual(true);
@@ -117,18 +104,14 @@
 
         it('should fail an execution of an workflow', function executionFailed() {
             // given
-            scope.workflows = [
-                {
-                    _id: 'executeme'
-                }
-            ];
+            scope.workflows = testGlobals.createDefaultWorkflows();
 
-            httpBackend.expect('POST', '/api/workflows/executeme/executions').
+            $httpBackend.expect('POST', '/api/workflows/flowid/executions').
                 respond(400, 'bad request');
 
             // when
             scope.executeWorkflow(scope.workflows[0]);
-            httpBackend.flush();
+            $httpBackend.flush();
 
             // then
             expect(scope.workflows[0].success).toEqual(false);
