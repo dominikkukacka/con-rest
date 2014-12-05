@@ -40,7 +40,13 @@
         }
 
         function createDefaultRequests() {
-            return [createDefaultRequest()];
+            var secondRequest = createDefaultRequest();
+            secondRequest._id = 'someid2';
+            var thirdRequest = createDefaultRequest();
+            thirdRequest._id = 'someid3';
+            return [createDefaultRequest(),
+                secondRequest,
+                thirdRequest];
         }
 
         function createDefaultWorkflow() {
@@ -49,6 +55,16 @@
                 name: 'flow',
                 calls: createDefaultRequests()
             };
+        }
+
+        function createDefaultRequestWorkflow() {
+            var workflow = createDefaultWorkflow();
+            var calls = [];
+            for (var i = 0; i < workflow.calls.length; i++) {
+                calls.push(workflow.calls[i]._id);
+            }
+            workflow.calls = calls;
+            return workflow;
         }
 
         function createResponseWorkflow() {
@@ -137,6 +153,7 @@
                 createDefaultRequests: createDefaultRequests,
                 createDefaultWorkflow: createDefaultWorkflow,
                 createDefaultWorkflows: createDefaultWorkflows,
+                createDefaultRequestWorkflow: createDefaultRequestWorkflow,
                 createEmptyRequest: createEmptyRequest,
                 expectRequest: expectRequest,
                 expectWorkflow: expectWorkflow,
