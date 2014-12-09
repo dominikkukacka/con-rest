@@ -30,7 +30,7 @@
 
 <md-toolbar layout-padding layout="rows">
     <div class="md-toolbar-tools">
-        <md-button hide show-phone show-tablet aria-label="Toggle Menu"
+        <md-button hide-gt-md aria-label="Toggle Menu"
                    ng-click="showNavigation()">
             <md-icon icon="/icons/ic_menu_24px.svg"></md-icon>
         </md-button>
@@ -41,7 +41,7 @@
      layout="rows">
     <md-sidenav class="md-sidenav-left md-whiteframe-z2"
                 md-component-id="navigation"
-                md-is-locked-open="$media('md')"
+                md-is-locked-open="$media('gt-md')"
                 layout="column">
         <md-toolbar>
             <div class="md-toolbar-tools">
