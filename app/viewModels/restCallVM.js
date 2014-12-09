@@ -10,10 +10,10 @@
 
     app.controller('restCallVM', function restCallVMScope($scope, $http, events, $timeout) {
         // The id can be provided by the parent.
-        $scope.id = $scope.id || null;
 
         // Request can be passed a long or it could be empty.
         $scope.request = $scope.request || {
+            _id: $scope.id || null,
             name: null,
             url: null,
             method: null,
@@ -28,7 +28,23 @@
         // UI related properties
         $scope.openMethods = false;
         $scope.availableMethods = ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS', 'PATCH'];
+        $scope.openTypes = false;
+        $scope.availableTypes = ['formData', 'payload'];
         $scope.showCalls = false;
+        $scope.editing = false;
+
+        $scope.startEditing = function startEditing() {
+            $scope.editing = true;
+        };
+
+        $scope.requestCancelEditing = function requestCancelEditing(){
+            $scope.$emit(events.CANCEL_EDITING);
+        };
+
+        $scope.cancelEditing = function cancelEditing(event) {
+            event.stopPropagation();
+            $scope.editing = false;
+        };
 
         // Open the dropdown for methods.
         $scope.toggleMethodsDropdown = function toggleMethodsDropdown() {
@@ -39,6 +55,17 @@
         $scope.selectMethod = function selectMethod(selectedMethod) {
             $scope.request.method = selectedMethod;
             $scope.openMethods = false;
+        };
+
+        // Open the dropdown for types.
+        $scope.toggleTypesDropdown = function toggleTypesDropdown() {
+            $scope.openTypes = !$scope.openTypes;
+        };
+
+        // Select type
+        $scope.selectType = function selectType(type) {
+            $scope.request.type = type;
+            $scope.openTypes = false;
         };
 
         // Open the available requests
@@ -64,7 +91,7 @@
 
         // Get the registered call by id.
         $scope.getCall = function getCall() {
-            $http.get('/api/requests/' + $scope.id).
+            $http.get('/api/requests/' + $scope.request._id).
                 then($scope.populateRequest, $scope.emitRetrievalFailed);
         };
 
@@ -80,6 +107,7 @@
                 name: $scope.request.name,
                 url: $scope.request.url,
                 method: $scope.request.method,
+                type: $scope.request.type,
                 data: $scope.request.data,
                 headers: $scope.request.headers
             }).then($scope.emitRegistrationSuccessfull, $scope.emitRegistrationFailed);
@@ -102,13 +130,13 @@
 
         // Execute the registered call.
         $scope.executeCall = function executeCall() {
-            $http.post('/api/requests/' + $scope.id + '/executions').
+            $http.post('/api/requests/' + $scope.request._id + '/executions').
                 then($scope.emitResponse, $scope.emitRequestFailed);
         };
 
         // Notify the parent the registration of the call has been successful.
         $scope.emitRegistrationSuccessfull = function emitRegistrationSuccessfull(response) {
-            $scope.id = response.data;
+            $scope.request._id = response.data;
             $scope.$emit(events.REGISTRATION_SUCCESSFUL, response);
         };
 
@@ -147,6 +175,23 @@
                 }
             }
             $scope.$emit(events.REQUESTS_RETRIEVED, response);
+        };
+
+        $scope.updateRestCall = function updateRestCall() {
+            $http.put('/api/requests/' + $scope.request._id, $scope.request).
+                then($scope.restCallUpdated);
+        };
+
+        $scope.restCallUpdated = function restCallUpdated(response) {
+            $scope.$emit(events.REQUEST_UPDATED, response);
+        };
+
+        $scope.save = function save() {
+            if(!$scope.request._id) {
+                $scope.registerCall();
+            } else {
+                $scope.updateRestCall();
+            }
         };
     });
 }(window.angular));

@@ -10,10 +10,12 @@
 
     app.factory('events', function eventsFactory() {
         return {
+            CANCEL_EDITING: 'cancelEditing',
             REGISTRATION_SUCCESSFUL: 'registrationSuccessful',
             REGISTRATION_FAILED: 'registrationFailed',
             REQUEST_FAILED: 'requestFailed',
             REQUEST_RETRIEVED: 'requestRetrieved',
+            REQUEST_UPDATED: 'requestUpdated',
             REQUESTS_RETRIEVED: 'requestRetrieved',
             RESPONSE_RECEIVED: 'responseReceived',
             RETRIEVAL_FAILED: 'retrievalFailed',

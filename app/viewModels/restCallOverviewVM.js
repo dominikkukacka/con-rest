@@ -34,7 +34,7 @@
                 if (restCall._id) {
                     $scope.removeRestCall(restCall);
                 } else {
-                    $scope.removeRestCallFromModel(restCall);
+                    $scope.removeRestCallFromModel(restCall)();
                 }
             };
         };
@@ -48,6 +48,23 @@
             return function removeWrapper() {
                 var index = $scope.restCalls.indexOf(restCall);
                 $scope.restCalls.splice(index, 1);
+            };
+        };
+
+        $scope.executeRestCall = function executeRestCall(restCall) {
+            $http.post('/api/requests/' + restCall._id + '/executions').
+                then($scope.restCallExecuted(restCall), $scope.restCallExecutionFailed(restCall));
+        };
+
+        $scope.restCallExecuted = function restCallExecuted (restCall) {
+            return function wrapperRestCallExecuted() {
+                restCall.success = true;
+            };
+        };
+
+        $scope.restCallExecutionFailed = function restCallExecutionFailed(restCall) {
+            return function wrapperRestCallFailed() {
+                restCall.success = false;
             };
         };
 
