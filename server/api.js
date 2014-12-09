@@ -139,6 +139,36 @@
         return deferred.promise;
     }
 
+    function saveAPICall(req, res) {
+        var id = mongoose.Types.ObjectId(req.params.id);
+        var details = req.body;
+        var apiCall = null;
+        return queue().
+            then(function getExistingAPICall() {
+                var deferred = queue.defer();
+                APICall.findById(id, deferred.makeNodeResolver());
+                return deferred.promise;
+            }).
+            then(function modifyAPICall(retrievedAPICall) {
+                var deferred = queue.defer();
+                apiCall = retrievedAPICall;
+                apiCall.name = details.name;
+                apiCall.url = details.url;
+                apiCall.method = details.method;
+                apiCall.type = details.type;
+                apiCall.data = details.data;
+                apiCall.headers = details.headers;
+                apiCall.save(deferred.makeNodeResolver());
+                return deferred.promise;
+            }).
+            then(function returnTrue() {
+                var deferred = queue.defer();
+                deferred.resolve(apiCall);
+                res.send('ok');
+                return deferred.promise;
+            });
+    }
+
     // Execute a REST call from the database using its ID
     // Response is "Status: 200 OK" and a JSON body. Response Example:
 
@@ -291,6 +321,7 @@
 
     module.exports = {
         deleteAPICall: deleteAPICall,
+        saveAPICall: saveAPICall,
         APICall: APICall,
         getAPICalls: getAPICalls,
         getAPICallById: getAPICallById,

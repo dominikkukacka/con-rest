@@ -6,7 +6,11 @@
 <md-card class="call-registrator md-whiteframe-z1"
          flex layout="column">
     <md-toolbar>
-        <h3 class="md-toolbar-tools">Add API Call</h3>
+        <h3 class="md-toolbar-tools"
+            ng-if="!request._id">Add API Call</h3>
+
+        <h3 class="md-toolbar-tools"
+            ng-if="request._id">Edit API Call</h3>
     </md-toolbar>
     <form role="form" layout-padding>
         <md-text-float label="API Call name"
@@ -32,14 +36,40 @@
                            ng-model="request.url"></md-text-float>
         </div>
 
-        <md-text-float label="params"
-                       ng-model="request.params"
-                       rows="4"
-                       cols="50"
+        <md-text-float label="headers"
+                       ng-model="request.headers"
+                       rows="2"
+                       cols="60"
                        type="textarea"></md-text-float>
 
-        <md-button class="md-primary md-raised"
-                   ng-click="registerCall()">Submit
-        </md-button>
+        <div layout="column">
+            <md-text-float label="type"
+                           ng-model="request.type"
+                           data-ng-click="toggleTypesDropdown()"></md-text-float>
+            <md-list ng-show="openTypes">
+                <md-item ng-repeat="type in availableTypes"
+                         data-ng-click="selectType(type)">
+                    <p>{{ type }}</p>
+                    <md-divider ng-if="!$last"></md-divider>
+                </md-item>
+            </md-list>
+        </div>
+
+        <md-text-float label="parameters"
+                       ng-model="request.data"
+                       rows="4"
+                       cols="60"
+                       type="textarea"></md-text-float>
+
+        <div layout="row">
+            <md-button class="md-primary md-raised"
+                       ng-click="save()">Submit
+            </md-button>
+            <md-button ng-if="request._id"
+                       class="md-primary md-raised"
+                       ng-click="requestCancelEditing()">Cancel
+            </md-button>
+        </div>
+
     </form>
 </md-card>

@@ -6,7 +6,7 @@
 (function workFlowVMSpecs() {
     'use strict';
 
-    describe('wofkFlowVM Specs', function workFlowVMSpecs() {
+    describe('workFlowVM Specs', function workFlowVMSpecs() {
         var scope, httpBackend, events;
         beforeEach(module('con-rest'));
 

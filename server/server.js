@@ -22,6 +22,7 @@
         app.get('/api/requests', api.getAPICalls);
         app.get('/api/requests/:id', api.getAPICallById);
         app.post('/api/requests', api.registerAPICall);
+        app.put('/api/requests/:id', api.saveAPICall);
         app.delete('/api/requests/:id', api.deleteAPICall);
 
         app.get('/api/requests/:id/executions', api.getExecutionsByAPICallId);

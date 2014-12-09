@@ -3,10 +3,10 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function restCallSpecs() {
+(function restCallVMSpecs() {
     'use strict';
 
-    describe('Rest Call View Model specs', function restCallSpecs() {
+    describe('Rest Call View Model specs', function restCallVMSpecs() {
 
         var scope, httpBackend, events;
         beforeEach(module('con-rest'));
@@ -42,7 +42,7 @@
             httpBackend.flush();
             expect(response.status).toEqual(200);
             expect(response.data).toEqual('someguidid');
-            expect(scope.id).toEqual('someguidid');
+            expect(scope.request._id).toEqual('someguidid');
         });
 
         it('should display an handle errors accordingly', function emitFailed() {
@@ -65,8 +65,8 @@
         it('should execute the rest call', function executeCall() {
             // given
             var response = null;
-            scope.id = 'abc';
-            httpBackend.expect('POST', '/api/requests/' + scope.id + '/executions').
+            scope.request._id = 'abc';
+            httpBackend.expect('POST', '/api/requests/' + scope.request._id + '/executions').
                 respond(200, 'ok');
 
             // when
@@ -85,8 +85,8 @@
         it('should notify the parent when an request failed', function failedRequest() {
             // given
             var response = null;
-            scope.id = 'abc';
-            httpBackend.expect('POST', '/api/requests/' + scope.id + '/executions').
+            scope.request._id = 'abc';
+            httpBackend.expect('POST', '/api/requests/' + scope.request._id + '/executions').
                 respond(404, 'not found');
 
             // when
@@ -105,15 +105,15 @@
         it('should get the registered call', function getRequest() {
             // given
             var response = null;
-            scope.id = 'abc';
+            scope.request._id = 'abc';
             var expectedResponse = {
-                _id: scope.id,
+                _id: scope.request._id,
                 name: 'ba',
                 url: 'http://ba.na.na',
                 method: 'DELETE',
                 data: '{ "message": "chomp" }'
             };
-            httpBackend.expect('GET', '/api/requests/' + scope.id).
+            httpBackend.expect('GET', '/api/requests/' + scope.request._id).
                 respond(200, expectedResponse);
 
             // when
@@ -129,6 +129,18 @@
             expect(scope.request.url).toEqual(expectedResponse.url);
             expect(scope.request.method).toEqual(expectedResponse.method);
             expect(scope.request.data).toEqual(expectedResponse.data);
+        });
+
+        it('should save the changes on an existing call', function saveChanges() {
+            // given
+            scope.request._id = '547c4ae3341c73f41186a4d6';
+            spyOn(scope, 'updateRestCall');
+
+            // when
+            scope.save();
+
+            // then
+            expect(scope.updateRestCall).toHaveBeenCalled();
         });
 
         it('should get a list of registered api calls', function getApiCall() {

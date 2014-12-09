@@ -12,7 +12,9 @@
         return {
             controller: 'restCallVM',
             restrict: 'EA',
-            scope: {},
+            scope: {
+                request: '=?restCall'
+            },
             templateUrl: 'callRegistrator'
         };
     });

@@ -8,7 +8,7 @@
 
     var app = angular.module('con-rest');
 
-    app.directive('restCall', function restCallDirective() {
+    app.directive('restCall', function restCallDirective(events) {
         return {
             controller: 'restCallVM',
             restrict: 'E',
@@ -21,6 +21,9 @@
                 if (scope.id) {
                     scope.getCall();
                 }
+
+                scope.$on(events.CANCEL_EDITING, scope.cancelEditing);
+                scope.$on(events.REQUEST_UPDATED, scope.cancelEditing);
             }
         };
     });
