@@ -104,7 +104,7 @@
                 }
             ];
 
-            httpBackend.expect('POST', '/api/workflows/executeme/execute').
+            httpBackend.expect('POST', '/api/workflows/executeme/executions').
                 respond(200, 'ok');
 
             // when
@@ -123,7 +123,7 @@
                 }
             ];
 
-            httpBackend.expect('POST', '/api/workflows/executeme/execute').
+            httpBackend.expect('POST', '/api/workflows/executeme/executions').
                 respond(400, 'bad request');
 
             // when

@@ -228,7 +228,7 @@
             var deferred = queue.defer();
 
             data.index = callIndex++;
-            callResults[data.id] = data;
+            callResults[data.apiCall.id] = data;
 
             deferred.resolve(data);
             return deferred.promise;

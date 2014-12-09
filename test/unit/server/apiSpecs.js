@@ -128,11 +128,11 @@
                         return api.executeAPICallById(req, res);
                     }).
                     then(function then() {
-                        var call = res.send.args[0][0];
-                        call.statusCode.should.be.exactly(200);
-                        String(call.id).should.be.exactly('545726928469e940235ce770');
-                        Object.keys(call.response).length.should.be.exactly(1);
-                        call.response.index.should.be.exactly(100);
+                        var execution = res.send.args[0][0];
+                        execution.statusCode.should.be.exactly(200);
+                        String(execution.apiCall._id).should.be.exactly('545726928469e940235ce770');
+                        Object.keys(execution.response).length.should.be.exactly(1);
+                        execution.response.index.should.be.exactly(100);
                     }).
                     then(done).
                     catch(done);
@@ -200,7 +200,6 @@
                     then(function then() {
                         var call = res.send.args[0][0];
                         call.statusCode.should.be.exactly(200);
-                        String(call.id).should.be.exactly('545726928469e940235ce800');
                         Object.keys(call.response).length.should.be.exactly(1);
                         call.response.index.should.be.exactly(111);
                     }).
@@ -238,7 +237,6 @@
                     then(function then() {
                         var call = res.send.args[0][0];
                         call.statusCode.should.be.exactly(200);
-                        String(call.id).should.be.exactly('545726928469e940235ce900');
                         Object.keys(call.response).length.should.be.exactly(1);
                         call.response.index.should.be.exactly(200);
                     }).
