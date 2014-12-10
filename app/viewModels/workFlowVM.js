@@ -41,6 +41,11 @@
             $scope.workflow.calls.push({});
         };
 
+        // Remove a REST call which was added to the workflow.
+        $scope.removeCall = function removeCall(index) {
+            $scope.workflow.calls.splice(index, 1);
+        };
+
         $scope.retrievedWorkflow = function retrievedWorkflow(response) {
             $scope.workflow.name = response.data.name;
             $scope.workflow.calls = [];
