@@ -8,7 +8,7 @@
 
     var app = angular.module('con-rest');
 
-    app.directive('workflowOverview', function workflowOverviewDirective() {
+    app.directive('workflowOverview', function workflowOverviewDirective(events) {
         return {
             controller: 'workflowOverviewVM',
             restrict: 'E',
@@ -16,6 +16,8 @@
             templateUrl: 'workflowOverview',
             link: function workflowOverviewConstructor(scope) {
                 scope.getWorkflows();
+
+                scope.$on(events.WORKFLOW_DELETED, scope.removedWorkflow);
             }
         };
     });

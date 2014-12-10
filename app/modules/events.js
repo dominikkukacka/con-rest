@@ -20,6 +20,7 @@
             RESPONSE_RECEIVED: 'responseReceived',
             RETRIEVAL_FAILED: 'retrievalFailed',
             WORKFLOW_CREATED: 'workflowCreated',
+            WORKFLOW_DELETED: 'workflowDeleted',
             WORKFLOW_RECEIVED: 'workflowReceived',
             WORKFLOW_UPDATED: 'workflowUpdated',
             WORKFLOWS_RETRIEVED: 'workflowsRetrieved'

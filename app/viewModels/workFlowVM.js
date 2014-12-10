@@ -10,10 +10,11 @@
 
     app.controller('workFlowVM', function workFlowVM($scope, $http, events) {
         // Set a default empty workflow if not provided.
-        $scope.workflow = $scope.workflow || {
+        $scope.originalWorkflow = $scope.originalWorkflow || {
             _id: null,
             calls: []
         };
+        $scope.workflow = angular.copy($scope.originalWorkflow, {});
 
         // New calls created while configuring the workflow.
         $scope.newCalls = [];
@@ -22,6 +23,17 @@
 
         $scope.startEditing = function startEditing() {
             $scope.editing = true;
+        };
+
+        $scope.endEditing = function endEditing() {
+            $scope.editing = false;
+            if (!$scope.workflow._id) {
+                $scope.$emit(events.WORKFLOW_DELETED, $scope.workflow);
+            }
+        };
+
+        $scope.requestCancel = function requestCancel() {
+            $scope.$emit(events.CANCEL_EDITING);
         };
 
         // Add an additional REST call to the workflow.
@@ -64,10 +76,12 @@
         // The workflow we create only needs the id of the calls.
         $scope.createNewWorkflow = function createNewWorkflow() {
             var calls = $scope.extractCalls();
-            $http.post('/api/workflows/', {
+            var promise = $http.post('/api/workflows/', {
                 name: $scope.workflow.name,
                 calls: calls
-            }).then($scope.createdWorkflow);
+            });
+            promise.then($scope.createdWorkflow);
+            return promise;
         };
 
         // The workflow can't be updated at this moment, will be implemented in the near future.
@@ -78,19 +92,28 @@
         // The workflow can't be updated at this moment, will be implemented in the near future.
         $scope.updateWorkflow = function updateWorkflow() {
             var calls = $scope.extractCalls();
-            $http.put('/api/workflows/' + $scope.workflow._id, {
+            var promise = $http.put('/api/workflows/' + $scope.workflow._id, {
                 name: $scope.workflow.name,
                 calls: calls
-            }).then($scope.workflowUpdated);
+            });
+            promise.then($scope.workflowUpdated);
+            return promise;
         };
 
         // Saving would result in a POST for new workflows, but a PUT for an existing workflows.
         $scope.save = function save() {
+            var promise;
             if (!$scope.workflow._id) {
-                $scope.createNewWorkflow();
+                promise = $scope.createNewWorkflow();
             } else {
-                $scope.updateWorkflow();
+                promise = $scope.updateWorkflow();
             }
+            promise.then($scope.updateModel);
+        };
+
+        $scope.updateModel = function updateModel() {
+            $scope.originalWorkflow.name = $scope.workflow.name;
+            $scope.originalWorkflow.calls = $scope.workflow.calls;
         };
 
         $scope.addRestCall = function addRestCall() {

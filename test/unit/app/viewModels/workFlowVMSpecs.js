@@ -102,11 +102,22 @@
             expect(response.data).toEqual('ok');
         });
 
+        it('should request cancel editing', function cancelEditing() {
+            // given
+            spyOn(scope, '$emit');
+
+            // when
+            scope.requestCancel();
+
+            // then
+            expect(scope.$emit).toHaveBeenCalledWith(events.CANCEL_EDITING);
+        });
+
         describe('saving functionality', function savingSpecs() {
             it('should create a workflow', function createWorkflow() {
                 // given
                 scope.workflow._id = null;
-                spyOn(scope, 'createNewWorkflow');
+                spyOn(scope, 'createNewWorkflow').andCallThrough();
 
                 // when
                 scope.save();
@@ -118,7 +129,7 @@
             it('should save the changes on an existing workflow', function saveChanges() {
                 // given
                 scope.workflow._id = '12304';
-                spyOn(scope, 'updateWorkflow');
+                spyOn(scope, 'updateWorkflow').andCallThrough();
 
                 // when
                 scope.save();

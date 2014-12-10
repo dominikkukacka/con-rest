@@ -18,6 +18,12 @@
             });
         };
 
+        $scope.removedWorkflow = function removedWorkflow(event, workflow) {
+            event.stopPropagation();
+            var index = $scope.workflows.indexOf(workflow);
+            $scope.workflows.splice(index, 1);
+        };
+
         $scope.confirmWorkflowDeletion = function confirmWorkflowDeletion(event, workflow) {
             var confirm = $mdDialog.confirm().
                 title('Are you sure you want to remove this workflow [' + workflow.name + ']?').

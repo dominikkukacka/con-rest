@@ -8,12 +8,12 @@
 
     var app = angular.module('con-rest');
 
-    app.directive('workflow', function workflowDirective() {
+    app.directive('workflow', function workflowDirective(events) {
         return {
             controller: 'workFlowVM',
             restrict: 'E',
             scope: {
-                workflow: '=workflow'
+                originalWorkflow: '=workflow'
             },
             templateUrl: 'workflow',
             link: function workflowConstructor(scope) {
@@ -21,6 +21,10 @@
                 if (scope.workflow._id === undefined) {
                     scope.editing = true;
                 }
+
+                scope.$on(events.WORKFLOW_CREATED, scope.endEditing);
+                scope.$on(events.WORKFLOW_UPDATED, scope.endEditing);
+                scope.$on(events.CANCEL_EDITING, scope.endEditing);
             }
         };
     });

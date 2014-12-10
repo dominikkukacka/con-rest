@@ -53,6 +53,20 @@
             expect(scope.removeWorkflowOnConfirm).toHaveBeenCalledWith(fakeWorkflow);
         });
 
+
+        it('should remove an unsaved workflow on cancel', function removeUnsavedWorkflowOnCancel() {
+            // given
+            var scope = loadWorkflowOverview();
+            scope.workflows = [];
+            scope.addWorkflow();
+
+            // when
+            scope.$$childHead.$emit(events.WORKFLOW_DELETED, scope.workflows[0]);
+
+            // then
+            expect(scope.workflows.length).toEqual(0);
+        });
+
         function loadWorkflowOverview() {
             // given
             var directive = angular.element('<workflow-overview></workflow-overview>');
