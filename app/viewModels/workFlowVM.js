@@ -24,6 +24,10 @@
             $scope.editing = true;
         };
 
+        $scope.endEditing = function endEditing() {
+            $scope.editing = false;
+        };
+
         // Add an additional REST call to the workflow.
         $scope.addCall = function addCall() {
             $scope.workflow.calls.push({});

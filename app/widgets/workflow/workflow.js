@@ -8,7 +8,7 @@
 
     var app = angular.module('con-rest');
 
-    app.directive('workflow', function workflowDirective() {
+    app.directive('workflow', function workflowDirective(events) {
         return {
             controller: 'workFlowVM',
             restrict: 'E',
@@ -21,6 +21,9 @@
                 if (scope.workflow._id === undefined) {
                     scope.editing = true;
                 }
+
+                scope.$on(events.WORKFLOW_CREATED, scope.endEditing);
+                scope.$on(events.WORKFLOW_UPDATED, scope.endEditing);
             }
         };
     });
