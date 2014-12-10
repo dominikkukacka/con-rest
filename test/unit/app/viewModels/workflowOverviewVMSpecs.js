@@ -96,18 +96,6 @@
             expect(scope.workflows.length).toEqual(0);
         });
 
-        it('should remove an unsaved workflow on cancel', function removeUnsavedWorkflowOnCancel() {
-            // given
-            scope.workflows = [];
-            scope.addWorkflow();
-
-            // when
-            scope.$broadcast(events.CANCEL_EDITING);
-
-            // then
-            expect(scope.workflows.length).toEqual(0);
-        });
-
         it('should execute a workflow', function executeWorkflow() {
             // given
             scope.workflows = [

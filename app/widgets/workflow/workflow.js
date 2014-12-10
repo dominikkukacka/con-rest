@@ -13,7 +13,7 @@
             controller: 'workFlowVM',
             restrict: 'E',
             scope: {
-                workflow: '=workflow'
+                originalWorkflow: '=workflow'
             },
             templateUrl: 'workflow',
             link: function workflowConstructor(scope) {

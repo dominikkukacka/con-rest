@@ -62,6 +62,58 @@
             expect(scope.editing).toEqual(false);
         });
 
+        it('should not modify the existing workflow when editing', function unedited() {
+            // given
+            var directive = angular.element('<workflow workflow="workflow"></workflow>')
+            parentScope.workflow = {
+                _id: 'someuberniceid',
+                name: 'unmodifiedname',
+                calls: ['unmodifiedcall1', 'unmodifiedcall2']
+            };
+            var scope = initializeDirective(parentScope, directive);
+            var originalWorkflow = angular.copy(scope.workflow, {});
+
+            // when
+            scope.workflow.name = 'modifiedname';
+            scope.workflow.calls.push('additional');
+            scope.workflow.calls.shift();
+
+            scope.endEditing();
+
+            // then
+            expect(parentScope.workflow).toEqual(originalWorkflow);
+        });
+
+        it('should update the model when save has been successful', function safeSuccess() {
+            // given
+            var directive = angular.element('<workflow workflow="workflow"></workflow>')
+            parentScope.workflow = {
+                _id: 'someuberniceid',
+                name: 'unmodifiedname',
+                calls: ['unmodifiedcall1', 'unmodifiedcall2']
+            };
+            var scope = initializeDirective(parentScope, directive);
+            var originalWorkflow = angular.copy(scope.workflow, {});
+            spyOn(scope, 'updateWorkflow').andCallFake(function resolvePromise() {
+                return {
+                    then: function fakeThen(callback) {
+                        callback();
+                    }
+                };
+            });
+
+            // when
+            scope.workflow.name = 'modifiedname';
+            scope.workflow.calls.push('additional');
+            scope.workflow.calls.shift();
+
+            scope.save();
+
+            // then
+            expect(parentScope.workflow).toEqual(scope.workflow);
+            expect(parentScope.workflow).not.toEqual(originalWorkflow);
+        });
+
         function initializeDirective(scope, directive) {
             $compile(directive)(scope);
             $rootScope.$digest();

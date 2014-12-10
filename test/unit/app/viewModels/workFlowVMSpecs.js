@@ -117,7 +117,7 @@
             it('should create a workflow', function createWorkflow() {
                 // given
                 scope.workflow._id = null;
-                spyOn(scope, 'createNewWorkflow');
+                spyOn(scope, 'createNewWorkflow').andCallThrough();
 
                 // when
                 scope.save();
@@ -129,7 +129,7 @@
             it('should save the changes on an existing workflow', function saveChanges() {
                 // given
                 scope.workflow._id = '12304';
-                spyOn(scope, 'updateWorkflow');
+                spyOn(scope, 'updateWorkflow').andCallThrough();
 
                 // when
                 scope.save();
