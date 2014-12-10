@@ -49,12 +49,11 @@
             </div>
         </md-toolbar>
         <md-content layout="column">
-            <md-button ng-repeat="item in menu">
-                <a href="{{ '#' + item.url }}"
-                   ng-href="{{ '#' + item.url }}"
-                   ng-click="hideNavigation()"
-                   class="menu-item"
-                   md-ink-ripple="#bbb">{{ item.label }}</a>
+            <md-button href="{{ '#' + item.url }}"
+                       ng-href="{{ '#' + item.url }}"
+                       ng-click="hideNavigation()"
+                       ng-repeat="item in menu"
+                       class="menu-item">{{ item.label }}
             </md-button>
         </md-content>
     </md-sidenav>
