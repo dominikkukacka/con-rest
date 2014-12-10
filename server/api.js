@@ -232,40 +232,57 @@
             });
     }
 
+    function getHeaders(headers) {
+        var defaultHeaders = {
+            'user-agent': 'con-rest'
+        };
+
+        if (headers) {
+            defaultHeaders = _.extend(defaultHeaders, headers);
+        }
+
+        return defaultHeaders;
+    }
+
+    function getOptions(apiCall) {
+
+        var headers = getHeaders(apiCall.headers);
+
+        var options = {
+            method: apiCall.method,
+            url: apiCall.url,
+            headers: headers
+        };
+
+        var type = apiCall.type || null;
+        var data = apiCall.data || null;
+
+        // these two are for saving the execution to the database
+        options.type = type;
+        options.data = data;
+
+        if (data) {
+            if (type === PAYLOAD) {
+                try {
+                    options.body = JSON.stringify(data);
+                    options.json = true;
+                } catch (e) {
+                    options.body = data;
+                }
+            } else if (type === FORM_DATA) {
+                options.formData = data;
+            }
+        }
+
+        return options;
+    }
+
     // Executes REST call from database
     function executeAPICall(apiCall) {
         return function () {
             var deferred = queue.defer();
 
-            var headers = {
-                'user-agent': 'con-rest'
-            };
-
-            if (apiCall.headers) {
-                headers = _.extend(headers, apiCall.headers);
-            }
-
-            var options = {
-                method: apiCall.method,
-                url: apiCall.url,
-                headers: headers
-            };
-
-            var type = apiCall.type || null;
-            var data = apiCall.data || null;
-
-            if (data) {
-                if (type === PAYLOAD) {
-                    try {
-                        options.body = JSON.stringify(data);
-                        options.json = true;
-                    } catch (e) {
-                        options.body = data;
-                    }
-                } else if (type === FORM_DATA) {
-                    options.formData = data;
-                }
-            }
+            var options = getOptions(apiCall);
 
             request(options, function (err, response, body) {
                 if (err) {
@@ -284,9 +301,9 @@
                     statusCode: response.statusCode,
                     apiCall: apiCall,
                     response: parsedBody,
-                    headers: headers,
-                    type: type,
-                    data: data
+                    headers: options.headers,
+                    type: options.type,
+                    data: options.data
                 });
             });
 
