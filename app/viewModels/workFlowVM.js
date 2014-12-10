@@ -26,6 +26,9 @@
 
         $scope.endEditing = function endEditing() {
             $scope.editing = false;
+            if (!$scope.workflow._id) {
+                $scope.$emit(events.WORKFLOW_DELETED, $scope.workflow);
+            }
         };
 
         $scope.requestCancel = function requestCancel() {
