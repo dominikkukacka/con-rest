@@ -28,6 +28,10 @@
             $scope.editing = false;
         };
 
+        $scope.requestCancel = function requestCancel() {
+            $scope.$emit(events.CANCEL_EDITING);
+        };
+
         // Add an additional REST call to the workflow.
         $scope.addCall = function addCall() {
             $scope.workflow.calls.push({});

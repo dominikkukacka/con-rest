@@ -24,6 +24,7 @@
 
                 scope.$on(events.WORKFLOW_CREATED, scope.endEditing);
                 scope.$on(events.WORKFLOW_UPDATED, scope.endEditing);
+                scope.$on(events.CANCEL_EDITING, scope.endEditing);
             }
         };
     });

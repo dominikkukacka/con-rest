@@ -102,6 +102,17 @@
             expect(response.data).toEqual('ok');
         });
 
+        it('should request cancel editing', function cancelEditing() {
+            // given
+            spyOn(scope, '$emit');
+
+            // when
+            scope.requestCancel();
+
+            // then
+            expect(scope.$emit).toHaveBeenCalledWith(events.CANCEL_EDITING);
+        });
+
         describe('saving functionality', function savingSpecs() {
             it('should create a workflow', function createWorkflow() {
                 // given

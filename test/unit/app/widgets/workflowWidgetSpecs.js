@@ -49,6 +49,19 @@
             expect(scope.editing).toEqual(false);
         });
 
+        it('should cancel editing', function cancelEditing() {
+            // given
+            parentScope.workflow = {};
+            var directive = angular.element('<workflow workflow="workflow"></workflow>')
+            var scope = initializeDirective(parentScope, directive);
+
+            // when
+            scope.$broadcast(events.CANCEL_EDITING);
+
+            // then
+            expect(scope.editing).toEqual(false);
+        });
+
         function initializeDirective(scope, directive) {
             $compile(directive)(scope);
             $rootScope.$digest();
