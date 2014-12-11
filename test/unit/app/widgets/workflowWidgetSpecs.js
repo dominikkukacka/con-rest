@@ -7,27 +7,23 @@
     'use strict';
 
     describe('workflow widget specs', function workflowWidgetSpecs() {
-        var $rootScope;
-        var $httpBackend;
-        var $compile;
         var events;
         var parentScope;
+        var testGlobals;
 
-        beforeEach(module('con-rest'));
+        beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _events_) {
-            $rootScope = _$rootScope_;
-            $httpBackend = _$httpBackend_;
-            $compile = _$compile_;
+        beforeEach(inject(function setupTests(testSetup, _events_) {
+            testGlobals = testSetup.setupDirectiveTest();
             events = _events_;
-            parentScope = $rootScope.$new();
+            parentScope = testGlobals.parentScope;
         }));
 
         it('should end editing mode when the workflow has been created', function created() {
             // given
             parentScope.workflow = {};
             var directive = angular.element('<workflow workflow="workflow"></workflow>')
-            var scope = initializeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(parentScope, directive);
 
             // when
             scope.$broadcast(events.WORKFLOW_CREATED);
@@ -40,7 +36,7 @@
             // given
             parentScope.workflow = {};
             var directive = angular.element('<workflow workflow="workflow"></workflow>')
-            var scope = initializeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(parentScope, directive);
 
             // when
             scope.$broadcast(events.WORKFLOW_UPDATED);
@@ -53,7 +49,7 @@
             // given
             parentScope.workflow = {};
             var directive = angular.element('<workflow workflow="workflow"></workflow>')
-            var scope = initializeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(parentScope, directive);
 
             // when
             scope.$broadcast(events.CANCEL_EDITING);
@@ -70,7 +66,7 @@
                 name: 'unmodifiedname',
                 calls: ['unmodifiedcall1', 'unmodifiedcall2']
             };
-            var scope = initializeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(parentScope, directive);
             var originalWorkflow = angular.copy(scope.workflow, {});
 
             // when
@@ -92,7 +88,7 @@
                 name: 'unmodifiedname',
                 calls: ['unmodifiedcall1', 'unmodifiedcall2']
             };
-            var scope = initializeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(parentScope, directive);
             var originalWorkflow = angular.copy(scope.workflow, {});
             spyOn(scope, 'updateWorkflow').andCallFake(function resolvePromise() {
                 return {
@@ -113,12 +109,5 @@
             expect(parentScope.workflow).toEqual(scope.workflow);
             expect(parentScope.workflow).not.toEqual(originalWorkflow);
         });
-
-        function initializeDirective(scope, directive) {
-            $compile(directive)(scope);
-            $rootScope.$digest();
-            // Expose the scope so we can run some tests on it
-            return directive.children().scope();
-        }
     });
 }(window.angular));
