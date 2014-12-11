@@ -113,6 +113,33 @@
             expect(scope.$emit).toHaveBeenCalledWith(events.CANCEL_EDITING);
         });
 
+        it('should remove a REST call from the workflow by its index', function removeCall() {
+            // given
+            scope.workflow = {
+                _id: 'someid',
+                name: 'workflowName',
+                calls: [
+                    {
+                        _id: 'call1'
+                    },
+                    {
+                        _id: 'call3'
+                    },
+                    {
+                        _id: 'call5'
+                    }
+                ]
+            };
+
+            // when
+            scope.removeCall(1);
+
+            // then
+            expect(scope.workflow.calls.length).toEqual(2);
+            expect(scope.workflow.calls[0]._id).toEqual('call1');
+            expect(scope.workflow.calls[1]._id).toEqual('call5');
+        });
+
         describe('saving functionality', function savingSpecs() {
             it('should create a workflow', function createWorkflow() {
                 // given

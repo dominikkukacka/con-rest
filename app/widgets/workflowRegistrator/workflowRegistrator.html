@@ -20,8 +20,15 @@
             <div layout="column"
                  layout-tablet="row"
                  layout-wrap>
-                <call-selector ng-repeat="call in workflow.calls"
-                               request="call"></call-selector>
+                <section layout="row"
+                         ng-repeat="call in workflow.calls">
+                    <call-selector request="call"></call-selector>
+                    <md-button class="md-fab"
+                               arial-label="remove call"
+                               ng-click="removeCall($index)">
+                        <md-icon icon="/icons/ic_remove_24px.svg"></md-icon>
+                    </md-button>
+                </section>
 
                 <md-button class="md-fab"
                            aria-label="add call"
@@ -39,7 +46,8 @@
         </form>
 
         <div data-ng-repeat="call in newCalls">
-            <div data-call-registrator="call"></div>
+            <div data-call-registrator="call">
+            </div>
         </div>
     </div>
 </md-card>
