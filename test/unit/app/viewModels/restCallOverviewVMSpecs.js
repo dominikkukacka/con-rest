@@ -5,30 +5,20 @@
     'use strict';
 
     describe('restCallOverviewVM specs', function restCallOverviewVMSpecs() {
-        var scope, httpBackend, events;
-        beforeEach(module('con-rest'));
+        var scope, httpBackend, events, testGlobals;
+        beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function ($controller, $rootScope, $httpBackend, _events_) {
-            scope = $rootScope.$new();
-            httpBackend = $httpBackend;
+        beforeEach(inject(function (testSetup, _events_) {
+            testGlobals = testSetup.setupControllerTest('restCallOverviewVM');
+            scope = testGlobals.scope;
+            httpBackend = testGlobals.$httpBackend;
             events = _events_;
-            $controller('restCallOverviewVM', {
-                $scope: scope
-            });
         }));
+
         it('should load all rest calls', function loadExistingRestCalls() {
             // given
             var response = null;
-            var restCalls = [
-                {
-                    _id: 'fakeId',
-                    name: 'fakerestcall',
-                    url: 'http://some.fake.url/api/test',
-                    type: 'payload',
-                    data: {fakeparam1: 'fakedata1'},
-                    headers: {hparam1: "fakeheader1", hparam2: "fakeheader2"}
-                }
-            ];
+            var restCalls = testGlobals.createDefaultRequests();
             httpBackend.expect('GET', '/api/requests/').
                 respond(200, restCalls);
 
@@ -41,28 +31,14 @@
             // then
             httpBackend.flush();
             expect(response.status).toEqual(200);
-            expect(scope.restCalls[0].name).toEqual(restCalls[0].name);
-            expect(scope.restCalls[0].url).toEqual(restCalls[0].url);
-            expect(scope.restCalls[0].type).toEqual(restCalls[0].type);
-            expect(scope.restCalls[0].data).toEqual(restCalls[0].data);
-            expect(scope.restCalls[0].headers).toEqual(restCalls[0].headers);
+            testGlobals.expectRequest(scope.restCalls[0]).toEqual(restCalls[0]);
         });
 
         it('should remove a rest call', function removeRestCall() {
             // given
-            scope.restCalls = [
-                {
-                    _id: 'this one is okay'
-                },
-                {
-                    _id: 'do not'
-                },
-                {
-                    _id: 'nope'
-                }
-            ];
+            scope.restCalls = testGlobals.createDefaultRequests();
 
-            httpBackend.expect('DELETE', '/api/requests/' + 'this one is okay').
+            httpBackend.expect('DELETE', '/api/requests/someid').
                 respond(200, 'ok');
 
             // when
@@ -71,8 +47,8 @@
 
             // then
             expect(scope.restCalls.length).toEqual(2);
-            expect(scope.restCalls[0]._id).toEqual('do not');
-            expect(scope.restCalls[1]._id).toEqual('nope');
+            expect(scope.restCalls[0]._id).toEqual('someid2');
+            expect(scope.restCalls[1]._id).toEqual('someid3');
         });
 
         it('should remove an unsaved rest call', function removeUnsavedRestCall() {
