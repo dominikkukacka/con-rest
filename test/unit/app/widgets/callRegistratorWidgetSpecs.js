@@ -6,21 +6,17 @@
 (function callRegistratorWidgetSpecs() {
     'use strict';
 
-    describe('callRegistrator Widget specs', function callRegistratorWidgetSpecs(){
-        var $rootScope;
+    describe('callRegistrator Widget specs', function callRegistratorWidgetSpecs() {
         var $httpBackend;
-        var $compile;
-        var events;
         var parentScope;
+        var testGlobals;
 
-        beforeEach(module('con-rest'));
+        beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _events_) {
-            $rootScope = _$rootScope_;
-            $httpBackend = _$httpBackend_;
-            $compile = _$compile_;
-            events = _events_;
-            parentScope = $rootScope.$new();
+        beforeEach(inject(function setupTests(testSetup) {
+            testGlobals = testSetup.setupDirectiveTest();
+            $httpBackend = testGlobals.$httpBackend;
+            parentScope = testGlobals.parentScope;
         }));
 
         it('should load the widget with a provided model', function providedModel() {
@@ -29,17 +25,10 @@
             var directive = angular.element('<call-registrator rest-call="request">');
 
             // when
-            var scope = initalizeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(parentScope, directive);
 
             // then
             expect(scope.request).toEqual(parentScope.request);
         });
-
-        function initalizeDirective(scope, directive) {
-            $compile(directive)(scope);
-            $rootScope.$digest();
-            // Expose the scope so we can run some tests on it
-            return directive.children().scope();
-        }
     });
 }());
