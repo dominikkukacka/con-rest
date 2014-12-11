@@ -135,7 +135,7 @@
 
                 return deferred.promise;
             }).
-            then(function mergeAndRun(retrievedCalls) {
+            then(function executeCalls(retrievedCalls) {
                 var deferred = queue.defer();
 
                 var apiCallQueue = queue();
@@ -187,15 +187,19 @@
                 var result = callResults[i];
                 executionSaving = executionSaving.
                     then(saveExecution(workflow, result)).
-                    then(function (entry) {
-                        results.push(entry);
-                    });
+                    then(pushResult(results));
             }
 
             executionSaving.then(deferred.makeNodeResolver());
 
             return deferred.promise;
-        }
+        };
+    }
+
+    function pushResult(results) {
+        return function(entry) {
+            results.push(entry);
+        };
     }
 
     function saveWorkflowExecution(workflow, results) {
@@ -215,7 +219,7 @@
             workflowExecution.save(deferred.makeNodeResolver());
 
             return deferred.promise;
-        }
+        };
     }
 
     function saveExecution(workflow, result) {
