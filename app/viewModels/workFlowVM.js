@@ -98,6 +98,7 @@
         $scope.updateWorkflow = function updateWorkflow() {
             var calls = $scope.extractCalls();
             var promise = $http.put('/api/workflows/' + $scope.workflow._id, {
+                _id: $scope.workflow._id,
                 name: $scope.workflow.name,
                 calls: calls
             });

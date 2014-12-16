@@ -7,44 +7,33 @@
     'use strict';
 
     describe('callSelector widget specs', function callSelectorWidgetSpecs() {
-        var $rootScope;
-        var $httpBackend;
-        var $compile;
-        var $timeout;
-        var events;
+        var testGlobals;
         var parentScope;
+        var $httpBackend;
+        var $timeout;
 
-        beforeEach(module('con-rest'));
+        beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function setupTests(_$rootScope_, _$httpBackend_, _$compile_, _$timeout_, _events_) {
-            $rootScope = _$rootScope_;
-            $httpBackend = _$httpBackend_;
-            $compile = _$compile_;
+        beforeEach(inject(function setupTests(testSetup, _$timeout_) {
+            testGlobals = testSetup.setupDirectiveTest();
             $timeout = _$timeout_;
-            events = _events_;
-            parentScope = $rootScope.$new();
+            parentScope = testGlobals.parentScope;
+            $httpBackend = testGlobals.$httpBackend;
         }));
 
         it('should load the call selector and the name should be set accordingly', function loadcallSelector() {
             // given
-            parentScope.request = {_id: 'someid'};
+            testGlobals.parentScope.request = { _id: 'someid' };
             var directive = angular.element('<call-selector request="request"></call-selector>');
             var availableRequests = [
-                {
-                    _id: 'someid',
-                    name: 'fakeCall',
-                    url: 'https://fake.url',
-                    method: 'PUT',
-                    data: {ba: 'nana'},
-                    headers: {to: 'ken'}
-                }
+                testGlobals.createDefaultRequest()
             ];
 
             $httpBackend.expect('GET', '/api/requests/').
                 respond(200, availableRequests);
 
             // when
-            var scope = initalizeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(testGlobals.parentScope, directive);
             $httpBackend.flush();
 
             // then
@@ -57,19 +46,13 @@
             parentScope.request = null;
             var directive = angular.element('<call-selector request="request"></call-selector>');
             var availableRequests = [
-                {
-                    name: 'fakeCall',
-                    url: 'https://fake.url',
-                    method: 'PUT',
-                    data: {ba: 'nana'},
-                    headers: {to: 'ken'}
-                }
+                testGlobals.createDefaultRequest()
             ];
 
             $httpBackend.expect('GET', '/api/requests/').
                 respond(200, availableRequests);
 
-            var scope = initalizeDirective(parentScope, directive);
+            var scope = testGlobals.initializeDirective(parentScope, directive);
             $httpBackend.flush();
 
             scope.showCalls = true;
@@ -81,12 +64,5 @@
             // then
             expect(scope.showCalls).toEqual(false);
         });
-
-        function initalizeDirective(scope, directive) {
-            $compile(directive)(scope);
-            $rootScope.$digest();
-            // Expose the scope so we can run some tests on it
-            return directive.children().scope();
-        }
     });
 }());
