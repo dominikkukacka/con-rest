@@ -135,7 +135,7 @@
 
                 return deferred.promise;
             }).
-            then(function mergeAndRun(retrievedCalls) {
+            then(function executeCalls(retrievedCalls) {
                 var deferred = queue.defer();
 
                 var apiCallQueue = queue();
@@ -159,34 +159,14 @@
                 var deferred = queue.defer();
 
                 var results = [];
-                var executionSaving = queue();
 
-                for (var i in callResults) {
-                    var result = callResults[i];
-
-                    executionSaving = executionSaving.
-                        then(saveExecution(workflow, result)).
-                        then(pushResult(results));
-
-                }
-
-                executionSaving.then(function () {
-                    var executionIds = results.map(function (execution) {
-                        return execution._id;
+                queue().
+                    then(saveExecutions(workflow, callResults, results)).
+                    then(saveWorkflowExecution(workflow, results)).
+                    then(function () {
+                        res.send(results);
+                        deferred.resolve();
                     });
-
-                    var workflowExecution = new WorkflowExecution({
-                        workflow: workflow._id,
-                        executedAt: new Date(),
-                        executions: executionIds
-                    });
-
-                    workflowExecution.save(deferred.makeNodeResolver());
-
-                }).then(function () {
-                    res.send(results);
-                    deferred.resolve();
-                });
 
 
                 return deferred.promise;
@@ -196,9 +176,49 @@
             });
     }
 
+    function saveExecutions(workflow, callResults, results) {
+        return function() {
+            var deferred = queue.defer();
+
+            var executionSaving = queue();
+
+            for (var i in callResults) {
+
+                var result = callResults[i];
+                executionSaving = executionSaving.
+                    then(saveExecution(workflow, result)).
+                    then(pushResult(results));
+            }
+
+            executionSaving.then(deferred.makeNodeResolver());
+
+            return deferred.promise;
+        };
+    }
+
     function pushResult(results) {
-        return function (entry) {
+        return function(entry) {
             results.push(entry);
+        };
+    }
+
+    function saveWorkflowExecution(workflow, results) {
+        return function() {
+            var deferred = queue.defer();
+
+            var executionIds = results.map(function (execution) {
+                return execution._id;
+            });
+
+            var workflowExecution = new WorkflowExecution({
+                workflow: workflow._id,
+                executedAt: new Date(),
+                executions: executionIds
+            });
+
+            workflowExecution.save(deferred.makeNodeResolver());
+
+            return deferred.promise;
         };
     }
 
@@ -215,6 +235,7 @@
                 type: result.type,
                 data: result.data
             });
+
 
             execution.save(function (err, data) {
                 deferred.resolve(data);

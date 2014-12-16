@@ -232,40 +232,64 @@
             });
     }
 
+    // generates the `header` object to be sent with every request.
+    // it will add the user specified headers to the default headers
+    function getHeaders(headers) {
+        var defaultHeaders = {
+            'user-agent': 'con-rest'
+        };
+
+        if (headers) {
+            defaultHeaders = _.extend(defaultHeaders, headers);
+        }
+
+        return defaultHeaders;
+    }
+
+    // generates the complete `options` object for the request
+    function getOptions(apiCall) {
+        var headers = getHeaders(apiCall.headers);
+
+        var options = {
+            method: apiCall.method,
+            url: apiCall.url,
+            headers: headers
+        };
+
+        var type = apiCall.type || null;
+        var data = apiCall.data || null;
+
+        // these two are for saving the execution to the database
+        options.type = type;
+        options.data = data;
+
+        if (data) {
+            if (type === PAYLOAD) {
+                // *PAYLOAD* will go into the `body` of the request
+                try {
+                    // when we are handling *PAYLOAD* data then we will try to stringify the data
+                    // e.g. converting the internal js object to an json string
+                    options.body = JSON.stringify(data);
+                    options.json = true;
+                } catch (e) {
+                    // if the stringify fails we are just taking the string provided from mongo
+                    options.body = data;
+                }
+            } else if (type === FORM_DATA) {
+                // *FORM_DATA* will go into the `formData` of the request
+                options.formData = data;
+            }
+        }
+
+        return options;
+    }
+
     // Executes REST call from database
     function executeAPICall(apiCall) {
         return function () {
             var deferred = queue.defer();
 
-            var headers = {
-                'user-agent': 'con-rest'
-            };
-
-            if (apiCall.headers) {
-                headers = _.extend(headers, apiCall.headers);
-            }
-
-            var options = {
-                method: apiCall.method,
-                url: apiCall.url,
-                headers: headers
-            };
-
-            var type = apiCall.type || null;
-            var data = apiCall.data || null;
-
-            if (data) {
-                if (type === PAYLOAD) {
-                    try {
-                        options.body = JSON.stringify(data);
-                        options.json = true;
-                    } catch (e) {
-                        options.body = data;
-                    }
-                } else if (type === FORM_DATA) {
-                    options.formData = data;
-                }
-            }
+            var options = getOptions(apiCall);
 
             request(options, function (err, response, body) {
                 if (err) {
@@ -275,8 +299,10 @@
 
                 var parsedBody = null;
                 try {
+                    // if the response body is json we try to parse it an put the object into the db
                     parsedBody = JSON.parse(body);
                 } catch (e) {
+                    // otherwise a string of it will be saved
                     parsedBody = body;
                 }
 
@@ -284,9 +310,9 @@
                     statusCode: response.statusCode,
                     apiCall: apiCall,
                     response: parsedBody,
-                    headers: headers,
-                    type: type,
-                    data: data
+                    headers: options.headers,
+                    type: options.type,
+                    data: options.data
                 });
             });
 
@@ -299,6 +325,8 @@
         return function saveExecution(result) {
             var deferred = queue.defer();
 
+            // this execution comes from direct execution of a request
+            // so workflow will be null
             var execution = new Execution({
                 workflow: null,
                 apiCall: result.apiCall,
