@@ -10,6 +10,7 @@
 
     app.controller('workflowOverviewVM', function workflowOverviewVM($scope, $http, $mdDialog, events) {
         $scope.workflows = [];
+        $scope.response = null;
 
         $scope.addWorkflow = function addWorkflow() {
             $scope.workflows.push({
@@ -63,13 +64,16 @@
         };
 
         $scope.workflowExecuted = function workflowExecuted(workflow) {
-            return function wrapperWorkflowExecuted() {
+            return function wrapperWorkflowExecuted(response) {
+                $scope.$emit(events.EXECUTION_DONE, response);
                 workflow.success = true;
+
             };
         };
 
         $scope.workflowExecutionFailed = function workflowExecutionFailed(workflow) {
-            return function wrapperWorkflowFailed() {
+            return function wrapperWorkflowFailed(response) {
+                $scope.$emit(events.EXECUTION_DONE, response);
                 workflow.success = false;
             };
         };

@@ -19,8 +19,14 @@
                            aria-label="delete workflow">
                     <md-icon icon="/icons/ic_delete_24px.svg"></md-icon>
                 </md-button>
-                <md-icon icon="/icons/ic_done_24px.svg" ng-if="workflow.success === true"></md-icon>
-                <md-icon icon="/icons/ic_error_24px.svg" ng-if="workflow.success === false"></md-icon>
+                <section ng-if="workflow.success === true">
+                    <md-icon icon="/icons/ic_done_24px.svg"></md-icon>
+                    <response response="response"></response>
+                </section>
+                <section ng-if="workflow.success === false">
+                    <md-icon icon="/icons/ic_error_24px.svg"></md-icon>
+                    <response response="response"></response>
+                </section>
             </section>
         </section>
     </div>
