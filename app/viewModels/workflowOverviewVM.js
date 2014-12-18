@@ -65,16 +65,15 @@
 
         $scope.workflowExecuted = function workflowExecuted(workflow) {
             return function wrapperWorkflowExecuted(response) {
-                $scope.$emit(events.EXECUTION_DONE, response);
                 workflow.success = true;
-
+                $scope.$broadcast(events.EXECUTION_DONE, response);
             };
         };
 
         $scope.workflowExecutionFailed = function workflowExecutionFailed(workflow) {
             return function wrapperWorkflowFailed(response) {
-                $scope.$emit(events.EXECUTION_DONE, response);
                 workflow.success = false;
+                $scope.$broadcast(events.EXECUTION_DONE, response);
             };
         };
 

@@ -11,9 +11,8 @@
         $scope.response = null;
 
 
-        $scope.showResponse = function showResponse(response) {
-            $scope.response = response;
+        $scope.showResponse = function showResponse(event, response) {
+            $scope.response = response || { dummy: 'xyz', data: '123' };
         };
     });
-
 }(window.angular));

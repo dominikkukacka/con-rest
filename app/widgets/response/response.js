@@ -11,12 +11,12 @@
             controller: 'responseVM',
             restrict: 'E',
             scope: {
+                id: '@id',
                 response: '=?response'
             },
             templateUrl: 'response',
             link: function responseConstructor(scope) {
-                scope.showResponse();
-
+                //scope.showResponse();
                 scope.$on(events.EXECUTION_DONE, scope.showResponse);
 
             }
