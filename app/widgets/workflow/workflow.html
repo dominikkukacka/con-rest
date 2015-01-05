@@ -9,7 +9,7 @@
              ng-click="startEditing()">
         <h2>{{ workflow.name }}</h2>
 
-        <div layout="rows" layout-phone="column">
+        <div layout="rows" layout-phone="column" layout-wrap>
             <rest-call ng-repeat="call in workflow.calls"
                        id="{{call._id}}"></rest-call>
         </div>
