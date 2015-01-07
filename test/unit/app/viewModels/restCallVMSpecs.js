@@ -18,47 +18,6 @@
             events = testGlobals.events;
         }));
 
-        it('should register a rest call', function registerRestCall() {
-            // given
-            var response = null;
-            testGlobals.givenRequest(scope.request).isDefault();
-
-            // when
-            scope.$on(events.REGISTRATION_SUCCESSFUL, function registrationSuccessful(event, res) {
-                response = res;
-            });
-            $httpBackend.expect('POST', '/api/requests', {
-                name: scope.request.name,
-                url: scope.request.url,
-                method: scope.request.method,
-                data: scope.request.data,
-                headers: scope.request.headers
-            }).respond(200, 'someguidid');
-            scope.registerCall();
-
-            // then
-            $httpBackend.flush();
-            expect(response).toEqual('someguidid');
-            expect(scope.request._id).toEqual('someguidid');
-        });
-
-        it('should display an handle errors accordingly', function emitFailed() {
-            // given
-            var response = null;
-
-            // when
-            scope.$on(events.REGISTRATION_FAILED, function requestFailed(event, res) {
-                response = res;
-            });
-            $httpBackend.when('POST', '/api/requests').respond(400, 'bad request');
-            scope.registerCall();
-
-            // then
-            $httpBackend.flush();
-            expect(response.status).toEqual(400);
-            expect(response.data).toEqual('bad request');
-        });
-
         it('should execute the rest call', function executeCall() {
             // given
             var response = null;

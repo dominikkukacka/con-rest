@@ -26,10 +26,6 @@
         $scope.availableCalls = null;
 
         // UI related properties
-        $scope.openMethods = false;
-        $scope.availableMethods = ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS', 'PATCH'];
-        $scope.openTypes = false;
-        $scope.availableTypes = ['formData', 'payload'];
         $scope.showCalls = false;
         $scope.editing = false;
 
@@ -37,35 +33,9 @@
             $scope.editing = true;
         };
 
-        $scope.requestCancelEditing = function requestCancelEditing() {
-            $scope.$emit(events.CANCEL_EDITING);
-        };
-
         $scope.cancelEditing = function cancelEditing(event) {
             event.stopPropagation();
             $scope.editing = false;
-        };
-
-        // Open the dropdown for methods.
-        $scope.toggleMethodsDropdown = function toggleMethodsDropdown() {
-            $scope.openMethods = !$scope.openMethods;
-        };
-
-        // Select method
-        $scope.selectMethod = function selectMethod(selectedMethod) {
-            $scope.request.method = selectedMethod;
-            $scope.openMethods = false;
-        };
-
-        // Open the dropdown for types.
-        $scope.toggleTypesDropdown = function toggleTypesDropdown() {
-            $scope.openTypes = !$scope.openTypes;
-        };
-
-        // Select type
-        $scope.selectType = function selectType(type) {
-            $scope.request.type = type;
-            $scope.openTypes = false;
         };
 
         // Open the available requests
@@ -101,18 +71,6 @@
                 .then($scope.retrievedRequests);
         };
 
-        // Register a new call to be executed.
-        $scope.registerCall = function registerCall() {
-            requestDAO.registerCall({
-                name: $scope.request.name,
-                url: $scope.request.url,
-                method: $scope.request.method,
-                type: $scope.request.type,
-                data: $scope.request.data,
-                headers: $scope.request.headers
-            }).then($scope.emitRegistrationSuccessfull, $scope.emitRegistrationFailed);
-        };
-
         // The request should set the attributes so the pointer will be to the same
         // model. This will allow the other consumers of this model to receive the update
         // aswell.
@@ -133,21 +91,10 @@
                 .then($scope.emitResponse, $scope.emitRequestFailed);
         };
 
-        // Notify the parent the registration of the call has been successful.
-        $scope.emitRegistrationSuccessfull = function emitRegistrationSuccessfull(id) {
-            $scope.request._id = id;
-            $scope.$emit(events.REGISTRATION_SUCCESSFUL, id);
-        };
-
         // Making the emit response public, allows for the response to be send manually.
         $scope.emitResponse = function emitResponse(response) {
             $scope.response = response;
             $scope.$emit(events.RESPONSE_RECEIVED, response);
-        };
-
-        // Notify the parent the request couldn't be saved successfully.
-        $scope.emitRegistrationFailed = function emitRegistrationFailed(response) {
-            $scope.$emit(events.REGISTRATION_FAILED, response);
         };
 
         // Emit failures to the parent, so this can be handled accordingly.
@@ -174,23 +121,6 @@
                 }
             }
             $scope.$emit(events.REQUESTS_RETRIEVED, availableCalls);
-        };
-
-        $scope.updateRestCall = function updateRestCall() {
-            requestDAO.updateRestCall($scope.request)
-                .then($scope.restCallUpdated);
-        };
-
-        $scope.restCallUpdated = function restCallUpdated(response) {
-            $scope.$emit(events.REQUEST_UPDATED, response);
-        };
-
-        $scope.save = function save() {
-            if (!$scope.request._id) {
-                $scope.registerCall();
-            } else {
-                $scope.updateRestCall();
-            }
         };
     });
 }(window.angular));
