@@ -8,7 +8,7 @@
 
     var app = angular.module('con-rest');
 
-    app.controller('restCallVM', function restCallVMScope($scope, $http, events, $timeout) {
+    app.controller('restCallVM', function restCallVMScope($scope, $http, events, $timeout, requestDAO) {
         // The id can be provided by the parent.
 
         // Request can be passed a long or it could be empty.
@@ -37,7 +37,7 @@
             $scope.editing = true;
         };
 
-        $scope.requestCancelEditing = function requestCancelEditing(){
+        $scope.requestCancelEditing = function requestCancelEditing() {
             $scope.$emit(events.CANCEL_EDITING);
         };
 
@@ -91,14 +91,14 @@
 
         // Get the registered call by id.
         $scope.getCall = function getCall() {
-            $http.get('/api/requests/' + $scope.request._id).
-                then($scope.populateRequest, $scope.emitRetrievalFailed);
+            requestDAO.getCall($scope.request._id)
+                .then($scope.populateRequest, $scope.emitRetrievalFailed);
         };
 
         // Get all the registered calls and populate the requests list.
         $scope.getAvailableRequests = function getAvailableRequests() {
-            $http.get('/api/requests/').
-                then($scope.retrievedRequests);
+            requestDAO.getAvailableRequests()
+                .then($scope.retrievedRequests);
         };
 
         // Register a new call to be executed.
@@ -116,8 +116,7 @@
         // The request should set the attributes so the pointer will be to the same
         // model. This will allow the other consumers of this model to receive the update
         // aswell.
-        $scope.populateRequest = function populateRequest(response) {
-            var request = response.data;
+        $scope.populateRequest = function populateRequest(request) {
             $scope.request._id = request._id;
             $scope.request.name = request.name;
             $scope.request.url = request.url;
@@ -130,8 +129,8 @@
 
         // Execute the registered call.
         $scope.executeCall = function executeCall() {
-            $http.post('/api/requests/' + $scope.request._id + '/executions').
-                then($scope.emitResponse, $scope.emitRequestFailed);
+            requestDAO.executeCall($scope.request._id)
+                .then($scope.emitResponse, $scope.emitRequestFailed);
         };
 
         // Notify the parent the registration of the call has been successful.
@@ -163,23 +162,23 @@
         };
 
         // Notify the requests have been retrieved.
-        $scope.retrievedRequests = function retrievedRequests(response) {
-            $scope.availableCalls = response.data;
+        $scope.retrievedRequests = function retrievedRequests(availableCalls) {
+            $scope.availableCalls = availableCalls;
             if ($scope.request._id) {
-                for (var i = 0; i < response.data.length; i++) {
-                    var call = response.data[i];
+                for (var i = 0; i < availableCalls.length; i++) {
+                    var call = availableCalls[i];
                     if (call._id === $scope.request._id) {
                         $scope.request.name = call.name;
                         break;
                     }
                 }
             }
-            $scope.$emit(events.REQUESTS_RETRIEVED, response);
+            $scope.$emit(events.REQUESTS_RETRIEVED, availableCalls);
         };
 
         $scope.updateRestCall = function updateRestCall() {
             $http.put('/api/requests/' + $scope.request._id, $scope.request).
-                then($scope.restCallUpdated);
+            then($scope.restCallUpdated);
         };
 
         $scope.restCallUpdated = function restCallUpdated(response) {
@@ -187,7 +186,7 @@
         };
 
         $scope.save = function save() {
-            if(!$scope.request._id) {
+            if (!$scope.request._id) {
                 $scope.registerCall();
             } else {
                 $scope.updateRestCall();

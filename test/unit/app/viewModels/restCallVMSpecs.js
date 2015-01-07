@@ -11,7 +11,7 @@
         var scope, $httpBackend, events, testGlobals;
         beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function (testSetup) {
+        beforeEach(inject(function(testSetup) {
             testGlobals = testSetup.setupControllerTest('restCallVM');
             scope = testGlobals.scope;
             $httpBackend = testGlobals.$httpBackend;
@@ -65,7 +65,7 @@
             var response = null;
             scope.request._id = 'abc';
             $httpBackend.expect('POST', '/api/requests/' + scope.request._id + '/executions').
-                respond(200, 'ok');
+            respond(200, 'ok');
 
             // when
             scope.$on(events.RESPONSE_RECEIVED, function receivedResponse(event, res) {
@@ -85,7 +85,7 @@
             var response = null;
             scope.request._id = 'abc';
             $httpBackend.expect('POST', '/api/requests/' + scope.request._id + '/executions').
-                respond(404, 'not found');
+            respond(404, 'not found');
 
             // when
             scope.$on(events.REQUEST_FAILED, function requestFailed(event, res) {
@@ -106,7 +106,7 @@
             scope.request._id = 'abc';
             var expectedResponse = testGlobals.createDefaultRequest();
             $httpBackend.expect('GET', '/api/requests/' + scope.request._id).
-                respond(200, expectedResponse);
+            respond(200, expectedResponse);
 
             // when
             scope.$on(events.REQUEST_RETRIEVED, function requestRetrieved(event, res) {
@@ -124,7 +124,7 @@
             var response = null;
             var responseDetails = testGlobals.createDefaultRequests();
             $httpBackend.expect('GET', '/api/requests/').
-                respond(200, responseDetails);
+            respond(200, responseDetails);
 
             // when
             scope.$on(events.REQUESTS_RETRIEVED, function requestsReceived(event, res) {
@@ -134,8 +134,7 @@
 
             // then
             $httpBackend.flush();
-            expect(response.status).toEqual(200);
-            expect(scope.availableCalls).toEqual(response.data);
+            expect(scope.availableCalls).toEqual(response);
         });
 
         it('should set the attributes of the provided request', function providedRequest() {
@@ -144,7 +143,7 @@
             var response = null;
             var responseDetails = testGlobals.createDefaultRequests();
             $httpBackend.expect('GET', '/api/requests/').
-                respond(200, responseDetails);
+            respond(200, responseDetails);
 
             // when
             scope.$on(events.REQUESTS_RETRIEVED, function requestsReceived(event, res) {
@@ -154,9 +153,8 @@
 
             // then
             $httpBackend.flush();
-            expect(response.status).toEqual(200);
-            expect(scope.request.name).toEqual(response.data[0].name);
-            expect(scope.availableCalls).toEqual(response.data);
+            expect(scope.request.name).toEqual(response[0].name);
+            expect(scope.availableCalls).toEqual(response);
         });
     });
 }());
