@@ -103,7 +103,7 @@
 
         // Register a new call to be executed.
         $scope.registerCall = function registerCall() {
-            $http.post('/api/requests', {
+            requestDAO.registerCall({
                 name: $scope.request.name,
                 url: $scope.request.url,
                 method: $scope.request.method,
@@ -134,9 +134,9 @@
         };
 
         // Notify the parent the registration of the call has been successful.
-        $scope.emitRegistrationSuccessfull = function emitRegistrationSuccessfull(response) {
-            $scope.request._id = response.data;
-            $scope.$emit(events.REGISTRATION_SUCCESSFUL, response);
+        $scope.emitRegistrationSuccessfull = function emitRegistrationSuccessfull(id) {
+            $scope.request._id = id;
+            $scope.$emit(events.REGISTRATION_SUCCESSFUL, id);
         };
 
         // Making the emit response public, allows for the response to be send manually.
@@ -177,8 +177,8 @@
         };
 
         $scope.updateRestCall = function updateRestCall() {
-            $http.put('/api/requests/' + $scope.request._id, $scope.request).
-            then($scope.restCallUpdated);
+            requestDAO.updateRestCall($scope.request)
+                .then($scope.restCallUpdated);
         };
 
         $scope.restCallUpdated = function restCallUpdated(response) {

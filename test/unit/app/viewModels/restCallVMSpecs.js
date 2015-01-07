@@ -38,8 +38,7 @@
 
             // then
             $httpBackend.flush();
-            expect(response.status).toEqual(200);
-            expect(response.data).toEqual('someguidid');
+            expect(response).toEqual('someguidid');
             expect(scope.request._id).toEqual('someguidid');
         });
 

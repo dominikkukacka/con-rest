@@ -17,6 +17,13 @@
                 },
                 getAvailableRequests: function getAvailableRequests() {
                     return this.private.request('GET', '/api/requests/');
+                },
+                registerCall: function registerCall(restCall) {
+                    return this.private.request('POST', '/api/requests', restCall);
+                },
+                updateRestCall: function updateRestCall(restCall) {
+                    return this.private.request('PUT', '/api/requests/' + restCall._id,
+                        restCall);
                 }
             };
         }

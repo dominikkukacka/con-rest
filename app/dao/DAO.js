@@ -29,7 +29,8 @@
                 request: function request(method, url, data) {
                     var deferred = $q.defer();
                     this.private.requestRaw(method, url, data)
-                        .then(this.private.exposeData(deferred))
+                        .then(this.private.exposeData(deferred),
+                            deferred.reject);
                     return deferred.promise;
                 },
                 requestRaw: function requestRaw(method, url, data) {
