@@ -85,7 +85,7 @@
             expect(parentScope.workflow).toEqual(originalWorkflow);
         });
 
-        iit('should update the model when save has been successful', function safeSuccess() {
+        it('should update the model when save has been successful', function safeSuccess() {
             // given
             var responseDetails = testGlobals.createDefaultRequests();
             $httpBackend.when('GET', '/api/requests/').
