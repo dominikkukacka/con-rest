@@ -27,11 +27,11 @@
 
         $scope.confirmWorkflowDeletion = function confirmWorkflowDeletion(event, workflow) {
             var confirm = $mdDialog.confirm().
-                title('Are you sure you want to remove this workflow [' + workflow.name + ']?').
-                content('The workflow will be deleted, but the rest calls will remain.').
-                ok('REMOVE WORKFLOW').
-                cancel('KEEP WORKFLOW').
-                targetEvent(event);
+            title('Are you sure you want to remove this workflow [' + workflow.name + ']?').
+            content('The workflow will be deleted, but the rest calls will remain.').
+            ok('REMOVE WORKFLOW').
+            cancel('KEEP WORKFLOW').
+            targetEvent(event);
             $mdDialog.show(confirm).then($scope.removeWorkflowOnConfirm(workflow));
         };
 
@@ -48,32 +48,13 @@
 
         $scope.removeWorkflow = function removeWorkflow(workflow) {
             $http.delete('/api/workflows/' + workflow._id).
-                then($scope.removeWorkflowFromModel(workflow));
+            then($scope.removeWorkflowFromModel(workflow));
         };
 
         $scope.removeWorkflowFromModel = function removeWorkflowFromModel(workflow) {
             return function removeWrapper() {
                 var index = $scope.workflows.indexOf(workflow);
                 $scope.workflows.splice(index, 1);
-            };
-        };
-
-        $scope.executeWorkflow = function executeWorkflow(workflow) {
-            $http.post('/api/workflows/' + workflow._id + '/executions').
-                then($scope.workflowExecuted(workflow), $scope.workflowExecutionFailed(workflow));
-        };
-
-        $scope.workflowExecuted = function workflowExecuted(workflow) {
-            return function wrapperWorkflowExecuted(response) {
-                workflow.success = true;
-                $scope.$broadcast(events.EXECUTION_DONE, response);
-            };
-        };
-
-        $scope.workflowExecutionFailed = function workflowExecutionFailed(workflow) {
-            return function wrapperWorkflowFailed(response) {
-                workflow.success = false;
-                $scope.$broadcast(events.EXECUTION_DONE, response);
             };
         };
 
@@ -98,7 +79,7 @@
 
         $scope.getWorkflows = function getWorkflows() {
             $http.get('/api/workflows/').
-                then($scope.workflowsRetrieved);
+            then($scope.workflowsRetrieved);
         };
     });
 }(window.angular));

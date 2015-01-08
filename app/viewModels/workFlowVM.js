@@ -59,7 +59,7 @@
 
         $scope.getWorkflow = function getWorkflow() {
             $http.get('/api/workflows/' + $scope.workflow._id).
-                then($scope.retrievedWorkflow);
+            then($scope.retrievedWorkflow);
         };
 
         $scope.createdWorkflow = function createdWorkflow(response) {
@@ -124,6 +124,21 @@
 
         $scope.addRestCall = function addRestCall() {
             $scope.newCalls.push({});
+        };
+
+        $scope.executeWorkflow = function executeWorkflow() {
+            $http.post('/api/workflows/' + $scope.workflow._id + '/executions')
+                .then($scope.workflowExecuted, $scope.workflowExecutionFailed);
+        };
+
+        $scope.workflowExecuted = function workflowExecuted(response) {
+            $scope.workflow.success = true;
+            $scope.$broadcast(events.EXECUTION_DONE, response);
+        };
+
+        $scope.workflowExecutionFailed = function workflowExecutionFailed(response) {
+            $scope.workflow.success = false;
+            $scope.$broadcast(events.EXECUTION_DONE, response);
         };
     });
 

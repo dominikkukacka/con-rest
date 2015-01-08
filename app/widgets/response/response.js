@@ -1,7 +1,7 @@
 /**
  * Created by Stefan Schacherl on 17.12.2014.
  */
-(function response(angular, undefined){
+(function response(angular, undefined) {
     'use strict';
 
     var app = angular.module('con-rest');
@@ -16,9 +16,7 @@
             },
             templateUrl: 'response',
             link: function responseConstructor(scope) {
-                //scope.showResponse();
                 scope.$on(events.EXECUTION_DONE, scope.showResponse);
-
             }
         };
     });
