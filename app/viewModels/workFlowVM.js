@@ -8,7 +8,7 @@
 
     var app = angular.module('con-rest');
 
-    app.controller('workFlowVM', function workFlowVM($scope, $http, events) {
+    app.controller('workFlowVM', function workFlowVM($scope, $http, $mdDialog, events) {
         // Set a default empty workflow if not provided.
         $scope.originalWorkflow = $scope.originalWorkflow || {
             _id: null,
@@ -124,6 +124,36 @@
 
         $scope.addRestCall = function addRestCall() {
             $scope.newCalls.push({});
+        };
+
+        // Ask the user for confirmation before removing
+        $scope.confirmWorkflowDeletion = function confirmWorkflowDeletion(event) {
+            var confirm = $mdDialog.confirm()
+                .title('Are you sure you want to remove this workflow [' +
+                    $scope.workflow.name + ']?')
+                .content('The workflow will be deleted, but the rest calls will remain.')
+                .ok('REMOVE WORKFLOW')
+                .cancel('KEEP WORKFLOW')
+                .targetEvent(event);
+            $mdDialog.show(confirm).then($scope.removeWorkflowOnConfirm);
+        };
+
+        $scope.removeWorkflow = function removeWorkflow() {
+            $http.delete('/api/workflows/' + $scope.workflow._id)
+                .then($scope.removeWorkflowFromModel);
+        };
+
+        $scope.removeWorkflowOnConfirm = function removeWorkflowOnConfirm() {
+            if ($scope.workflow._id) {
+                $scope.removeWorkflow();
+            } else {
+                $scope.removeWorkflowFromModel();
+            }
+        };
+
+        $scope.removeWorkflowFromModel = function removeWorkflowFromModel() {
+            $scope.$emit(events.WORKFLOW_DELETED, $scope.originalWorkflow);
+            $scope.workflow = null;
         };
 
         $scope.executeWorkflow = function executeWorkflow() {

@@ -144,6 +144,35 @@
             });
         });
 
+        describe('removing functionality', function removeWorkflow() {
+            it('should remove an workflow', function removeWorkflow() {
+                // given
+                scope.workflow = testGlobals.createDefaultWorkflow();
+
+                $httpBackend.expect('DELETE', '/api/workflows/' + scope.workflow._id)
+                    .respond(200, 'ok');
+
+                // when
+                scope.removeWorkflowOnConfirm();
+                $httpBackend.flush();
+
+                // then
+                expect(scope.workflow).toEqual(null);
+            });
+
+            it('should remove an unsaved workflow', function removeUnsavedWorkflow() {
+                // given
+                scope.workflow = testGlobals.createDefaultWorkflow();
+                scope.workflow._id = null;
+
+                // when
+                scope.removeWorkflowOnConfirm();
+
+                // then
+                expect(scope.workflow).toEqual(null);
+            });
+        });
+
         describe('executing workflow', function executingWorkflowSpecs() {
             it('should execute a workflow', function executeWorkflow() {
                 // given

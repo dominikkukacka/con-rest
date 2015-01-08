@@ -25,39 +25,6 @@
             $scope.workflows.splice(index, 1);
         };
 
-        $scope.confirmWorkflowDeletion = function confirmWorkflowDeletion(event, workflow) {
-            var confirm = $mdDialog.confirm().
-            title('Are you sure you want to remove this workflow [' + workflow.name + ']?').
-            content('The workflow will be deleted, but the rest calls will remain.').
-            ok('REMOVE WORKFLOW').
-            cancel('KEEP WORKFLOW').
-            targetEvent(event);
-            $mdDialog.show(confirm).then($scope.removeWorkflowOnConfirm(workflow));
-        };
-
-        $scope.removeWorkflowOnConfirm = function removeWorkflowOnConfirm(workflow) {
-            return function removeWorkflowWrapper() {
-                if (workflow._id) {
-                    $scope.removeWorkflow(workflow);
-                } else {
-                    // removeWorkflowFromModel returns a wrapped function.
-                    $scope.removeWorkflowFromModel(workflow)();
-                }
-            };
-        };
-
-        $scope.removeWorkflow = function removeWorkflow(workflow) {
-            $http.delete('/api/workflows/' + workflow._id).
-            then($scope.removeWorkflowFromModel(workflow));
-        };
-
-        $scope.removeWorkflowFromModel = function removeWorkflowFromModel(workflow) {
-            return function removeWrapper() {
-                var index = $scope.workflows.indexOf(workflow);
-                $scope.workflows.splice(index, 1);
-            };
-        };
-
         $scope.convertCallsToModel = function convertCallsToModel(workflows) {
             angular.forEach(workflows, function iterator(workflow) {
                 var convertedCalls = [];
