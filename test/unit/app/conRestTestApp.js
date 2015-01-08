@@ -23,8 +23,12 @@
                 name: 'fakeCall',
                 url: 'https://fake.url',
                 method: 'PUT',
-                data: { ba: 'nana' },
-                headers: { to: 'ken' }
+                data: {
+                    ba: 'nana'
+                },
+                headers: {
+                    to: 'ken'
+                }
             };
         }
 
@@ -46,7 +50,8 @@
             thirdRequest._id = 'someid3';
             return [createDefaultRequest(),
                 secondRequest,
-                thirdRequest];
+                thirdRequest
+            ];
         }
 
         function createDefaultWorkflow() {
@@ -155,6 +160,7 @@
                 createDefaultWorkflows: createDefaultWorkflows,
                 createDefaultRequestWorkflow: createDefaultRequestWorkflow,
                 createEmptyRequest: createEmptyRequest,
+                events: events,
                 expectRequest: expectRequest,
                 expectWorkflow: expectWorkflow,
                 expectWorkflows: expectWorkflows,
@@ -176,7 +182,6 @@
             var testGlobals = createDefaultTestGlobals();
 
             testGlobals.scope = $rootScope.$new();
-            testGlobals.events = events;
 
             $controller(controllerName, {
                 $scope: testGlobals.scope

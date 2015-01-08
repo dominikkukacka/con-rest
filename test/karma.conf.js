@@ -4,7 +4,7 @@
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
 
-module.exports = function (config) {
+module.exports = function(config) {
     config.set({
         // base path, that will be used to resolve files and exclude
         basePath: '..',
@@ -22,8 +22,11 @@ module.exports = function (config) {
             'app/bower_components/angular-animate/angular-animate.min.js',
             'app/bower_components/hammerjs/hammer.min.js',
             'app/bower_components/angular-material/angular-material.min.js',
+            'app/bower_components/enofjs/src/clazz.js',
             // App wiring
             'app/app.js',
+            // DAO
+            'app/dao/**/*.js',
             // Models
             'app/models/**/*.js',
             // Modules

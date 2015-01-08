@@ -10,6 +10,7 @@
         var $httpBackend;
         var parentScope;
         var testGlobals;
+        var events;
 
         beforeEach(module('con-rest-test'));
 
@@ -17,6 +18,7 @@
             testGlobals = testSetup.setupDirectiveTest();
             $httpBackend = testGlobals.$httpBackend;
             parentScope = testGlobals.parentScope;
+            events = testGlobals.events;
         }));
 
         it('should load the widget with a provided model', function providedModel() {
@@ -25,10 +27,11 @@
             var directive = angular.element('<call-registrator rest-call="request">');
 
             // when
-            var scope = testGlobals.initializeDirective(parentScope, directive);
+            var $scope = testGlobals.initializeDirective(parentScope, directive);
 
             // then
-            expect(scope.request).toEqual(parentScope.request);
+            expect($scope.request).toEqual(parentScope.request);
+            return $scope;
         });
     });
 }());

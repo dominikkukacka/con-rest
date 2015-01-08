@@ -10,7 +10,7 @@
 
     app.directive('callRegistrator', function callRegistratorDirective() {
         return {
-            controller: 'restCallVM',
+            controller: 'restCallC',
             restrict: 'EA',
             scope: {
                 request: '=?restCall'
