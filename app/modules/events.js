@@ -11,6 +11,7 @@
     app.factory('events', function eventsFactory() {
         return {
             CANCEL_EDITING: 'cancelEditing',
+            EXECUTION_DONE: 'executionDone',
             REGISTRATION_SUCCESSFUL: 'registrationSuccessful',
             REGISTRATION_FAILED: 'registrationFailed',
             REQUEST_FAILED: 'requestFailed',

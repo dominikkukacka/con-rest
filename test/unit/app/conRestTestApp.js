@@ -78,6 +78,13 @@
             return workflow;
         }
 
+        function createDefaultResponse() {
+            return {
+                reference: 'someReference',
+                more: 'xyz'
+            };
+        }
+
         function createDefaultWorkflows() {
             return [createResponseWorkflow()];
         }
@@ -152,6 +159,14 @@
             }
         }
 
+        function expectResponse(response) {
+            return {
+                toEqual: function toEqual(expectedResponse) {
+                    expect(response).toEqual(expectedResponse);
+                }
+            };
+        }
+
         function createDefaultTestGlobals() {
             return {
                 createDefaultRequest: createDefaultRequest,
@@ -159,11 +174,13 @@
                 createDefaultWorkflow: createDefaultWorkflow,
                 createDefaultWorkflows: createDefaultWorkflows,
                 createDefaultRequestWorkflow: createDefaultRequestWorkflow,
+                createDefaultResponse: createDefaultResponse,
                 createEmptyRequest: createEmptyRequest,
                 events: events,
                 expectRequest: expectRequest,
                 expectWorkflow: expectWorkflow,
                 expectWorkflows: expectWorkflows,
+                expectResponse: expectResponse,
                 givenRequest: givenRequest,
                 $httpBackend: $httpBackend
             };

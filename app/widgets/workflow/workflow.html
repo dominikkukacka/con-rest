@@ -5,14 +5,38 @@
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
 <section class="workflow">
     <md-card class="workflow-view"
-             ng-if="!editing"
-             ng-click="startEditing()">
+             ng-if="!editing">
         <h2>{{ workflow.name }}</h2>
-
-        <div layout="rows" layout-phone="column" layout-wrap>
-            <rest-call ng-repeat="call in workflow.calls"
-                       id="{{call._id}}"></rest-call>
-        </div>
+        <section layout="row">
+            <div layout="rows" layout-phone="column" layout-wrap flex>
+                <rest-call ng-repeat="call in workflow.calls"
+                           id="{{call._id}}"></rest-call>
+            </div>
+            <section layout="column">
+                <md-button class="md-fab"
+                           ng-click="executeWorkflow(workflow)"
+                           aria-label="execute workflow">
+                        <md-icon icon="/icons/ic_arrow_forward_24px.svg"></md-icon>
+                </md-button>
+                <md-button class="md-fab"
+                           ng-click="startEditing()"
+                           aria-label="edit workflow">
+                    <md-icon icon="/icons/ic_edit_24px.svg"></md-icon>
+                </md-button>
+                <md-button class="md-fab"
+                           ng-click="confirmWorkflowDeletion($event, workflow)"
+                           aria-label="delete workflow">
+                    <md-icon icon="/icons/ic_delete_24px.svg"></md-icon>
+                </md-button>
+                <section ng-show="workflow.success === true">
+                    <md-icon icon="/icons/ic_done_24px.svg"></md-icon>
+                </section>
+                <section ng-show="workflow.success === false">
+                    <md-icon icon="/icons/ic_error_24px.svg"></md-icon>
+                </section>
+            </section>
+        </section>
+        <response response="response"></response>
     </md-card>
     <workflow-registrator ng-if="editing"
                           workflow="workflow">

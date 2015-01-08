@@ -25,23 +25,6 @@
 
         it('should load an overview of all registered workflows', loadWorkflowOverview);
 
-        it('should delete a workflow', function requestWorkflowDeletion() {
-            // given
-            var scope = loadWorkflowOverview();
-            var expectedEvent = {};
-            var expectedWorkflow = testGlobals.createDefaultWorkflow();
-            spyOn($mdDialog, 'show').andCallThrough();
-            spyOn(scope, 'removeWorkflowOnConfirm');
-
-            // when
-            scope.confirmWorkflowDeletion(expectedEvent, expectedWorkflow);
-
-            // then
-            expect($mdDialog.show).toHaveBeenCalled();
-            expect(scope.removeWorkflowOnConfirm).toHaveBeenCalledWith(expectedWorkflow);
-        });
-
-
         it('should remove an unsaved workflow on cancel', function removeUnsavedWorkflowOnCancel() {
             // given
             var scope = loadWorkflowOverview();
@@ -61,7 +44,7 @@
             var expectedWorkflows = testGlobals.createDefaultWorkflows();
 
             $httpBackend.expect('GET', '/api/workflows/').
-                respond(200, expectedWorkflows);
+            respond(200, expectedWorkflows);
             // In this test we don't care what the child widgets are doing.
             $httpBackend.when('GET', /\/api\/requests\/*/).respond(200, {});
 

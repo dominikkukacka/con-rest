@@ -8,20 +8,6 @@
     <div flex layout="row" layout-phone="column" layout-wrap>
         <section ng-repeat="workflow in workflows" layout="row">
             <workflow workflow="workflow"></workflow>
-            <section layout="column">
-                <md-button class="md-fab"
-                           ng-click="executeWorkflow(workflow)"
-                           aria-label="execute workflow">
-                    <md-icon icon="/icons/ic_arrow_forward_24px.svg"></md-icon>
-                </md-button>
-                <md-button class="md-fab"
-                           ng-click="confirmWorkflowDeletion($event, workflow)"
-                           aria-label="delete workflow">
-                    <md-icon icon="/icons/ic_delete_24px.svg"></md-icon>
-                </md-button>
-                <md-icon icon="/icons/ic_done_24px.svg" ng-if="workflow.success === true"></md-icon>
-                <md-icon icon="/icons/ic_error_24px.svg" ng-if="workflow.success === false"></md-icon>
-            </section>
         </section>
     </div>
     <md-button class="md-raised md-primary"
