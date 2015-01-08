@@ -15,10 +15,7 @@
             scope: {
                 request: '=?restCall'
             },
-            templateUrl: 'callRegistrator',
-            link: function callRegistratorConstructor() {
-
-            }
+            templateUrl: 'callRegistrator'
         };
     });
 }(window.angular));
