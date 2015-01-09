@@ -10,7 +10,7 @@
 
     app.directive('workflowRegistrator', function workflowDirective() {
         return {
-            controller: 'workFlowVM',
+            controller: 'workFlowC',
             restrict: 'E',
             scope: {
                 originalWorkflow: '=workflow'
