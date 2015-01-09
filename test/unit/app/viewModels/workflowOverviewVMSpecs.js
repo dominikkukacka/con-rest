@@ -10,7 +10,7 @@
         var scope, $httpBackend, events, testGlobals;
         beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function(testSetup) {
+        beforeEach(inject(function (testSetup) {
             testGlobals = testSetup.setupControllerTest('workflowOverviewVM');
             scope = testGlobals.scope;
             $httpBackend = testGlobals.$httpBackend;
@@ -34,7 +34,7 @@
             var response = null;
             var workflows = testGlobals.createDefaultWorkflows();
             $httpBackend.expect('GET', '/api/workflows/').
-            respond(200, workflows);
+                respond(200, workflows);
 
             // when
             scope.$on(events.WORKFLOWS_RETRIEVED, function workFlowCreated(event, res) {
@@ -44,7 +44,6 @@
 
             // then
             $httpBackend.flush();
-            expect(response.status).toEqual(200);
             testGlobals.expectWorkflows(scope.workflows).toMatch(workflows);
         });
     });
