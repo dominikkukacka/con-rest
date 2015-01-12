@@ -3,16 +3,16 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution, workflowExecution) {
+(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution, workflowExecution, mongooseConf) {
     'use strict';
 
     var app = express();
-
+    var connect = mongooseConf.getConfig();
     params.extend(app);
 
     app.use(bodyParser.json());
 
-    mongoose.connect('mongodb://localhost:27017/apis');
+    mongoose.connect(connect.uri, connect.options);
 
     var db = mongoose.connection;
     db.on('error', console.error);
@@ -44,4 +44,4 @@
     module.exports = app;
 
 }(require('express'), require('body-parser'), require('./api.js'), require('./workflow.js'),
-    require('mongoose'), require('express-params'), require('./execution.js'), require('./workflowExecution.js')));
+    require('mongoose'), require('express-params'), require('./execution.js'), require('./workflowExecution.js'), require('./getMongooseConfig.js')));
