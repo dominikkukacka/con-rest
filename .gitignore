@@ -161,6 +161,7 @@ pip-log.txt
 # Mac crap
 .DS_Store
 
+npm-debug.log
 node_modules
 bower_components
 target
