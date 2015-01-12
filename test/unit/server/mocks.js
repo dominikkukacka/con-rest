@@ -130,10 +130,16 @@
         // executed through workflow
         {
             _id: '5464b1e2f8243a3c321a0001',
-            map: [{
-                source: 'user.id',
-                destination: 'ba.na.na'
-            }]
+            name: 'extractor for banana and userid',
+            map: [
+                {
+                    source: 'user.id',
+                    destination: 'ba.na.na'
+                },{
+                    source: 'user.name',
+                    destination: 'userName'
+                }
+            ]
         }
     ];
 
