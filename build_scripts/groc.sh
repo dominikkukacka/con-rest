@@ -1,6 +1,6 @@
 #!/bin/bash
 set -ev
-if [ $TRAVIS_BRANCH == "master" ]; then
+if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     git checkout master
     grunt groc:dist
     rm -rf app/**/**/*.* app/**/*.js app/*.js test .jshintrc bower.json .bowerrc index.js package.json
