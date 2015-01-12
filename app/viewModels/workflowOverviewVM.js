@@ -8,7 +8,7 @@
 
     var app = angular.module('con-rest');
 
-    app.controller('workflowOverviewVM', function workflowOverviewVM($scope, $http, $mdDialog, events) {
+    app.controller('workflowOverviewVM', function workflowOverviewVM($scope, workflowDAO, $mdDialog, events) {
         $scope.workflows = [];
         $scope.response = null;
 
@@ -39,14 +39,14 @@
         };
 
         $scope.workflowsRetrieved = function workflowsRetrieved(response) {
-            $scope.workflows = $scope.convertCallsToModel(response.data);
+            $scope.workflows = $scope.convertCallsToModel(response);
 
             $scope.$emit(events.WORKFLOWS_RETRIEVED, response);
         };
 
         $scope.getWorkflows = function getWorkflows() {
-            $http.get('/api/workflows/').
-            then($scope.workflowsRetrieved);
+            workflowDAO.getWorkflows().
+                then($scope.workflowsRetrieved);
         };
     });
 }(window.angular));

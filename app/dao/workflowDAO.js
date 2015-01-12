@@ -13,6 +13,9 @@
             this.extend = 'DAO';
 
             this.public = {
+                getWorkflows: function getWorkflows() {
+                    return this.private.request('GET', '/api/workflows/');
+                },
                 getWorkflow: function getWorkflow(id) {
                     return this.private.request('GET', '/api/workflows/' + id);
                 },
