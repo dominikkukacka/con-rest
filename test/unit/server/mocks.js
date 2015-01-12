@@ -126,6 +126,19 @@
 
     ];
 
+    var mappers = [
+        // executed through workflow
+        {
+            _id: '5464b1e2f8243a3c321a0001',
+            map: [
+                {
+                    source: 'user.id',
+                    destination: 'ba.na.na'
+                }
+            ]
+        }
+    ];
+
 
     function APIMocks(done) {
 
@@ -133,12 +146,14 @@
         var Workflow = mongoose.model('Workflow');
         var Execution = mongoose.model('Execution');
         var WorkflowExecution = mongoose.model('WorkflowExecution');
+        var Mapper = mongoose.model('Mapper');
 
         var promisedInserts =
             apiCalls.length +
             workflows.length +
             executions.length +
-            workflowExecutions.length;
+            workflowExecutions.length +
+            mappers.length;
 
         var executedInserts = 0;
         var executedDone = false;
@@ -156,8 +171,7 @@
                 executedInserts++;
                 finish(err);
             });
-        }
-        ;
+        };
 
         for (var i = 0; i < workflows.length; i++) {
             var data = workflows[i];
@@ -165,8 +179,7 @@
                 executedInserts++;
                 finish(err);
             });
-        }
-        ;
+        };
 
         for (var i = 0; i < executions.length; i++) {
             var data = executions[i];
@@ -174,8 +187,7 @@
                 executedInserts++;
                 finish(err);
             });
-        }
-        ;
+        };
 
         for (var i = 0; i < workflowExecutions.length; i++) {
             var data = workflowExecutions[i];
@@ -183,11 +195,18 @@
                 executedInserts++;
                 finish(err);
             });
-        }
-        ;
+        };
+
+        for (var i = 0; i < mappers.length; i++) {
+            var data = mappers[i];
+            Mapper.create(data, function (err, model) {
+                executedInserts++;
+                finish(err);
+            });
+        };
 
     }
 
 
     module.exports = APIMocks;
-}(require('mongoose'), require('../../../server/api.js'), require('../../../server/workflow.js')));
+}(require('mongoose'), require('../../../server/api.js'), require('../../../server/workflow.js'), require('../../../server/mapper.js')));
