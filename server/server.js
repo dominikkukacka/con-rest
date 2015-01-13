@@ -3,14 +3,15 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution, workflowExecution, mongooseConf, mapper) {
+(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution, workflowExecution, config, mapper) {
     'use strict';
 
     var app = express();
-    var connect = mongooseConf.getConfig();
+    var connect = config.getMongoConfig();
+    var serverConfig = config.getServerConfig();
     params.extend(app);
 
-    app.use(bodyParser.json());
+    app.use(bodyParser.json(serverConfig.parser));
 
     mongoose.connect(connect.uri, connect.options);
 
@@ -59,6 +60,6 @@
     require('express-params'),
     require('./execution.js'),
     require('./workflowExecution.js'),
-    require('./getMongooseConfig.js'),
+    require('./getConfig.js'),
     require('./mapper.js')
 ));

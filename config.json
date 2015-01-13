@@ -1,0 +1,27 @@
+{
+  "server" : {
+    "port": "9000",
+    "parser": {
+      "strict": true,
+      "inflate": true,
+      "limit": "5mb",
+      "type": "json"
+    }
+  },
+  "mongoDb": {
+    "uri": "mongodb://localhost:27017/conRest",
+    "options": {
+      "db": {
+        "native_parser": true
+      },
+      "server": {
+        "poolSize": 5
+      },
+      "replset": {
+        "rs_name": "myReplicaSetName"
+      },
+      "user": "myUserName",
+      "pass": "myPassword"
+    }
+  }
+}
