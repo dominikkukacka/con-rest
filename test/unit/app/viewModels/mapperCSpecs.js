@@ -39,5 +39,61 @@
             expect($scope.name).toEqual(null);
             expect($scope.maps).toEqual([]);
         });
+
+        it('should add a new map', function addMap() {
+            // given
+            $scope.maps = [];
+
+            // when
+            $scope.addMap();
+
+            // then
+            expect($scope.maps[0]).toEqual(jasmine.objectContaining({
+                source: null,
+                destination: null
+            }));
+        });
+
+        it('should remove a map', function removeMap() {
+            // given
+            $scope.maps = [{
+                source: '1',
+                destination: '1'
+            }, {
+                source: '2',
+                destination: '2'
+            }, {
+                source: '3',
+                destination: '3'
+            }];
+
+            // when
+            $scope.removeMap(1);
+
+            // then
+            expect($scope.maps.length).toEqual(2);
+            expect($scope.maps[1]).toEqual(jasmine.objectContaining({
+                source: '3',
+                destination: '3'
+            }));
+        });
+
+        it('should prevent removing the last map', function removeLastMap() {
+            // given
+            $scope.maps = [{
+                source: '1',
+                destination: '1'
+            }];
+
+            // when
+            $scope.removeMap(0);
+
+            // then
+            expect($scope.maps.length).toEqual(1);
+            expect($scope.maps[0]).toEqual(jasmine.objectContaining({
+                source: '1',
+                destination: '1'
+            }));
+        });
     });
 }());

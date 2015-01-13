@@ -14,6 +14,13 @@
             });
         };
 
+        $scope.removeMap = function removeMap(index) {
+            if ($scope.maps.length === 1) {
+                return;
+            }
+            $scope.maps.splice(index, 1);
+        };
+
         $scope.save = function save() {
             mapperDAO.create($scope.name, $scope.maps)
                 .then(function cleanScope() {

@@ -18,10 +18,10 @@
             <md-text-float label="destination"
                            ng-model="map.destination"></md-text-float>
             <md-button class="md-fab"
-                       ng-if="!!$last"
-                       aria-label="add map"
-                       ng-click="addMap()">
-                <md-icon icon="/icons/ic_add_24px.svg"></md-icon>
+                       aria-label="remove map"
+                       ng-disabled="$first && $last"
+                       ng-click="removeMap($index)">
+                <md-icon icon="/icons/ic_delete_24px.svg"></md-icon>
             </md-button>
         </section>
     </form>
