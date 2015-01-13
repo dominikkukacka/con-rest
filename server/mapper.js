@@ -3,7 +3,7 @@
 //
 // Author: Dominik Kukacka
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function apiScope(mongoose, queue) {
+(function mapperScope(mongoose, queue) {
     'use strict';
 
     var Schema = mongoose.Schema;
@@ -40,22 +40,13 @@
     function saveMapper(req, res) {
         var id = mongoose.Types.ObjectId(req.params.id);
         var details = req.body;
-        var mapper = null;
+
         return queue().
-            then(function getExistingMapper() {
+            then(function() {
                 var deferred = queue.defer();
-                Mapper.findById(id, deferred.makeNodeResolver());
-                return deferred.promise;
+                Mapper.findByIdAndUpdate(id, { $set: details }, deferred.makeNodeResolver());
             }).
-            then(function modifyWorkflow(retrievedMapper) {
-                var deferred = queue.defer();
-                mapper = retrievedMapper;
-                mapper.name = details.name;
-                mapper.map = details.map;
-                mapper.save(deferred.makeNodeResolver());
-                return deferred.promise;
-            }).
-            then(function returnTrue() {
+            then(function(mapper) {
                 var deferred = queue.defer();
                 deferred.resolve(mapper);
                 res.send('ok');
