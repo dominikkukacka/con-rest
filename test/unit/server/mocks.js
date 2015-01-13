@@ -3,12 +3,11 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function apiMocksScope(mongoose, api, workflow) {
+(function apiMocksScope(mongoose, queue, api, workflow) {
     'use strict';
 
 
-    var apiCalls = [
-        {
+    var apiCalls = [{
             _id: '545726928469e940235ce769',
             name: 'firstCall',
             url: 'http://test.one',
@@ -66,31 +65,26 @@
         }
     ];
 
-    var workflows = [
-        {
-            _id: '545726928469e940235ce769',
-            name: 'firstWorkflow',
-            calls: ['545726928469e940235ce769', '545726928469e940235ce770']
-        },
-        {
-            _id: '545726928469e940235ce700',
-            name: 'secondWorkflow',
-            calls: ['545726928469e940235ce770', '545726928469e940235ce771', '545726928469e940235ce772']
-        }
-    ];
+    var workflows = [{
+        _id: '545726928469e940235ce769',
+        name: 'firstWorkflow',
+        calls: ['545726928469e940235ce769', '545726928469e940235ce770']
+    }, {
+        _id: '545726928469e940235ce700',
+        name: 'secondWorkflow',
+        calls: ['545726928469e940235ce770', '545726928469e940235ce771', '545726928469e940235ce772']
+    }];
 
-    var workflowExecutions = [
-        {
-            _id: '5464b1e2f8243a3c32170001',
-            workflow: '545726928469e940235ce700',
-            executedAt: new Date(),
-            executions: [
-                '5464b1e2f8243a3c32180001',
-                '5464b1e2f8243a3c32180002',
-                '5464b1e2f8243a3c32180003'
-            ]
-        }
-    ];
+    var workflowExecutions = [{
+        _id: '5464b1e2f8243a3c32170001',
+        workflow: '545726928469e940235ce700',
+        executedAt: new Date(),
+        executions: [
+            '5464b1e2f8243a3c32180001',
+            '5464b1e2f8243a3c32180002',
+            '5464b1e2f8243a3c32180003'
+        ]
+    }];
 
     var executions = [
         // executed through workflow
@@ -99,21 +93,25 @@
             workflow: '545726928469e940235ce700',
             apiCall: '545726928469e940235ce770',
             statusCode: 200,
-            reponse: {indicator: 100}
-        },
-        {
+            reponse: {
+                indicator: 100
+            }
+        }, {
             _id: '5464b1e2f8243a3c32180002',
             workflow: '545726928469e940235ce700',
             apiCall: '545726928469e940235ce771',
             statusCode: 200,
-            reponse: {indicator: 101}
-        },
-        {
+            reponse: {
+                indicator: 101
+            }
+        }, {
             _id: '5464b1e2f8243a3c32180003',
             workflow: '545726928469e940235ce700',
             apiCall: '545726928469e940235ce772',
             statusCode: 200,
-            reponse: {indicator: 102}
+            reponse: {
+                indicator: 102
+            }
         },
 
         // directly executed
@@ -121,73 +119,70 @@
             _id: '5464b1e2f8243a3c32180004',
             apiCall: '545726928469e940235ce770',
             statusCode: 200,
-            reponse: {indicator: 100}
+            reponse: {
+                indicator: 100
+            }
         }
 
     ];
 
+    var mappers = [
+        // executed through workflow
+        {
+            _id: '5464b1e2f8243a3c321a0001',
+            name: 'extractor for banana and userid',
+            map: [
+                {
+                    source: 'user.id',
+                    destination: 'ba.na.na'
+                },{
+                    source: 'user.name',
+                    destination: 'userName'
+                }
+            ]
+        }
+    ];
+
+    function createMocks(model, mocks) {
+        var allMocksCreated = queue.defer();
+        var Model = mongoose.model(model);
+        var allPromisses = [];
+
+        for (var i = 0; i < mocks.length; i++) {
+            var data = mocks[i];
+            var deferred = queue.defer();
+            Model.create(data, deferred.makeNodeResolver());
+            allPromisses.push(deferred);
+        }
+
+        queue.all(allPromisses)
+            .then(function resolve() {
+                allMocksCreated.resolve();
+            })
+            .fail(function reject() {
+                allMocksCreated.reject()
+            });
+        return allMocksCreated.promise;
+    }
+
 
     function APIMocks(done) {
+         var allMocks = [
+            createMocks('APICall', apiCalls),
+            createMocks('Workflow', workflows),
+            createMocks('Execution', executions),
+            createMocks('WorkflowExecution', workflowExecutions),
+            createMocks('Mapper', mappers),
+        ];
 
-        var APICall = mongoose.model('APICall');
-        var Workflow = mongoose.model('Workflow');
-        var Execution = mongoose.model('Execution');
-        var WorkflowExecution = mongoose.model('WorkflowExecution');
-
-        var promisedInserts =
-            apiCalls.length +
-            workflows.length +
-            executions.length +
-            workflowExecutions.length;
-
-        var executedInserts = 0;
-        var executedDone = false;
-
-        function finish() {
-            if (!executedDone && executedInserts >= promisedInserts) {
-                executedDone = true;
+        queue.all(allMocks)
+            .then(function itsDone() {
                 done();
-            }
-        }
-
-        for (var i = 0; i < apiCalls.length; i++) {
-            var data = apiCalls[i];
-            APICall.create(data, function (err, model) {
-                executedInserts++;
-                finish(err);
-            });
-        }
-        ;
-
-        for (var i = 0; i < workflows.length; i++) {
-            var data = workflows[i];
-            Workflow.create(data, function (err, model) {
-                executedInserts++;
-                finish(err);
-            });
-        }
-        ;
-
-        for (var i = 0; i < executions.length; i++) {
-            var data = executions[i];
-            Execution.create(data, function (err, model) {
-                executedInserts++;
-                finish(err);
-            });
-        }
-        ;
-
-        for (var i = 0; i < workflowExecutions.length; i++) {
-            var data = workflowExecutions[i];
-            WorkflowExecution.create(data, function (err, model) {
-                executedInserts++;
-                finish(err);
-            });
-        }
-        ;
+            })
+            .catch(done);
 
     }
 
 
     module.exports = APIMocks;
-}(require('mongoose'), require('../../../server/api.js'), require('../../../server/workflow.js')));
+}(require('mongoose'), require('q'), require('../../../server/api.js'), require('../../../server/workflow.js'), require('../../../server/mapper.js')));

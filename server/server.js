@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution, workflowExecution, mongooseConf) {
+(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution, workflowExecution, mongooseConf, mapper) {
     'use strict';
 
     var app = express();
@@ -40,8 +40,25 @@
 
         app.get('/api/executions', execution.getExecutions);
         app.get('/api/executions/:id', execution.getExecutionById);
+
+
+        app.get('/api/mappers', mapper.getMappers);
+        app.post('/api/mappers', mapper.createMapper);
+        app.get('/api/mappers/:id', mapper.getMapperById);
+        app.post('/api/mappers/:id', mapper.saveMapper);
+        app.delete('/api/mappers/:id', mapper.deleteMapper);
     });
     module.exports = app;
 
-}(require('express'), require('body-parser'), require('./api.js'), require('./workflow.js'),
-    require('mongoose'), require('express-params'), require('./execution.js'), require('./workflowExecution.js'), require('./getMongooseConfig.js')));
+}(
+    require('express'),
+    require('body-parser'),
+    require('./api.js'),
+    require('./workflow.js'),
+    require('mongoose'),
+    require('express-params'),
+    require('./execution.js'),
+    require('./workflowExecution.js'),
+    require('./getMongooseConfig.js'),
+    require('./mapper.js')
+));
