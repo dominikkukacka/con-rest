@@ -201,28 +201,28 @@
           foobar: 123
         };
 
-        var testMaps = [{
-          source: 'foobar',
-          destination: 'rootValue'
-        }, {
-          source: 'ba.na',
-          destination: 'bananaObj'
-        }, {
-          source: 'ba.na.na',
-          destination: 'bananaValue'
-        }, {
-          source: 'testArray.1',
-          destination: 'arrayValue'
-        }, {
-          source: 'testArray.2.test',
-          destination: 'arrayObj'
-        }, {
-          source: 'users.0.groups.0.name',
-          destination: 'complexString'
-        }, {
-          source: 'users.0.groups',
-          destination: 'complexArray'
-        }];
+                var testMaps = [{
+                    source: 'foobar',
+                    destination: 'rootValue'
+                }, {
+                    source: 'ba.na',
+                    destination: 'bananaObj'
+                }, {
+                    source: 'ba.na.na',
+                    destination: 'bananaValue'
+                }, {
+                    source: 'testArray[1]',
+                    destination: 'arrayValue'
+                }, {
+                    source: 'testArray[2].test',
+                    destination: 'arrayObj'
+                }, {
+                    source: 'users[0].groups[0].name',
+                    destination: 'complexString'
+                }, {
+                    source: 'users[0].groups',
+                    destination: 'complexArray'
+                }];
 
         var testOutput = {
           rootValue: 123,

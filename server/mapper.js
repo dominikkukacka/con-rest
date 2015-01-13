@@ -79,6 +79,9 @@
 
     function singleMap(obj, map) {
 
+        // convert foo[0].bar to foo.0.bar; i like it dirty
+        map = map.replace(/\]/g,'').replace(/\[/g, '.');
+
         var parts = map.split('.');
         var currentPointer = obj;
         for (var i = 0; i < parts.length; i++) {
