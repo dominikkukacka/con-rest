@@ -8,7 +8,11 @@
             restrict: 'E',
             scope: {},
             controller: 'mapperC',
-            templateUrl: 'mapperRegistrator'
+            templateUrl: 'mapperRegistrator',
+            link: function mapperRegistratorConstructor(scope) {
+                // Add a default map on initialization.
+                scope.addMap();
+            }
         };
     });
 }(window.angular));
