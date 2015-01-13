@@ -76,12 +76,40 @@
         return deferred.promise;
     }
 
+
+    function singleMap(obj, map) {
+
+        var parts = map.split('.');
+        var currentPointer = obj;
+        for (var i = 0; i < parts.length; i++) {
+            var part = parts[i];
+            currentPointer = currentPointer[part];
+        }
+
+        return currentPointer;
+
+    }
+
+    function map(obj, maps) {
+        var mappedValues = {};
+        for (var i = 0; i < maps.length; i++) {
+            var _map = maps[i];
+
+            var value = singleMap(obj, _map.source);
+            mappedValues[_map.destination] = value;
+        }
+
+        return mappedValues;
+
+    }
+
     module.exports = {
         Mapper: Mapper,
         getMappers: getMappers,
         getMapperById: getMapperById,
         saveMapper: saveMapper,
         createMapper: createMapper,
-        deleteMapper: deleteMapper
+        deleteMapper: deleteMapper,
+        map: map
     };
 }(require('mongoose'), require('q')));
