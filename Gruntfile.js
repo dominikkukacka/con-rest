@@ -6,7 +6,7 @@
 
 'use strict';
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
 
     var pkg = grunt.file.readJSON('package.json');
@@ -31,15 +31,13 @@ module.exports = function (grunt) {
         },
         clean: {
             all: {
-                files: [
-                    {
-                        dot: true,
-                        src: [
-                            '<%= app.tmp %>',
-                            '<%= app.dist %>'
-                        ]
-                    }
-                ]
+                files: [{
+                    dot: true,
+                    src: [
+                        '<%= app.tmp %>',
+                        '<%= app.dist %>'
+                    ]
+                }]
             }
         },
         concat: {
@@ -50,20 +48,31 @@ module.exports = function (grunt) {
                         '.tmp/pre.con-rest.js'
                     ]
                 }
+            },
+            dev: {
+                options: {
+                    sourceMap: true
+                },
+                files: {
+                    '<%= app.tmp %>/js/con-rest.js': [
+                        '<%= app.app%>/dao/*.js',
+                        '<%= app.app%>/modules/*.js',
+                        '<%= app.app%>/viewModels/*.js',
+                        '<%= app.app%>/widgets/**/*.js'
+                    ]
+                }
             }
         },
         copy: {
             dist: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= app.tmp %>/styles',
-                        dest: '<%= app.dist %>/styles',
-                        src: [
-                            '*.css'
-                        ]
-                    }
-                ]
+                files: [{
+                    expand: true,
+                    cwd: '<%= app.tmp %>/styles',
+                    dest: '<%= app.dist %>/styles',
+                    src: [
+                        '*.css'
+                    ]
+                }]
             }
         },
         express: {
@@ -168,7 +177,7 @@ module.exports = function (grunt) {
                 dest: '<%= app.tmp %>/scripts/templates.js',
                 options: {
                     module: 'con-rest',
-                    url: function (url) {
+                    url: function(url) {
                         return url.replace(/(app\/widgets\/([\s\S]*?)\/)/, '').replace(/.html/, '');
                     }
                 }
@@ -188,20 +197,21 @@ module.exports = function (grunt) {
                         removeScriptTypeAttributes: true,
                         removeStyleLinkTypeAttributes: true
                     },
-                    url: function (url) {
+                    url: function(url) {
                         return url.replace(/(app\/widgets\/([\s\S]*?)\/)/, '').replace(/.html/, '');
                     }
                 }
             }
         },
         simplemocha: {
-            all: { src: ['test/unit/server/**/*.js'] }
+            all: {
+                src: ['test/unit/server/**/*.js']
+            }
         },
         uglify: {
             options: {
                 mangle: {
-                    except: [
-                    ]
+                    except: []
                 },
                 compress: {
                     /* jshint ignore:start */
@@ -209,7 +219,7 @@ module.exports = function (grunt) {
                         "DEBUG": false
                     },
                     dead_code: true
-                    /* jshint ignore:end */
+                        /* jshint ignore:end */
                 },
                 banner: '/* con-rest: v<%= pkg.version %> by EnoF */'
             },
@@ -268,7 +278,7 @@ module.exports = function (grunt) {
                     '<%= app.app %>/**/*.js',
                     '<%= app.test %>/unit/app/**/*.js'
                 ],
-                tasks: ['karma:unitAuto:run'],
+                tasks: ['karma:unitAuto:run', 'concat:dev'],
                 options: {
                     // Start a live reload server on the default port 35729
                     livereload: true
@@ -298,7 +308,8 @@ module.exports = function (grunt) {
         'clean',
         'jshint',
         'less',
-        'ngtemplates:dev'
+        'ngtemplates:dev',
+        'concat:dev'
     ]);
 
     grunt.registerTask('setupEnv', [
