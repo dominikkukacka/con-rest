@@ -77,9 +77,14 @@
     }
 
 
+    // will extract a value of an object using a map
+    // a map can be a:
+    //   * 'foo' - gets the property `foo` from the root of the provided object
+    //   * 'foo.bar.baz' - you can chain property names to get deeper into the object
+    //   * 'foo[0].bar' - goes into array `foo` index 0 and gets the object `bar`
+    //   * 'foo[0][1][0].baz' - you can also go into nested arrays
     function singleMap(obj, map) {
 
-        // convert foo[0].bar to foo.0.bar; i like it dirty
         map = map.replace(/\]/g,'').replace(/\[/g, '.');
 
         var parts = map.split('.');
