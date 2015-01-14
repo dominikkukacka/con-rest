@@ -12,6 +12,7 @@
         $scope.menu = sitemap;
 
         $scope.showNavigation = function showNavigation() {
+            // navigation is a html fragment defined in `index.html`
             $mdSidenav('navigation').open();
         };
 
