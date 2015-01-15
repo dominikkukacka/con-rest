@@ -131,15 +131,13 @@
         {
             _id: '5464b1e2f8243a3c321a0001',
             name: 'extractor for banana and userid',
-            map: [
-                {
-                    source: 'user.id',
-                    destination: 'ba.na.na'
-                },{
-                    source: 'user.name',
-                    destination: 'userName'
-                }
-            ]
+            maps: [{
+                source: 'user.id',
+                destination: 'ba.na.na'
+            }, {
+                source: 'user.name',
+                destination: 'userName'
+            }]
         }
     ];
 
@@ -167,7 +165,7 @@
 
 
     function APIMocks(done) {
-         var allMocks = [
+        var allMocks = [
             createMocks('APICall', apiCalls),
             createMocks('Workflow', workflows),
             createMocks('Execution', executions),
@@ -185,4 +183,5 @@
 
 
     module.exports = APIMocks;
-}(require('mongoose'), require('q'), require('../../../server/api.js'), require('../../../server/workflow.js'), require('../../../server/mapper.js')));
+}(require('mongoose'), require('q'), require('../../../server/api.js'), require('../../../server/workflow.js'),
+    require('../../../server/mapper.js')));

@@ -9,23 +9,23 @@
     // `con-rest` angular module registration - COMPLETE!
     var app = angular.module('con-rest', ['ngRoute', 'ngMaterial']);
 
-    var sitemap = [
-        {
-            url: '/workflows',
-            templateUrl: 'pages/workflows.html',
-            label: 'workflows'
-        },
-        {
-            url: '/registerCall',
-            templateUrl: 'pages/registerCall.html',
-            label: 'register call'
-        },
-        {
-            url: '/restcalls',
-            templateUrl: 'pages/restCalls.html',
-            label: 'rest calls'
-        }
-    ];
+    var sitemap = [{
+        url: '/workflows',
+        templateUrl: 'pages/workflows.html',
+        label: 'workflows'
+    }, {
+        url: '/mapper',
+        templateUrl: 'pages/mapper.html',
+        label: 'register mapper'
+    }, {
+        url: '/registerCall',
+        templateUrl: 'pages/registerCall.html',
+        label: 'register call'
+    }, {
+        url: '/restcalls',
+        templateUrl: 'pages/restCalls.html',
+        label: 'rest calls'
+    }];
 
     app.factory('sitemap', function siteMap() {
         return sitemap;

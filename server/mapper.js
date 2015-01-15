@@ -10,7 +10,7 @@
 
     var mapperSchema = new Schema({
         name: String,
-        map: [{
+        maps: [{
             source: String,
             destination: String
         }]
@@ -42,16 +42,18 @@
         var details = req.body;
 
         return queue().
-            then(function() {
-                var deferred = queue.defer();
-                Mapper.findByIdAndUpdate(id, { $set: details }, deferred.makeNodeResolver());
-            }).
-            then(function(mapper) {
-                var deferred = queue.defer();
-                deferred.resolve(mapper);
-                res.send('ok');
-                return deferred.promise;
-            });
+        then(function() {
+            var deferred = queue.defer();
+            Mapper.findByIdAndUpdate(id, {
+                $set: details
+            }, deferred.makeNodeResolver());
+        }).
+        then(function(mapper) {
+            var deferred = queue.defer();
+            deferred.resolve(mapper);
+            res.send('ok');
+            return deferred.promise;
+        });
     }
 
     function createMapper(req, res) {
