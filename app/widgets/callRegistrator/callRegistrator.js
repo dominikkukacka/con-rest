@@ -4,18 +4,18 @@
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
 (function callRegistratorScope(angular) {
-    'use strict';
+  'use strict';
 
-    var app = angular.module('con-rest');
+  var app = angular.module('con-rest');
 
-    app.directive('callRegistrator', function callRegistratorDirective() {
-        return {
-            controller: 'restCallC',
-            restrict: 'EA',
-            scope: {
-                request: '=?restCall'
-            },
-            templateUrl: 'callRegistrator'
-        };
-    });
+  app.directive('callRegistrator', function callRegistratorDirective() {
+    return {
+      controller: 'restCallC',
+      restrict: 'EA',
+      scope: {
+        request: '=?restCall'
+      },
+      templateUrl: 'callRegistrator'
+    };
+  });
 }(window.angular));

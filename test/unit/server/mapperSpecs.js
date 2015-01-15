@@ -177,83 +177,82 @@
       });
     });
 
-        describe('map', function mapScope() {
-            it('should execute some maps', function testMap(done) {
-                var testObject = {
-                    ba: {
-                        na: {
-                            na: 1337
-                        }
-                    },
-                    users: [{
-                        id: 1,
-                        name: 'Max',
-                        groups: [{
-                            name: 'admin'
-                        }]
-                    }, ],
-                    testArray: [
-                        'banan',
-                        'apple', {
-                            test: 'orange'
-                        }
-                    ],
-                    arr: [
-                        [
-                            null,
-                            [
-                                'baz',
-                                1338
-                            ]
-                        ]
-                    ],
-                    foobar: 123
-                };
+    describe('map', function mapScope() {
+      it('should execute some maps', function testMap(done) {
+        var testObject = {
+          ba: {
+            na: {
+              na: 1337
+            }
+          },
+          users: [{
+            id: 1,
+            name: 'Max',
+            groups: [{
+              name: 'admin'
+            }]
+          }, ],
+          testArray: [
+            'banan',
+            'apple', {
+              test: 'orange'
+            }
+          ],
+          arr: [
+            [
+              null, [
+                'baz',
+                1338
+              ]
+            ]
+          ],
+          foobar: 123
+        };
 
-                var testMaps = [{
-                    source: 'foobar',
-                    destination: 'rootValue'
-                }, {
-                    source: 'ba.na',
-                    destination: 'bananaObj'
-                }, {
-                    source: 'ba.na.na',
-                    destination: 'bananaValue'
-                }, {
-                    source: 'testArray[1]',
-                    destination: 'arrayValue'
-                }, {
-                    source: 'testArray[2].test',
-                    destination: 'arrayObj'
-                }, {
-                    source: 'users[0].groups[0].name',
-                    destination: 'complexString'
-                }, {
-                    source: 'users[0].groups',
-                    destination: 'complexArray'
-                }, {
-                    source: 'arr[0][1][0]',
-                    destination: 'arrayArray'
-                }, {
-                    source: 'users[0].email',
-                    destination: 'noValue'
-                }];
+        var testMaps = [{
+          source: 'foobar',
+          destination: 'rootValue'
+        }, {
+          source: 'ba.na',
+          destination: 'bananaObj'
+        }, {
+          source: 'ba.na.na',
+          destination: 'bananaValue'
+        }, {
+          source: 'testArray[1]',
+          destination: 'arrayValue'
+        }, {
+          source: 'testArray[2].test',
+          destination: 'arrayObj'
+        }, {
+          source: 'users[0].groups[0].name',
+          destination: 'complexString'
+        }, {
+          source: 'users[0].groups',
+          destination: 'complexArray'
+        }, {
+          source: 'arr[0][1][0]',
+          destination: 'arrayArray'
+        }, {
+          source: 'users[0].email',
+          destination: 'noValue'
+        }];
 
-                var testOutput = {
-                    rootValue: 123,
-                    bananaObj: {
-                        na: 1337
-                    },
-                    bananaValue: 1337,
-                    arrayValue: 'apple',
-                    arrayObj: 'orange',
-                    complexString: 'admin',
-                    complexArray: [{
-                        name: 'admin'
-                    }],
-                    arrayArray: 'baz',
-                    noValue: undefined
-                };
+        var testOutput = {
+          rootValue: 123,
+          bananaObj: {
+            na: 1337
+          },
+          bananaValue: 1337,
+          arrayValue: 'apple',
+          arrayObj: 'orange',
+          complexString: 'admin',
+          complexArray: [{
+            name: 'admin'
+          }],
+          arrayArray: 'baz',
+          noValue: undefined
+        };
 
 
         var result = mapper.map(testObject, testMaps);

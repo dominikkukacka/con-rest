@@ -4,20 +4,20 @@
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
 (function navigationVM(angular) {
-    'use strict';
+  'use strict';
 
-    var app = angular.module('con-rest');
+  var app = angular.module('con-rest');
 
-    app.controller('navigationVM', function navigationVMScope($scope, $mdSidenav, sitemap) {
-        $scope.menu = sitemap;
+  app.controller('navigationVM', function navigationVMScope($scope, $mdSidenav, sitemap) {
+    $scope.menu = sitemap;
 
-        $scope.showNavigation = function showNavigation() {
-            // navigation is a html fragment defined in `index.html`
-            $mdSidenav('navigation').open();
-        };
+    $scope.showNavigation = function showNavigation() {
+      // navigation is a html fragment defined in `index.html`
+      $mdSidenav('navigation').open();
+    };
 
-        $scope.hideNavigation = function hideNavigation() {
-            $mdSidenav('navigation').close();
-        };
-    });
+    $scope.hideNavigation = function hideNavigation() {
+      $mdSidenav('navigation').close();
+    };
+  });
 }(window.angular));

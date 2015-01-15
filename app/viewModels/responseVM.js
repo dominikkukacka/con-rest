@@ -3,15 +3,15 @@
  */
 
 (function responseVMScope(angular) {
-    'use strict';
+  'use strict';
 
-    var app = angular.module('con-rest');
+  var app = angular.module('con-rest');
 
-    app.controller('responseVM', function responseVM($scope) {
-        $scope.response = $scope.response || null;
+  app.controller('responseVM', function responseVM($scope) {
+    $scope.response = $scope.response || null;
 
-        $scope.showResponse = function showResponse(event, response) {
-            $scope.response = response;
-        };
-    });
+    $scope.showResponse = function showResponse(event, response) {
+      $scope.response = response;
+    };
+  });
 }(window.angular));
