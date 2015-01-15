@@ -26,6 +26,7 @@
                 .then(function cleanScope() {
                     $scope.name = null;
                     $scope.maps = [];
+                    $scope.addMap();
                 });
         };
     });

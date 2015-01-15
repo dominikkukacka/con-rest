@@ -37,7 +37,10 @@
 
             // then
             expect($scope.name).toEqual(null);
-            expect($scope.maps).toEqual([]);
+            expect($scope.maps).toEqual([{
+                source: null,
+                destination: null
+            }]);
         });
 
         it('should add a new map', function addMap() {
