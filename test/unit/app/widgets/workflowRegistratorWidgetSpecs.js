@@ -4,35 +4,35 @@
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
 (function workflowRegistratorWidgetSpecs() {
-    'use strict';
+  'use strict';
 
-    describe('workflow registrator widget specs', function workflowRegistratorWidgetSpecs() {
-        var $httpBackend;
-        var parentScope;
-        var testGlobals;
+  describe('workflow registrator widget specs', function workflowRegistratorWidgetSpecs() {
+    var $httpBackend;
+    var parentScope;
+    var testGlobals;
 
-        beforeEach(module('con-rest-test'));
+    beforeEach(module('con-rest-test'));
 
-        beforeEach(inject(function setupTests(_events_, testSetup) {
-            testGlobals = testSetup.setupDirectiveTest();
-            parentScope = testGlobals.parentScope;
-            $httpBackend = testGlobals.$httpBackend;
-        }));
+    beforeEach(inject(function setupTests(_events_, testSetup) {
+      testGlobals = testSetup.setupDirectiveTest();
+      parentScope = testGlobals.parentScope;
+      $httpBackend = testGlobals.$httpBackend;
+    }));
 
-        it('should load the calls in the workflow when an workflow model has been provided', function loadRestCalls() {
-            // given
-            parentScope.workflow = testGlobals.createDefaultWorkflow();
-            var directive = angular.element('<workflow-registrator workflow="workflow"></workflow-registrator>');
+    it('should load the calls in the workflow when an workflow model has been provided', function loadRestCalls() {
+      // given
+      parentScope.workflow = testGlobals.createDefaultWorkflow();
+      var directive = angular.element('<workflow-registrator workflow="workflow"></workflow-registrator>');
 
-            // Child widget is calling for all requests
-            $httpBackend.when('GET', '/api/requests/').
-                respond(200, []);
+      // Child widget is calling for all requests
+      $httpBackend.when('GET', '/api/requests/').
+      respond(200, []);
 
-            // when
-            var scope = testGlobals.initializeDirective(parentScope, directive);
+      // when
+      var scope = testGlobals.initializeDirective(parentScope, directive);
 
-            // then
-            testGlobals.expectWorkflows(scope.workflow).toEqual(parentScope.workflow);
-        });
+      // then
+      testGlobals.expectWorkflows(scope.workflow).toEqual(parentScope.workflow);
     });
+  });
 }());

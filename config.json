@@ -1,5 +1,5 @@
 {
-  "server" : {
+  "server": {
     "port": "9000",
     "parser": {
       "strict": true,

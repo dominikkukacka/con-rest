@@ -4,358 +4,358 @@
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
 (function apiScope(mongoose, queue, request, _) {
-    'use strict';
+  'use strict';
 
-    var Schema = mongoose.Schema;
+  var Schema = mongoose.Schema;
 
-    var apiCallSchema = new Schema({
-        name: String,
-        url: String,
-        method: String,
-        type: String,
-        data: Schema.Types.Mixed,
-        headers: Schema.Types.Mixed
+  var apiCallSchema = new Schema({
+    name: String,
+    url: String,
+    method: String,
+    type: String,
+    data: Schema.Types.Mixed,
+    headers: Schema.Types.Mixed
+  });
+
+  var PAYLOAD = 'payload';
+  var FORM_DATA = 'formData';
+
+  var APICall = mongoose.model('APICall', apiCallSchema);
+
+  var Execution = mongoose.model('Execution');
+
+  // Receive all stored REST calls from the database.
+  // Response is "Status: 200 OK" and an array of JSON objects. Response example:
+
+  //     [{
+  //         "_id":"547874b2281a1fbc22e2284b",
+  //         "name":"sampleRestCall",
+  //         "url":"http://this.sample.call",
+  //         "method":"POST",
+  //         "type":"formData",
+  //         "data":"{\n\"sampleParam\":\"sampleValue\",\n\"testParam\":\"2\"\n}",
+  //         "headers":"{\n\"sampleAuthorization\":\"sampleValue\"\n}",
+  //         "__v":0
+  //     }]
+  function getAPICalls(req, res) {
+    var deferred = queue.defer();
+    APICall.find(deferred.makeNodeResolver());
+    deferred.promise.then(function returnResults(results) {
+      res.send(results);
     });
+    return deferred.promise;
+  }
 
-    var PAYLOAD = 'payload';
-    var FORM_DATA = 'formData';
+  // Receive specific REST call from the database by its ID
+  // Response is "Status: 200 OK" and a JSON object. Response example:
 
-    var APICall = mongoose.model('APICall', apiCallSchema);
+  //     {
+  //         "_id":"547874b2281a1fbc22e2284b",
+  //         "name":"sampleRestCall",
+  //         "url":"http://this.sample.call",
+  //         "method":"POST",
+  //         "type":"formData",
+  //         "data":"{\n\"sampleParam\":\"sampleValue\",\n\"testParam\":\"2\"\n}",
+  //         "headers":"{\n\"sampleAuthorization\":\"sampleValue\"\n}",
+  //         "__v":0
+  //     }
+  function getAPICallById(req, res) {
+    var deferred = queue.defer();
+    var id = mongoose.Types.ObjectId(req.params.id);
+    APICall.findById(id, deferred.makeNodeResolver());
+    deferred.promise.then(function returnCall(call) {
+      res.send(call);
+    });
+    return deferred.promise;
+  }
 
-    var Execution = mongoose.model('Execution');
+  // Delete specific REST call from database by its ID
+  // Response is "Status: 200 OK" and "deleted" in body
+  function deleteAPICall(req, res) {
+    var deferred = queue.defer();
+    var id = mongoose.Types.ObjectId(req.params.id);
+    APICall.findByIdAndRemove(id, deferred.makeNodeResolver());
+    deferred.promise.then(function returnDeleted() {
+      res.send('deleted');
+    });
+    return deferred.promise;
+  }
 
-    // Receive all stored REST calls from the database.
-    // Response is "Status: 200 OK" and an array of JSON objects. Response example:
+  // Receive all executions of a specific REST call by its ID
+  // Response is "Status: 200 OK" and an array of JSON objects. Sample response:
 
-    //     [{
-    //         "_id":"547874b2281a1fbc22e2284b",
-    //         "name":"sampleRestCall",
-    //         "url":"http://this.sample.call",
-    //         "method":"POST",
-    //         "type":"formData",
-    //         "data":"{\n\"sampleParam\":\"sampleValue\",\n\"testParam\":\"2\"\n}",
-    //         "headers":"{\n\"sampleAuthorization\":\"sampleValue\"\n}",
-    //         "__v":0
-    //     }]
-    function getAPICalls(req, res) {
-        var deferred = queue.defer();
-        APICall.find(deferred.makeNodeResolver());
-        deferred.promise.then(function returnResults(results) {
-            res.send(results);
-        });
-        return deferred.promise;
-    }
+  //     [{
+  //         "_id": "547d9969c48ab5b029856df6",
+  //         "workflow": null,
+  //         "apiCall": "547874b2281a1fbc22e2284b",
+  //         "statusCode":200,
+  //         "response": {
+  //             "sampleResponse": "sampleValue",
+  //             "sampleReference": "anotherValue"
+  //         },
+  //         "headers": {
+  //             "user-agent": "con-rest",
+  //             "sampleAuthorization": "sampleValue"
+  //         },
+  //         "executedAt": "2014-12-02T13:30:55.955Z",
+  //         "__v":0
+  //     }]
+  function getExecutionsByAPICallId(req, res) {
+    var deferred = queue.defer();
+    var id = mongoose.Types.ObjectId(req.params.id);
+    Execution.
+    find({
+      apiCall: id
+    }).
+    exec(deferred.makeNodeResolver());
 
-    // Receive specific REST call from the database by its ID
-    // Response is "Status: 200 OK" and a JSON object. Response example:
+    deferred.promise.then(function returnCall(call) {
+      res.send(call);
+    });
+    return deferred.promise;
+  }
 
-    //     {
-    //         "_id":"547874b2281a1fbc22e2284b",
-    //         "name":"sampleRestCall",
-    //         "url":"http://this.sample.call",
-    //         "method":"POST",
-    //         "type":"formData",
-    //         "data":"{\n\"sampleParam\":\"sampleValue\",\n\"testParam\":\"2\"\n}",
-    //         "headers":"{\n\"sampleAuthorization\":\"sampleValue\"\n}",
-    //         "__v":0
-    //     }
-    function getAPICallById(req, res) {
-        var deferred = queue.defer();
-        var id = mongoose.Types.ObjectId(req.params.id);
-        APICall.findById(id, deferred.makeNodeResolver());
-        deferred.promise.then(function returnCall(call) {
-            res.send(call);
-        });
-        return deferred.promise;
-    }
+  // Add new REST call to the database and receive its ID
+  // Response is "Status: 200 OK" and an ID in the body. Request example:
 
-    // Delete specific REST call from database by its ID
-    // Response is "Status: 200 OK" and "deleted" in body
-    function deleteAPICall(req, res) {
-        var deferred = queue.defer();
-        var id = mongoose.Types.ObjectId(req.params.id);
-        APICall.findByIdAndRemove(id, deferred.makeNodeResolver());
-        deferred.promise.then(function returnDeleted() {
-            res.send('deleted');
-        });
-        return deferred.promise;
-    }
+  //     {
+  //         "name": "newSampleRestCall",
+  //         "url": "http://new.sample.api/call",
+  //         "method": "POST",
+  //         "headers": {
+  //             "sampleAuthorization":"sampleValue" },
+  //         "type":"payload",
+  //         "data": {
+  //             "sampleParam":"sampleValue",
+  //             "testParam":2 }
+  //     }
+  function registerAPICall(req, res) {
+    var apiCall = new APICall(req.body);
+    var deferred = queue.defer();
+    apiCall.save(deferred.makeNodeResolver());
+    deferred.promise.then(function saveNewCall() {
+      res.send(apiCall.id);
+    });
+    return deferred.promise;
+  }
 
-    // Receive all executions of a specific REST call by its ID
-    // Response is "Status: 200 OK" and an array of JSON objects. Sample response:
+  function saveAPICall(req, res) {
+    var id = mongoose.Types.ObjectId(req.params.id);
+    var details = req.body;
+    var apiCall = null;
+    return queue().
+    then(function getExistingAPICall() {
+      var deferred = queue.defer();
+      APICall.findById(id, deferred.makeNodeResolver());
+      return deferred.promise;
+    }).
+    then(function modifyAPICall(retrievedAPICall) {
+      var deferred = queue.defer();
+      apiCall = retrievedAPICall;
+      apiCall.name = details.name;
+      apiCall.url = details.url;
+      apiCall.method = details.method;
+      apiCall.type = details.type;
+      apiCall.data = details.data;
+      apiCall.headers = details.headers;
+      apiCall.save(deferred.makeNodeResolver());
+      return deferred.promise;
+    }).
+    then(function returnTrue() {
+      var deferred = queue.defer();
+      deferred.resolve(apiCall);
+      res.send('ok');
+      return deferred.promise;
+    });
+  }
 
-    //     [{
-    //         "_id": "547d9969c48ab5b029856df6",
-    //         "workflow": null,
-    //         "apiCall": "547874b2281a1fbc22e2284b",
-    //         "statusCode":200,
-    //         "response": {
-    //             "sampleResponse": "sampleValue",
-    //             "sampleReference": "anotherValue"
-    //         },
-    //         "headers": {
-    //             "user-agent": "con-rest",
-    //             "sampleAuthorization": "sampleValue"
-    //         },
-    //         "executedAt": "2014-12-02T13:30:55.955Z",
-    //         "__v":0
-    //     }]
-    function getExecutionsByAPICallId(req, res) {
-        var deferred = queue.defer();
-        var id = mongoose.Types.ObjectId(req.params.id);
-        Execution.
-            find({
-                apiCall: id
-            }).
-            exec(deferred.makeNodeResolver());
+  // Execute a REST call from the database using its ID
+  // Response is "Status: 200 OK" and a JSON body. Response Example:
 
-        deferred.promise.then(function returnCall(call) {
-            res.send(call);
-        });
-        return deferred.promise;
-    }
+  //     {
+  //         "_id": "547d9969c48ab5b029856df6",
+  //         "statusCode": 200,
+  //         "apiCall": {
+  //             "_id":"547874b2281a1fbc22e2284b",
+  //             "name": "newSampleRestCall",
+  //             "url": "http://new.sample.api/call",
+  //             "method": "POST",
+  //             "headers": {
+  //                 "sampleAuthorization":"sampleValue"
+  //             }
+  //             "type":"payload",
+  //             "data": {
+  //                 "sampleParam":"sampleValue",
+  //                 "testParam":2
+  //             }
+  //         },
+  //         "response": {
+  //             "sampleResponse": "sampleValue",
+  //             "sampleReference": "anotherValue"
+  //         },
+  //         "headers": {
+  //             "user-agent": "con-rest",
+  //             "sampleAuthorization": "sampleValue"
+  //         },
+  //         "type": "payload",
+  //         "data": {
+  //             "sampleParam":"sampleValue",
+  //             "testParam":2
+  //         }
+  //     }
+  function executeAPICallById(req, res) {
+    var id = mongoose.Types.ObjectId(req.params.id);
+    return queue().
+    then(function() {
+      var deferred = queue.defer();
+      APICall.findById(id, deferred.makeNodeResolver());
+      return deferred.promise;
+    }).then(function returnCall(call) {
+      var deferred = queue.defer();
+      queue().
+      then(executeAPICall(call)).
+      then(saveExecution()).
+      then(function(data) {
+        res.send(data);
+        deferred.resolve(data);
+      }).
+      fail(function error(err) {
+        res.status(500).send(err);
+        deferred.reject(err);
+      }).
+      catch(function error(err) {
+        res.status(500).send(err);
+        deferred.reject(err);
+      });
 
-    // Add new REST call to the database and receive its ID
-    // Response is "Status: 200 OK" and an ID in the body. Request example:
+      return deferred.promise;
+    });
+  }
 
-    //     {
-    //         "name": "newSampleRestCall",
-    //         "url": "http://new.sample.api/call",
-    //         "method": "POST",
-    //         "headers": {
-    //             "sampleAuthorization":"sampleValue" },
-    //         "type":"payload",
-    //         "data": {
-    //             "sampleParam":"sampleValue",
-    //             "testParam":2 }
-    //     }
-    function registerAPICall(req, res) {
-        var apiCall = new APICall(req.body);
-        var deferred = queue.defer();
-        apiCall.save(deferred.makeNodeResolver());
-        deferred.promise.then(function saveNewCall() {
-            res.send(apiCall.id);
-        });
-        return deferred.promise;
-    }
-
-    function saveAPICall(req, res) {
-        var id = mongoose.Types.ObjectId(req.params.id);
-        var details = req.body;
-        var apiCall = null;
-        return queue().
-            then(function getExistingAPICall() {
-                var deferred = queue.defer();
-                APICall.findById(id, deferred.makeNodeResolver());
-                return deferred.promise;
-            }).
-            then(function modifyAPICall(retrievedAPICall) {
-                var deferred = queue.defer();
-                apiCall = retrievedAPICall;
-                apiCall.name = details.name;
-                apiCall.url = details.url;
-                apiCall.method = details.method;
-                apiCall.type = details.type;
-                apiCall.data = details.data;
-                apiCall.headers = details.headers;
-                apiCall.save(deferred.makeNodeResolver());
-                return deferred.promise;
-            }).
-            then(function returnTrue() {
-                var deferred = queue.defer();
-                deferred.resolve(apiCall);
-                res.send('ok');
-                return deferred.promise;
-            });
-    }
-
-    // Execute a REST call from the database using its ID
-    // Response is "Status: 200 OK" and a JSON body. Response Example:
-
-    //     {
-    //         "_id": "547d9969c48ab5b029856df6",
-    //         "statusCode": 200,
-    //         "apiCall": {
-    //             "_id":"547874b2281a1fbc22e2284b",
-    //             "name": "newSampleRestCall",
-    //             "url": "http://new.sample.api/call",
-    //             "method": "POST",
-    //             "headers": {
-    //                 "sampleAuthorization":"sampleValue"
-    //             }
-    //             "type":"payload",
-    //             "data": {
-    //                 "sampleParam":"sampleValue",
-    //                 "testParam":2
-    //             }
-    //         },
-    //         "response": {
-    //             "sampleResponse": "sampleValue",
-    //             "sampleReference": "anotherValue"
-    //         },
-    //         "headers": {
-    //             "user-agent": "con-rest",
-    //             "sampleAuthorization": "sampleValue"
-    //         },
-    //         "type": "payload",
-    //         "data": {
-    //             "sampleParam":"sampleValue",
-    //             "testParam":2
-    //         }
-    //     }
-    function executeAPICallById(req, res) {
-        var id = mongoose.Types.ObjectId(req.params.id);
-        return queue().
-            then(function () {
-                var deferred = queue.defer();
-                APICall.findById(id, deferred.makeNodeResolver());
-                return deferred.promise;
-            }).then(function returnCall(call) {
-                var deferred = queue.defer();
-                queue().
-                    then(executeAPICall(call)).
-                    then(saveExecution()).
-                    then(function (data) {
-                        res.send(data);
-                        deferred.resolve(data);
-                    }).
-                    fail(function error(err) {
-                        res.status(500).send(err);
-                        deferred.reject(err);
-                    }).
-                    catch(function error(err) {
-                        res.status(500).send(err);
-                        deferred.reject(err);
-                    });
-
-                return deferred.promise;
-            });
-    }
-
-    // generates the `header` object to be sent with every request.
-    // it will add the user specified headers to the default headers
-    function getHeaders(headers) {
-        var defaultHeaders = {
-            'user-agent': 'con-rest'
-        };
-
-        if (headers) {
-            defaultHeaders = _.extend(defaultHeaders, headers);
-        }
-
-        return defaultHeaders;
-    }
-
-    // generates the complete `options` object for the request
-    function getOptions(apiCall) {
-        var headers = getHeaders(apiCall.headers);
-
-        var options = {
-            method: apiCall.method,
-            url: apiCall.url,
-            headers: headers
-        };
-
-        var type = apiCall.type || null;
-        var data = apiCall.data || null;
-
-        // these two are for saving the execution to the database
-        options.type = type;
-        options.data = data;
-
-        if (data) {
-            if (type === PAYLOAD) {
-                // *PAYLOAD* will go into the `body` of the request
-                try {
-                    // when we are handling *PAYLOAD* data then we will try to stringify the data
-                    // e.g. converting the internal js object to an json string
-                    options.body = JSON.stringify(data);
-                    options.json = true;
-                } catch (e) {
-                    // if the stringify fails we are just taking the string provided from mongo
-                    options.body = data;
-                }
-            } else if (type === FORM_DATA) {
-                // *FORM_DATA* will go into the `formData` of the request
-                options.formData = data;
-            }
-        }
-
-        return options;
-    }
-
-    // Executes REST call from database
-    function executeAPICall(apiCall) {
-        return function () {
-            var deferred = queue.defer();
-
-            var options = getOptions(apiCall);
-
-            request(options, function (err, response, body) {
-                if (err) {
-                    deferred.reject(err);
-                    return;
-                }
-
-                var parsedBody = null;
-                try {
-                    // if the response body is json we try to parse it an put the object into the db
-                    parsedBody = JSON.parse(body);
-                } catch (e) {
-                    // otherwise a string of it will be saved
-                    parsedBody = body;
-                }
-
-                deferred.resolve({
-                    statusCode: response.statusCode,
-                    apiCall: apiCall,
-                    response: parsedBody,
-                    headers: options.headers,
-                    type: options.type,
-                    data: options.data
-                });
-            });
-
-            return deferred.promise;
-        };
-    }
-
-    // Saves result of REST call execution in database
-    function saveExecution() {
-        return function saveExecution(result) {
-            var deferred = queue.defer();
-
-            // this execution comes from direct execution of a request
-            // so workflow will be null
-            var execution = new Execution({
-                workflow: null,
-                apiCall: result.apiCall,
-                statusCode: result.statusCode,
-                response: result.response,
-                headers: result.headers,
-                type: result.type,
-                data: result.data,
-                executedAt: new Date()
-            });
-
-            execution.save(function resolveWithResult(err, data) {
-                var returnData = _.clone(data);
-                returnData.apiCall = result.apiCall;
-                deferred.resolve(returnData);
-            });
-            return deferred.promise;
-        };
-    }
-
-    module.exports = {
-        deleteAPICall: deleteAPICall,
-        saveAPICall: saveAPICall,
-        APICall: APICall,
-        getAPICalls: getAPICalls,
-        getAPICallById: getAPICallById,
-        registerAPICall: registerAPICall,
-        executeAPICall: executeAPICall,
-        executeAPICallById: executeAPICallById,
-        getExecutionsByAPICallId: getExecutionsByAPICallId
+  // generates the `header` object to be sent with every request.
+  // it will add the user specified headers to the default headers
+  function getHeaders(headers) {
+    var defaultHeaders = {
+      'user-agent': 'con-rest'
     };
+
+    if (headers) {
+      defaultHeaders = _.extend(defaultHeaders, headers);
+    }
+
+    return defaultHeaders;
+  }
+
+  // generates the complete `options` object for the request
+  function getOptions(apiCall) {
+    var headers = getHeaders(apiCall.headers);
+
+    var options = {
+      method: apiCall.method,
+      url: apiCall.url,
+      headers: headers
+    };
+
+    var type = apiCall.type || null;
+    var data = apiCall.data || null;
+
+    // these two are for saving the execution to the database
+    options.type = type;
+    options.data = data;
+
+    if (data) {
+      if (type === PAYLOAD) {
+        // *PAYLOAD* will go into the `body` of the request
+        try {
+          // when we are handling *PAYLOAD* data then we will try to stringify the data
+          // e.g. converting the internal js object to an json string
+          options.body = JSON.stringify(data);
+          options.json = true;
+        } catch (e) {
+          // if the stringify fails we are just taking the string provided from mongo
+          options.body = data;
+        }
+      } else if (type === FORM_DATA) {
+        // *FORM_DATA* will go into the `formData` of the request
+        options.formData = data;
+      }
+    }
+
+    return options;
+  }
+
+  // Executes REST call from database
+  function executeAPICall(apiCall) {
+    return function() {
+      var deferred = queue.defer();
+
+      var options = getOptions(apiCall);
+
+      request(options, function(err, response, body) {
+        if (err) {
+          deferred.reject(err);
+          return;
+        }
+
+        var parsedBody = null;
+        try {
+          // if the response body is json we try to parse it an put the object into the db
+          parsedBody = JSON.parse(body);
+        } catch (e) {
+          // otherwise a string of it will be saved
+          parsedBody = body;
+        }
+
+        deferred.resolve({
+          statusCode: response.statusCode,
+          apiCall: apiCall,
+          response: parsedBody,
+          headers: options.headers,
+          type: options.type,
+          data: options.data
+        });
+      });
+
+      return deferred.promise;
+    };
+  }
+
+  // Saves result of REST call execution in database
+  function saveExecution() {
+    return function saveExecution(result) {
+      var deferred = queue.defer();
+
+      // this execution comes from direct execution of a request
+      // so workflow will be null
+      var execution = new Execution({
+        workflow: null,
+        apiCall: result.apiCall,
+        statusCode: result.statusCode,
+        response: result.response,
+        headers: result.headers,
+        type: result.type,
+        data: result.data,
+        executedAt: new Date()
+      });
+
+      execution.save(function resolveWithResult(err, data) {
+        var returnData = _.clone(data);
+        returnData.apiCall = result.apiCall;
+        deferred.resolve(returnData);
+      });
+      return deferred.promise;
+    };
+  }
+
+  module.exports = {
+    deleteAPICall: deleteAPICall,
+    saveAPICall: saveAPICall,
+    APICall: APICall,
+    getAPICalls: getAPICalls,
+    getAPICallById: getAPICallById,
+    registerAPICall: registerAPICall,
+    executeAPICall: executeAPICall,
+    executeAPICallById: executeAPICallById,
+    getExecutionsByAPICallId: getExecutionsByAPICallId
+  };
 }(require('mongoose'), require('q'), require('request'), require('underscore'), require('./execution')));

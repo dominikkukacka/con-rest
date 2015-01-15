@@ -5,71 +5,71 @@
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
 <md-card class="call-registrator md-whiteframe-z1"
          flex layout="column">
-    <md-toolbar>
-        <h3 class="md-toolbar-tools"
-            ng-if="!request._id">Add API Call</h3>
+  <md-toolbar>
+    <h3 class="md-toolbar-tools"
+        ng-if="!request._id">Add API Call</h3>
 
-        <h3 class="md-toolbar-tools"
-            ng-if="request._id">Edit API Call</h3>
-    </md-toolbar>
-    <form role="form" layout-padding>
-        <md-text-float label="API Call name"
-                       ng-model="request.name"></md-text-float>
+    <h3 class="md-toolbar-tools"
+        ng-if="request._id">Edit API Call</h3>
+  </md-toolbar>
+  <form role="form" layout-padding>
+    <md-text-float label="API Call name"
+                   ng-model="request.name"></md-text-float>
 
-        <div class="row" layout="row">
-            <div layout="column">
-                <md-text-float label="method"
-                               ng-model="request.method"
-                               data-ng-click="toggleMethodsDropdown()"></md-text-float>
-                <md-list ng-show="openMethods">
-                    <md-item ng-repeat="method in availableMethods"
-                             data-ng-click="selectMethod(method)">
-                        <p>{{ method }}</p>
-                        <md-divider ng-if="!$last"></md-divider>
-                    </md-item>
-                </md-list>
-            </div>
+    <div class="row" layout="row">
+      <div layout="column">
+        <md-text-float label="method"
+                       ng-model="request.method"
+                       data-ng-click="toggleMethodsDropdown()"></md-text-float>
+        <md-list ng-show="openMethods">
+            <md-item ng-repeat="method in availableMethods"
+                     data-ng-click="selectMethod(method)">
+                <p>{{ method }}</p>
+                <md-divider ng-if="!$last"></md-divider>
+            </md-item>
+        </md-list>
+      </div>
 
-            <md-text-float class="long"
-                           label="url"
-                           type="url"
-                           ng-model="request.url"></md-text-float>
-        </div>
+      <md-text-float class="long"
+                     label="url"
+                     type="url"
+                     ng-model="request.url"></md-text-float>
+    </div>
 
-        <md-text-float label="headers"
-                       ng-model="request.headers"
-                       rows="2"
-                       cols="60"
-                       type="textarea"></md-text-float>
+    <md-text-float label="headers"
+                   ng-model="request.headers"
+                   rows="2"
+                   cols="60"
+                   type="textarea"></md-text-float>
 
-        <div layout="column">
-            <md-text-float label="type"
-                           ng-model="request.type"
-                           data-ng-click="toggleTypesDropdown()"></md-text-float>
-            <md-list ng-show="openTypes">
-                <md-item ng-repeat="type in availableTypes"
-                         data-ng-click="selectType(type)">
-                    <p>{{ type }}</p>
-                    <md-divider ng-if="!$last"></md-divider>
-                </md-item>
-            </md-list>
-        </div>
+    <div layout="column">
+      <md-text-float label="type"
+                     ng-model="request.type"
+                     data-ng-click="toggleTypesDropdown()"></md-text-float>
+      <md-list ng-show="openTypes">
+          <md-item ng-repeat="type in availableTypes"
+                   data-ng-click="selectType(type)">
+              <p>{{ type }}</p>
+              <md-divider ng-if="!$last"></md-divider>
+          </md-item>
+      </md-list>
+    </div>
 
-        <md-text-float label="parameters"
-                       ng-model="request.data"
-                       rows="4"
-                       cols="60"
-                       type="textarea"></md-text-float>
+    <md-text-float label="parameters"
+                   ng-model="request.data"
+                   rows="4"
+                   cols="60"
+                   type="textarea"></md-text-float>
 
-        <div layout="row">
-            <md-button class="md-primary md-raised"
-                       ng-click="save()">Submit
-            </md-button>
-            <md-button ng-if="request._id"
-                       class="md-raised"
-                       ng-click="requestCancelEditing()">Cancel
-            </md-button>
-        </div>
+    <div layout="row">
+      <md-button class="md-primary md-raised"
+                 ng-click="save()">Submit
+      </md-button>
+      <md-button ng-if="request._id"
+                 class="md-raised"
+                 ng-click="requestCancelEditing()">Cancel
+      </md-button>
+    </div>
 
-    </form>
+  </form>
 </md-card>

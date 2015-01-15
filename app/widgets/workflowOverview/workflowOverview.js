@@ -4,21 +4,21 @@
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
 (function workflowOverview(angular) {
-    'use strict';
+  'use strict';
 
-    var app = angular.module('con-rest');
+  var app = angular.module('con-rest');
 
-    app.directive('workflowOverview', function workflowOverviewDirective(events) {
-        return {
-            controller: 'workflowOverviewVM',
-            restrict: 'E',
-            scope: {},
-            templateUrl: 'workflowOverview',
-            link: function workflowOverviewConstructor(scope) {
-                scope.getWorkflows();
+  app.directive('workflowOverview', function workflowOverviewDirective(events) {
+    return {
+      controller: 'workflowOverviewVM',
+      restrict: 'E',
+      scope: {},
+      templateUrl: 'workflowOverview',
+      link: function workflowOverviewConstructor(scope) {
+        scope.getWorkflows();
 
-                scope.$on(events.WORKFLOW_DELETED, scope.removedWorkflow);
-            }
-        };
-    });
+        scope.$on(events.WORKFLOW_DELETED, scope.removedWorkflow);
+      }
+    };
+  });
 }(window.angular));
