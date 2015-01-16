@@ -7,7 +7,7 @@
     return {
       restrict: 'E',
       scope: {
-        workflowId: '=workflowId'
+        connector: '=connector'
       },
       controller: 'connectorC',
       templateUrl: 'connectorRegistrator',

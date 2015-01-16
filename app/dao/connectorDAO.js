@@ -8,10 +8,10 @@
       this.extend = 'DAO';
 
       this.public = {
-        create: function create(workflowId, map) {
+        create: function create(connector) {
           return this.private.request('POST',
-            '/api/workflows/' + workflowId + '/connectors/', {
-              map: map.getId()
+            '/api/workflows/' + connector.getWorkflowId() + '/connectors/', {
+              mapper: connector.getMapper().getId()
             });
         }
       }

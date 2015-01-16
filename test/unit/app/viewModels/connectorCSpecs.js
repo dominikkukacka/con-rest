@@ -2,15 +2,16 @@
   'use strict';
 
   describe('connectorC specs', function connectorCSpecs() {
-    var $scope, $httpBackend, events, testGlobals, defaultMap, Mapper;
+    var $scope, $httpBackend, events, testGlobals, defaultMap, Mapper, Connector;
     beforeEach(module('con-rest-test'));
 
-    beforeEach(inject(function(testSetup, _Mapper_) {
+    beforeEach(inject(function(testSetup, _Mapper_, _Connector_) {
       testGlobals = testSetup.setupControllerTest('connectorC');
       $scope = testGlobals.scope;
       $httpBackend = testGlobals.$httpBackend;
       events = testGlobals.events;
       Mapper = _Mapper_;
+      Connector = _Connector_;
       defaultMap = new Mapper({
         _id: 'mapid1',
         maps: [{
@@ -22,13 +23,15 @@
 
     it('should create a new connector', function createNewConnector() {
       // given
-      $scope.workflowId = 'workflow1';
-      $scope.map = defaultMap;
+      $scope.connector = new Connector({
+        workflow: 'workflow1',
+        mapper: defaultMap
+      });
       spyOn($scope, '$emit');
 
       // predict
-      $httpBackend.expect('POST', '/api/workflows/' + $scope.workflowId + '/connectors/', {
-          map: $scope.map.getId()
+      $httpBackend.expect('POST', '/api/workflows/' + $scope.connector.getWorkflowId() + '/connectors/', {
+          mapper: defaultMap.getId()
         })
         .respond(200, 'connectorId');
 

@@ -2,23 +2,26 @@
   'use strict';
 
   describe('<connector-registrator> specs', function connectorWidgetRegistratorSpecs() {
-    var testGlobals, parentScope, $httpBackend, Mapper;
+    var testGlobals, parentScope, $httpBackend, Mapper, Connector;
 
     beforeEach(module('con-rest-test'));
 
-    beforeEach(inject(function setupTest(testSetup, _Mapper_) {
+    beforeEach(inject(function setupTest(testSetup, _Mapper_, _Connector_) {
       testGlobals = testSetup.setupDirectiveTest();
       parentScope = testGlobals.parentScope;
       $httpBackend = testGlobals.$httpBackend;
       Mapper = _Mapper_;
+      Connector = _Connector_;
     }));
 
     it('should use the provided workflow id', providedWorkflowId);
 
     function providedWorkflowId() {
       // given
-      parentScope.id = '123abc';
-      var directive = angular.element('<connector-registrator workflow-id="id"></connector-registrator>');
+      parentScope.connector = new Connector({
+        workflow: '123abc'
+      });
+      var directive = angular.element('<connector-registrator connector="connector"></connector-registrator>');
 
       // predict
       $httpBackend.expect('GET', '/api/mappers/')
@@ -29,7 +32,7 @@
       $httpBackend.flush();
 
       // then
-      expect($scope.workflowId).toEqual('123abc');
+      expect($scope.connector.getWorkflowId()).toEqual('123abc');
       return $scope;
     }
 
