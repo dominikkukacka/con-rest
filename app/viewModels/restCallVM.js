@@ -8,7 +8,7 @@
 
   var app = angular.module('con-rest');
 
-  app.controller('restCallVM', function restCallVMScope($scope, events, $timeout, requestDAO) {
+  app.controller('restCallVM', function restCallVMScope($scope, $mdDialog, events, $timeout, requestDAO) {
     // The id can be provided by the parent.
 
     // Request can be passed a long or it could be empty.
@@ -83,6 +83,63 @@
       $scope.request.headers = request.headers;
       // emit the model.
       $scope.$emit(events.REQUEST_RETRIEVED, $scope.request);
+    };
+
+    $scope.confirmRestCallDeletion = function confirmRestCallDeletion(event, request) {
+      // The dialog is an modal window.
+      var confirm = $mdDialog.confirm()
+        .title('Are you sure you want to remove this API call [' + request.name + ']?')
+        .content('The API call will be deleted permanently!')
+        .ok('REMOVE API CALL')
+        .cancel('KEEP API CALL')
+        .targetEvent(event);
+
+      // Showing the dialog will return a promise, based on what the user choose.
+      $mdDialog.show(confirm).then($scope.removeRestCallOnConfirm(request));
+    };
+
+    $scope.removeRestCallOnConfirm = function removeRestCallOnConfirm(request) {
+      // We should move the remove functionality to the restCallVM #51.
+      return function removeRestCallWrapper() {
+        if (request._id) {
+          $scope.removeRestCall(request);
+        } else {
+          $scope.removeRestCallFromModel(request)();
+        }
+      };
+    };
+
+    $scope.removeRestCall = function removeRestCall(request) {
+      // Remove the rest call from the server, before removing from the view.
+      requestDAO.remove(request._id)
+        .then($scope.removeRestCallFromModel(request));
+    };
+
+    $scope.removeRestCallFromModel = function removeRestCallFromModel(request) {
+      // Remove the restcall now that the server has removed it too.
+      return function removeWrapper() {
+        var index = $scope.restCalls.indexOf(request);
+        $scope.restCalls.splice(index, 1);
+      };
+    };
+
+    $scope.executeRestCall = function executeRestCall(request) {
+      requestDAO.executeCall(request._id)
+        .then($scope.restCallExecuted(request),
+        $scope.restCallExecutionFailed(request));
+    };
+
+    $scope.restCallExecuted = function restCallExecuted(request) {
+      // Should be moved to the restCallVM #51
+      return function wrapperRestCallExecuted() {
+        request.success = true;
+      };
+    };
+
+    $scope.restCallExecutionFailed = function restCallExecutionFailed(request) {
+      return function wrapperRestCallFailed() {
+        request.success = false;
+      };
     };
 
     // Execute the registered call.
