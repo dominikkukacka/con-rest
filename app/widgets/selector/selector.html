@@ -1,0 +1,16 @@
+<!-- con-rest -->
+<!-- Version: 0.0.1 -->
+<!-- -->
+<!-- Author: Andy Tang -->
+<!-- Fork me on Github: https://github.com/EnoF/con-rest -->
+<md-text-float label="{{ label }}"
+               ng-model="request.name"
+               ng-click="openAvailableOptions()"></md-text-float>
+<md-whiteframe class="md-whiteframe-z5">
+  <md-list ng-show="showOptions">
+    <md-item flex ng-repeat="option in options"
+      ng-click="selectCall(option)">
+      <ng-transclude></ng-transclude>
+    </md-item>
+  </md-list>
+</md-whiteframe>
