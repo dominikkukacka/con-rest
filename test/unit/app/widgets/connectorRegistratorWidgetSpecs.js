@@ -13,11 +13,14 @@
 
     it('should use the provided workflow id', function providedWorkflowId() {
       // given
+      parentScope.id = '123abc';
+      var directive = angular.element('<connector-registrator workflow-id="id"></connector-registrator>');
 
       // when
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
 
       // then
-
+      expect($scope.workflowId).toEqual('123abc');
     });
   });
 }(window.angular));
