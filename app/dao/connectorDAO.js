@@ -11,7 +11,9 @@
         create: function create(connector) {
           return this.private.request('POST',
             '/api/workflows/' + connector.getWorkflowId() + '/connectors/', {
-              mapper: connector.getMapper().getId()
+              mapper: connector.getMapper().getId(),
+              source: connector.getSource(),
+              destination: connector.getDestination()
             });
         }
       }

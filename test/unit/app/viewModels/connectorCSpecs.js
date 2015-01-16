@@ -25,13 +25,17 @@
       // given
       $scope.connector = new Connector({
         workflow: 'workflow1',
-        mapper: defaultMap
+        mapper: defaultMap,
+        source: 'restcall1',
+        destination: 'restcall2'
       });
       spyOn($scope, '$emit');
 
       // predict
       $httpBackend.expect('POST', '/api/workflows/' + $scope.connector.getWorkflowId() + '/connectors/', {
-          mapper: defaultMap.getId()
+          mapper: $scope.connector.getMapper().getId(),
+          source: $scope.connector.getSource(),
+          destination: $scope.connector.getDestination()
         })
         .respond(200, 'connectorId');
 
