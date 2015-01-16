@@ -14,11 +14,24 @@
 
     it('should open options', function openOptions() {
       // given
+      $scope.isOpen = false;
 
       // when
+      $scope.openOptions();
 
       // then
+      expect($scope.isOpen).toEqual(true);
+    });
 
+    it('should select a value', function selectValue() {
+      // given
+      $scope.value = null;
+
+      // when
+      $scope.select(1);
+
+      // then
+      expect($scope.value).toEqual(1);
     });
   })
 }());

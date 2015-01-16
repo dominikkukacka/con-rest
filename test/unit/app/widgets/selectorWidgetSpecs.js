@@ -18,15 +18,15 @@
       // given
       parentScope.options = [1, 2, 3];
       parentScope.value = 1;
-      var directive = angular.element('<selector value="value" options="options"></selector>');
+      var directive = angular.element('<selector label="bananas" value="value" options="options"></selector>');
 
       // when
       var $scope = testGlobals.initializeDirective(parentScope, directive);
 
       // then
+      expect($scope.label).toEqual('bananas');
       expect($scope.value).toEqual(1);
       expect($scope.options).toEqual([1, 2, 3]);
-      return $scope;
     }
 
     it('should close the list when the input element is blurred', function closeOnBlur() {
