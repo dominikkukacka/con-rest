@@ -9,6 +9,7 @@
       scope: {
         label: '@label',
         value: '=value',
+        displayValue: '=?displayValue',
         options: '=options'
       },
       controller: 'selectorVM',
