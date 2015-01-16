@@ -6,12 +6,12 @@
   app.controller('connectorC', function connectorC($scope, mapperDAO, connectorDAO, events) {
     $scope.workflowId = $scope.workflowId || null;
     $scope.map = null;
-    $scope.availableMaps = null;
+    $scope.availableMappers = null;
 
     $scope.getMappers = function getMappers() {
       mapperDAO.getAll()
         .then(function setMappers(maps) {
-          $scope.availableMaps = maps;
+          $scope.availableMappers = maps;
         });
     };
 

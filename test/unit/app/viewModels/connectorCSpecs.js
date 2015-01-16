@@ -42,26 +42,20 @@
 
     it('should retrieve available mappers', function retrieveMappers() {
       // given
-      expect($scope.availableMaps).toEqual(null);
+      expect($scope.availableMappers).toEqual(null);
 
       // predict
       $httpBackend.expect('GET', '/api/mappers/')
-        .respond(200, [{
-          _id: 'map1',
-          maps: []
-        }, {
-          _id: 'map2',
-          maps: []
-        }]);
+        .respond(200, testGlobals.createDefaultMappersResponse());
 
       // when
       $scope.getMappers();
       $httpBackend.flush();
 
       // then
-      expect($scope.availableMaps instanceof Array).toEqual(true);
-      expect($scope.availableMaps.length).toEqual(2);
-      expect($scope.availableMaps[0] instanceof Mapper).toEqual(true);
+      expect($scope.availableMappers instanceof Array).toEqual(true);
+      expect($scope.availableMappers.length).toEqual(2);
+      expect($scope.availableMappers[0] instanceof Mapper).toEqual(true);
     });
   })
 }());

@@ -10,7 +10,10 @@
         workflowId: '=workflowId'
       },
       controller: 'connectorC',
-      templateUrl: 'connectorRegistrator'
+      templateUrl: 'connectorRegistrator',
+      link: function connectorRegistratorConstructor(scope) {
+        scope.getMappers();
+      }
     };
   });
 }(window.angular));

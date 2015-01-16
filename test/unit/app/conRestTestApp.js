@@ -64,6 +64,16 @@
       };
     }
 
+    function createDefaultMappersResponse() {
+      return [{
+        _id: 'map1',
+        maps: []
+      }, {
+        _id: 'map2',
+        maps: []
+      }];
+    }
+
     function createDefaultRequestWorkflow() {
       var workflow = createDefaultWorkflow();
       var calls = [];
@@ -179,6 +189,7 @@
 
     function createDefaultTestGlobals() {
       return {
+        createDefaultMappersResponse: createDefaultMappersResponse,
         createDefaultRequest: createDefaultRequest,
         createDefaultRequests: createDefaultRequests,
         createDefaultWorkflow: createDefaultWorkflow,
