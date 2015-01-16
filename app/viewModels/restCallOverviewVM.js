@@ -9,18 +9,6 @@
   app.controller('restCallOverviewVM', function restCallOverviewVM($scope, $mdDialog, events, requestDAO) {
     $scope.restCalls = [];
 
-    $scope.addRestCall = function addRestCall() {
-      // This call seems deprecated, we should double check this.
-      // Created issue #50.
-      $scope.restCalls.push({
-        name: 'New API call',
-        url: '',
-        method: '',
-        data: {},
-        headers: {}
-      });
-    };
-
     $scope.confirmRestCallDeletion = function confirmRestCallDeletion(event, restCall) {
       // The dialog is an modal window.
       var confirm = $mdDialog.confirm()
@@ -31,7 +19,7 @@
         .targetEvent(event);
 
       // Showing the dialog will return a promise, based on what the user choose.
-      $mdDialog.show(confirm).then($scope.removeRestCallOnConfirm(restCall));
+      $mdDialog.show(confirm).then($scope.removeRestCallOnCongit firm(restCall));
     };
 
     $scope.removeRestCallOnConfirm = function removeRestCallOnConfirm(restCall) {
