@@ -12,6 +12,11 @@
       $httpBackend = testGlobals.$httpBackend;
       Mapper = _Mapper_;
       Connector = _Connector_;
+
+      // we don't really care about this request in this use widget.
+      // the functionality is handled by the child widget.
+      $httpBackend.when('GET', '/api/requests/')
+        .respond(200, []);
     }));
 
     it('should use the provided workflow id', providedWorkflowId);

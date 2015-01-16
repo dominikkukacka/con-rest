@@ -33,6 +33,17 @@
             </md-button>
         </section>
       </div>
+      <div layout="column" ng-if="!!workflow._id">
+        <h4 aria-label="add call"
+            ng-click="addConnector()">
+          <span>Connectors</span>
+          <md-icon icon="/icons/ic_add_24px.svg"></md-icon>
+        </h4>
+        <section layout="row"
+                 ng-repeat="connector in workflow.connectors">
+            <connector-registrator connector="connector"></connector-registrator>
+        </section>
+      </div>
       <md-button class="md-primary md-raised"
                  data-ng-click="save()">save
       </md-button>

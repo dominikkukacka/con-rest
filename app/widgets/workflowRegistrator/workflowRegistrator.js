@@ -15,7 +15,10 @@
       scope: {
         originalWorkflow: '=workflow'
       },
-      templateUrl: 'workflowRegistrator'
+      templateUrl: 'workflowRegistrator',
+      link: function workflowRegistratorConstructor(scope) {
+        scope.workflow.connectors = scope.workflow.connectors || [];
+      }
     };
   });
 }(window.angular));

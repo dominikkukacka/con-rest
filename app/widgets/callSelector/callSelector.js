@@ -13,12 +13,14 @@
       controller: 'restCallVM',
       restrict: 'E',
       scope: {
+        label: '@label',
         request: '=request'
       },
       templateUrl: 'callSelector',
       link: function constructor(scope, element) {
         // Retrieve the available requests.
         scope.getAvailableRequests();
+        scope.label = scope.label || 'api call';
 
         element.find('input').on('blur', scope.closeAvailableRequests);
       }
