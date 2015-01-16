@@ -3,9 +3,17 @@
 
   var app = angular.module('con-rest');
 
-  app.controller('connectorC', function connectorC($scope, connectorDAO, events) {
+  app.controller('connectorC', function connectorC($scope, mapperDAO, connectorDAO, events) {
     $scope.workflowId = $scope.workflowId || null;
     $scope.map = null;
+    $scope.availableMaps = null;
+
+    $scope.getMappers = function getMappers() {
+      mapperDAO.getAll()
+        .then(function setMappers(maps) {
+          $scope.availableMaps = maps;
+        });
+    };
 
     $scope.save = function save() {
       connectorDAO.create($scope.workflowId, $scope.map)

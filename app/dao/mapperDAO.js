@@ -3,7 +3,7 @@
 
   var app = angular.module('con-rest');
 
-  app.factory('mapperDAO', function mapperDAOScope(DAO) {
+  app.factory('mapperDAO', function mapperDAOScope($q, DAO, Mapper) {
     function mapperDAO() {
       this.extend = 'DAO';
 
@@ -13,6 +13,18 @@
             name: name,
             maps: maps
           });
+        },
+        getAll: function getAll() {
+          var deferred = $q.defer();
+          this.private.request('GET', '/api/mappers/')
+            .then(function convert(maps) {
+              var modeled = [];
+              maps.forEach(function createInstance(map) {
+                this.push(new Mapper(map));
+              }, modeled);
+              deferred.resolve(modeled);
+            }, deferred.reject);
+          return deferred.promise;
         }
       };
     }
