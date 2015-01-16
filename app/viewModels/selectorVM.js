@@ -6,7 +6,7 @@
   app.controller('selectorVM', function selectorVM($scope, $timeout) {
     $scope.label = $scope.label || 'select';
     $scope.value = $scope.value || null;
-    $scope.displayValue = $scope.displayValue || $scope.value;
+    $scope.displayValue = $scope.displayValue;
     $scope.options = $scope.options || [];
     $scope.isOpen = false;
 

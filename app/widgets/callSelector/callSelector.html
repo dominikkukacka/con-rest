@@ -3,6 +3,16 @@
 <!-- -->
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
-<selector label="{{ label }}"
-          options="availableCalls"
-          value="request"></selector>
+<!-- make sure only to display the widget when options > 0 -->
+<section>
+  <selector label="api call"
+            ng-if="availableCalls.length > 0"
+            options="availableCalls"
+            display-value="request.name"
+            value="request">
+    <md-item-content>
+      <div flex>{{$parent.option.method}}</div>
+      <div flex class="md-tile-content"><p>{{$parent.option.name}}</p></div>
+    </md-item-content>
+  </selector>
+</section>
