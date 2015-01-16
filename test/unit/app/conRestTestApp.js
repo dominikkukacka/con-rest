@@ -14,7 +14,9 @@
       $compile(directive)(scope);
       $rootScope.$digest();
       // Expose the scope to run tests on
-      return directive.children().scope();
+      this.directive = directive;
+      this.$scope = directive.children().scope();
+      return this.$scope;
     }
 
     function createDefaultRequest() {
@@ -167,6 +169,14 @@
       };
     }
 
+    function getDirective() {
+      return this.directive;
+    }
+
+    function getScope() {
+      return this.$scope;
+    }
+
     function createDefaultTestGlobals() {
       return {
         createDefaultRequest: createDefaultRequest,
@@ -191,6 +201,8 @@
 
       testGlobals.parentScope = $rootScope.$new();
       testGlobals.initializeDirective = initializeDirective;
+      testGlobals.getScope = getScope;
+      testGlobals.getDirective = getDirective;
 
       return testGlobals;
     }

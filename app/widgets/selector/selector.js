@@ -11,7 +11,11 @@
         options: '=options'
       },
       controller: 'selectorVM',
-      templateUrl: 'selector'
+      templateUrl: 'selector',
+      transclude: true,
+      link: function selectorConstructor(scope, element) {
+        element.find('input').on('blur', scope.closeOptions);
+      }
     };
   });
 }(window.angular));

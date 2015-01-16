@@ -4,12 +4,12 @@
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
 <md-text-float label="{{ label }}"
-               ng-model="request.name"
-               ng-click="openAvailableOptions()"></md-text-float>
+               ng-model="value"
+               ng-click="openOptions()"></md-text-float>
 <md-whiteframe class="md-whiteframe-z5">
-  <md-list ng-show="showOptions">
+  <md-list ng-show="isOpen">
     <md-item flex ng-repeat="option in options"
-      ng-click="selectCall(option)">
+             ng-click="select(option)">
       <ng-transclude></ng-transclude>
     </md-item>
   </md-list>
