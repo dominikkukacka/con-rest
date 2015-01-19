@@ -3,19 +3,16 @@
 <!-- -->
 <!-- Author: Andy Tang -->
 <!-- Fork me on Github: https://github.com/EnoF/con-rest -->
-<div class="call-selector">
-  <md-text-float label="api call"
-                 ng-model="request.name"
-                 ng-click="openAvailableRequests()"></md-text-float>
-  <md-whiteframe class="md-whiteframe-z5">
-    <md-list ng-show="showCalls">
-      <md-item flex ng-repeat="call in availableCalls"
-               ng-click="selectCall(call)">
-        <md-item-content>
-            <div flex>{{call.method}}</div>
-            <div flex class="md-tile-content"><p>{{call.name}}</p></div>
-        </md-item-content>
-      </md-item>
-    </md-list>
-  </md-whiteframe>
-</div>
+<!-- make sure only to display the widget when options > 0 -->
+<section>
+  <selector label="api call"
+            ng-if="availableCalls.length > 0"
+            options="availableCalls"
+            display-value="request.name"
+            value="request">
+    <md-item-content>
+      <div flex>{{$parent.option.method}}</div>
+      <div flex class="md-tile-content"><p>{{$parent.option.name}}</p></div>
+    </md-item-content>
+  </selector>
+</section>

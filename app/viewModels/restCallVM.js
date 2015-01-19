@@ -121,6 +121,9 @@
         }
       }
       $scope.$emit(events.REQUESTS_RETRIEVED, availableCalls);
+      if (!$scope.$root.$$phase) {
+        $scope.$evalAsync();
+      }
     };
   });
 }(window.angular));
