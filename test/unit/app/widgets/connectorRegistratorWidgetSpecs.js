@@ -48,7 +48,45 @@
       // then
       expect($scope.availableMappers instanceof Array).toEqual(true);
       expect($scope.availableMappers.length).toEqual(2);
-      expect($scope.availableMappers[0] instanceof Mapper).toEqual(true);
-    })
+    });
+
+    it('should set the source on the model', function sourceOnModel() {
+      // given
+      var $scope = providedWorkflowId();
+      expect($scope.connector.getSource()).toEqual(undefined);
+
+      // when
+      $scope.source._id = 'someid';
+      $scope.$apply();
+
+      // then
+      expect($scope.connector.getSource()).toEqual('someid');
+    });
+
+    it('should set the destination on the model', function destinationOnModel() {
+      // given
+      var $scope = providedWorkflowId();
+      expect($scope.connector.getDestination()).toEqual(undefined);
+
+      // when
+      $scope.destination._id = 'someid';
+      $scope.$apply();
+
+      // then
+      expect($scope.connector.getDestination()).toEqual('someid');
+    });
+
+    it('should set the mapper on the model', function mapperOnModel() {
+      // given
+      var $scope = providedWorkflowId();
+      expect($scope.connector.getMapper().getId()).toEqual(undefined);
+
+      // when
+      $scope.mapper._id = 'someid';
+      $scope.$apply();
+
+      // then
+      expect($scope.connector.getMapper().getId()).toEqual('someid');
+    });
   });
 }(window.angular));

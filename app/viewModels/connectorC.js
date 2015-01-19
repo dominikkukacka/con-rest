@@ -6,6 +6,9 @@
   app.controller('connectorC', function connectorC($scope, mapperDAO, connectorDAO, events) {
     $scope.connector = $scope.connector || null;
     $scope.availableMappers = null;
+    $scope.source = {};
+    $scope.destination = {};
+    $scope.mapper = {};
 
     $scope.getMappers = function getMappers() {
       mapperDAO.getAll()

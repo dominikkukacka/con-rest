@@ -9,6 +9,9 @@
         id: {
           get: null
         },
+        name: {
+          getSet: null
+        },
         maps: {
           getSet: null
         }
@@ -17,6 +20,7 @@
       this.constructor = function constructor(mapper) {
         this.private.id = mapper._id;
         this.private.maps = mapper.maps;
+        this.private.name = mapper.name;
       };
     }
 

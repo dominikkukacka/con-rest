@@ -62,7 +62,6 @@
       // then
       expect($scope.availableMappers instanceof Array).toEqual(true);
       expect($scope.availableMappers.length).toEqual(2);
-      expect($scope.availableMappers[0] instanceof Mapper).toEqual(true);
     });
   })
 }());

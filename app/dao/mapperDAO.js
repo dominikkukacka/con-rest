@@ -15,16 +15,7 @@
           });
         },
         getAll: function getAll() {
-          var deferred = $q.defer();
-          this.private.request('GET', '/api/mappers/')
-            .then(function convert(maps) {
-              var modeled = [];
-              maps.forEach(function createInstance(map) {
-                this.push(new Mapper(map));
-              }, modeled);
-              deferred.resolve(modeled);
-            }, deferred.reject);
-          return deferred.promise;
+          return this.private.request('GET', '/api/mappers/');
         }
       };
     }
