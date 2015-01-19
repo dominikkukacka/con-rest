@@ -26,7 +26,8 @@
 
     // Select call, this is not the requst.
     $scope.select = function select(selectedValue) {
-      $scope.value = selectedValue;
+      // Make sure to keep the memory pointer the same.
+      angular.extend($scope.value, selectedValue);
       $scope.isOpen = false;
     };
   });

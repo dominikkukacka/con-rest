@@ -25,13 +25,15 @@
 
     it('should select a value', function selectValue() {
       // given
-      $scope.value = null;
+      $scope.value = {};
 
       // when
-      $scope.select(1);
+      $scope.select({
+        value: 1
+      });
 
       // then
-      expect($scope.value).toEqual(1);
+      expect($scope.value.value).toEqual(1);
     });
   })
 }());
