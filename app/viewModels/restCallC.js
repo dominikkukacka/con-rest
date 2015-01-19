@@ -4,7 +4,38 @@
   var app = angular.module('con-rest');
 
   app.controller('restCallC', function restCallC($scope, requestDAO, events) {
+    //Helper functions
+    function extractJSONObject(data) {
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        return data;
+      }
+    }
+
+    function stringifyJSONObject(data) {
+      if (data instanceof Object) {
+        return JSON.stringify(data, null, '\t');
+      } else {
+        return data;
+      }
+    }
+
     // Request can be passed a long or it could be empty.
+    if ($scope.request) {
+      $scope.request.headers = stringifyJSONObject($scope.request.headers);
+      $scope.request.data = stringifyJSONObject($scope.request.data);
+    } else {
+      $scope.request = {
+        _id: $scope.id || null,
+        name: null,
+        url: null,
+        method: null,
+        data: null,
+        headers: null
+      };
+    }
+/*
     $scope.request = $scope.request || {
       _id: $scope.id || null,
       name: null,
@@ -12,7 +43,7 @@
       method: null,
       data: null,
       headers: null
-    };
+    };*/
 
     // UI related settings.
     $scope.openMethods = false;
@@ -33,8 +64,8 @@
         url: $scope.request.url,
         method: $scope.request.method,
         type: $scope.request.type,
-        data: $scope.request.data,
-        headers: $scope.request.headers
+        data: extractJSONObject($scope.request.data),
+        headers: extractJSONObject($scope.request.headers)
       }).then($scope.emitRegistrationSuccessfull, $scope.emitRegistrationFailed);
     };
 
@@ -44,6 +75,8 @@
     };
 
     $scope.requestCancelEditing = function requestCancelEditing() {
+      $scope.request.headers = extractJSONObject($scope.request.headers);
+      $scope.request.data = extractJSONObject($scope.request.data);
       $scope.$emit(events.CANCEL_EDITING);
     };
 
@@ -79,6 +112,8 @@
     };
 
     $scope.updateRestCall = function updateRestCall() {
+      $scope.request.headers = extractJSONObject($scope.request.headers);
+      $scope.request.data = extractJSONObject($scope.request.data);
       requestDAO.updateRestCall($scope.request)
         .then($scope.restCallUpdated);
     };
