@@ -2,7 +2,8 @@
                flex layout-padding layout="column">
   <div flex layout="row" layout-phone="column" layout-wrap>
     <section ng-repeat="restCall in restCalls" layout="row">
-      <rest-call rest-call="restCall"></rest-call>
+      <rest-call rest-call="restCall"
+                 is-executable="true"></rest-call>
     </section>
   </div>
 </md-whiteframe>

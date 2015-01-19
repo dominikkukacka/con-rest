@@ -14,7 +14,8 @@
       restrict: 'E',
       scope: {
         id: '@id',
-        request: '=?restCall'
+        request: '=?restCall',
+        isExecutable: '@?'
       },
       templateUrl: 'restCall',
       link: function restCallConstructor(scope) {

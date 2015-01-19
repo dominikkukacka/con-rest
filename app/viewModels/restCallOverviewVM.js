@@ -9,6 +9,12 @@
   app.controller('restCallOverviewVM', function restCallOverviewVM($scope, $mdDialog, events, requestDAO) {
     $scope.restCalls = [];
 
+    $scope.removedRestCall = function removedRestCall(event, restCall) {
+      event.stopPropagation();
+      var index = $scope.restCalls.indexOf(restCall);
+      $scope.restCalls.splice(index, 1);
+    };
+
     $scope.getRestCalls = function getRestCalls() {
       requestDAO.getAll()
         .then($scope.restCallsRetrieved);

@@ -6,7 +6,7 @@
 
   var app = angular.module('con-rest');
 
-  app.directive('restCallOverview', function restCallOverviewDirective() {
+  app.directive('restCallOverview', function restCallOverviewDirective(events) {
     return {
       controller: 'restCallOverviewVM',
       restrict: 'E',
@@ -14,6 +14,8 @@
       templateUrl: 'restCallOverview',
       link: function restCallOverviewConstructor(scope) {
         scope.getRestCalls();
+
+        scope.$on(events.REQUEST_DELETED, scope.removedRestCall);
       }
     };
   });
