@@ -2,21 +2,8 @@
                flex layout-padding layout="column">
   <div flex layout="row" layout-phone="column" layout-wrap>
     <section ng-repeat="restCall in restCalls" layout="row">
-      <rest-call rest-call="restCall"></rest-call>
-      <section layout="column">
-        <md-button class="md-fab"
-                   ng-click="executeRestCall(restCall)"
-                   aria-label="execute workflow">
-          <md-icon icon="/icons/ic_arrow_forward_24px.svg"></md-icon>
-        </md-button>
-        <md-button class="md-fab"
-                   ng-click="confirmRestCallDeletion($event, restCall)"
-                   aria-label="delete rest call">
-          <md-icon icon="/icons/ic_delete_24px.svg"></md-icon>
-        </md-button>
-        <md-icon icon="/icons/ic_done_24px.svg" ng-if="restCall.success === true"></md-icon>
-        <md-icon icon="/icons/ic_error_24px.svg" ng-if="restCall.success === false"></md-icon>
-      </section>
+      <rest-call rest-call="restCall"
+                 is-executable="true"></rest-call>
     </section>
   </div>
 </md-whiteframe>

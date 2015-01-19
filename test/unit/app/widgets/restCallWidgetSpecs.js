@@ -10,10 +10,12 @@
     var $httpBackend;
     var parentScope;
     var testGlobals;
+    var $mdDialog;
 
     beforeEach(module('con-rest-test'));
 
-    beforeEach(inject(function setupTests(testSetup) {
+    beforeEach(inject(function setupTests(_$mdDialog_, testSetup) {
+      $mdDialog = _$mdDialog_;
       testGlobals = testSetup.setupDirectiveTest();
       parentScope = testGlobals.parentScope;
       $httpBackend = testGlobals.$httpBackend;
@@ -58,6 +60,22 @@
 
       // then
       testGlobals.expectRequest(scope.request).toEqual(parentScope.restCall);
+    });
+
+    it('should open confirm dialog to delete a rest call', function requestRestCallDeletion() {
+      // given
+      parentScope.restCall = testGlobals.createDefaultRequest();
+      var directive = angular.element('<rest-call rest-call="restCall"></rest-call>');
+      var scope = testGlobals.initializeDirective(parentScope, directive);
+      var expectedEvent = {};
+
+      spyOn($mdDialog, 'show').andCallThrough();
+
+      // when
+      scope.confirmRestCallDeletion(expectedEvent);
+
+      // then
+      expect($mdDialog.show).toHaveBeenCalled();
     });
   });
 }());

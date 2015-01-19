@@ -114,5 +114,37 @@
       expect(scope.request.name).toEqual(response[0].name);
       expect(scope.availableCalls).toEqual(response);
     });
+
+    it('should remove a rest call', function removeRestCall() {
+      // given
+      scope.request = testGlobals.createDefaultRequest();
+
+      $httpBackend.expect('DELETE', '/api/requests/' + scope.request._id)
+        .respond(200, 'ok');
+
+      // when
+      scope.removeRestCallOnConfirm();
+      $httpBackend.flush();
+
+      // then
+      expect(scope.request).toEqual(null);
+    });
+
+    it('should execute a rest call', function executeRestCall() {
+      // given
+      scope.restCalls = [{
+        _id: 'executeCall'
+      }];
+
+      $httpBackend.expect('POST', '/api/requests/executeCall/executions').
+        respond(200, 'ok');
+
+      // when
+      scope.executeRestCall(scope.restCalls[0]);
+      $httpBackend.flush();
+
+      // then
+      expect(scope.restCalls[0].success).toEqual(true);
+    });
   });
 }());

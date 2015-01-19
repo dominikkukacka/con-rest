@@ -24,15 +24,16 @@
     it('should load the call selector and the name should be set accordingly', function loadcallSelector() {
       // given
       testGlobals.parentScope.request = {
-        _id: 'someid'
+        _id: 'someid',
+        name: 'fakeCall'
       };
       var directive = angular.element('<call-selector request="request"></call-selector>');
       var availableRequests = [
         testGlobals.createDefaultRequest()
       ];
 
-      $httpBackend.expect('GET', '/api/requests/').
-      respond(200, availableRequests);
+      $httpBackend.expect('GET', '/api/requests/')
+        .respond(200, availableRequests);
 
       // when
       var scope = testGlobals.initializeDirective(testGlobals.parentScope, directive);

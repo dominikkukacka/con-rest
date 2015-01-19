@@ -17,6 +17,7 @@
       REQUEST_FAILED: 'requestFailed',
       REQUEST_RETRIEVED: 'requestRetrieved',
       REQUEST_UPDATED: 'requestUpdated',
+      REQUEST_DELETED: 'requestDeleted',
       REQUESTS_RETRIEVED: 'requestRetrieved',
       RESPONSE_RECEIVED: 'responseReceived',
       RETRIEVAL_FAILED: 'retrievalFailed',

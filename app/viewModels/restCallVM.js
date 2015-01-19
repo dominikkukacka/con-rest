@@ -8,11 +8,11 @@
 
   var app = angular.module('con-rest');
 
-  app.controller('restCallVM', function restCallVMScope($scope, events, $timeout, requestDAO) {
+  app.controller('restCallVM', function restCallVMScope($scope, $mdDialog, events, $timeout, requestDAO) {
     // The id can be provided by the parent.
 
     // Request can be passed a long or it could be empty.
-    $scope.request = $scope.request || {
+    $scope.originalRestCall = $scope.request || {
       _id: $scope.id || null,
       name: null,
       url: null,
@@ -20,6 +20,7 @@
       data: null,
       headers: null
     };
+    $scope.request = angular.copy($scope.originalRestCall, {});
     $scope.response = null;
 
     // A list of all available calls.
@@ -83,6 +84,59 @@
       $scope.request.headers = request.headers;
       // emit the model.
       $scope.$emit(events.REQUEST_RETRIEVED, $scope.request);
+    };
+
+    $scope.confirmRestCallDeletion = function confirmRestCallDeletion(event) {
+      // The dialog is an modal window.
+      var confirm = $mdDialog.confirm()
+        .title('Are you sure you want to remove this API call [' + $scope.request.name + ']?')
+        .content('The API call will be deleted permanently!')
+        .ok('REMOVE API CALL')
+        .cancel('KEEP API CALL')
+        .targetEvent(event);
+
+      // Showing the dialog will return a promise, based on what the user choose.
+      $mdDialog.show(confirm).then($scope.removeRestCallOnConfirm);
+    };
+
+    $scope.removeRestCallOnConfirm = function removeRestCallOnConfirm() {
+      // We should move the remove functionality to the restCallVM #51.
+      if ($scope.request._id) {
+        $scope.removeRestCall();
+      } else {
+        $scope.removeRestCallFromModel();
+      }
+    };
+
+    $scope.removeRestCall = function removeRestCall() {
+      // Remove the rest call from the server, before removing from the view.
+      requestDAO.remove($scope.request._id)
+        .then($scope.removeRestCallFromModel);
+    };
+
+    $scope.removeRestCallFromModel = function removeRestCallFromModel() {
+      // Remove the restcall now that the server has removed it too.
+      $scope.$emit(events.REQUEST_DELETED, $scope.originalRestCall);
+      $scope.request = null;
+    };
+
+    $scope.executeRestCall = function executeRestCall(request) {
+      requestDAO.executeCall(request._id)
+        .then($scope.restCallExecuted(request),
+        $scope.restCallExecutionFailed(request));
+    };
+
+    $scope.restCallExecuted = function restCallExecuted(request) {
+      // Should be moved to the restCallVM #51
+      return function wrapperRestCallExecuted() {
+        request.success = true;
+      };
+    };
+
+    $scope.restCallExecutionFailed = function restCallExecutionFailed(request) {
+      return function wrapperRestCallFailed() {
+        request.success = false;
+      };
     };
 
     // Execute the registered call.

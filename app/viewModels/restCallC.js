@@ -35,15 +35,6 @@
         headers: null
       };
     }
-/*
-    $scope.request = $scope.request || {
-      _id: $scope.id || null,
-      name: null,
-      url: null,
-      method: null,
-      data: null,
-      headers: null
-    };*/
 
     // UI related settings.
     $scope.openMethods = false;

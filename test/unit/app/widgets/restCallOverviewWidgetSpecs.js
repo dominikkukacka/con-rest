@@ -6,36 +6,18 @@
 
   describe('rest call overview widget specs', function restCallOverviewWidgetSpecs() {
     var $httpBackend;
-    var $mdDialog;
     var parentScope;
     var testGlobals;
 
     beforeEach(module('con-rest-test'));
 
-    beforeEach(inject(function setupTests(_$mdDialog_, testSetup) {
-      $mdDialog = _$mdDialog_;
+    beforeEach(inject(function setupTests(testSetup) {
       testGlobals = testSetup.setupDirectiveTest();
       $httpBackend = testGlobals.$httpBackend;
       parentScope = testGlobals.parentScope;
     }));
 
     it('should load an overview of all registered rest calls', loadRestCallOverview);
-    it('should delete a rest call', function requestRestCallDeletion() {
-      // given
-      var scope = loadRestCallOverview();
-      var expectedEvent = {};
-      var expectedRequest = testGlobals.createDefaultRequest();
-
-      spyOn($mdDialog, 'show').andCallThrough();
-      spyOn(scope, 'removeRestCallOnConfirm');
-
-      // when
-      scope.confirmRestCallDeletion(expectedEvent, expectedRequest);
-
-      // then
-      expect($mdDialog.show).toHaveBeenCalled();
-      expect(scope.removeRestCallOnConfirm).toHaveBeenCalledWith(expectedRequest);
-    });
 
     function loadRestCallOverview() {
       // given
