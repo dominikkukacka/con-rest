@@ -15,10 +15,7 @@
   }
 
   function getMapperById(req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    return Mapper.findById(id)
-      .exec()
-      .then(helper.sendAndResolve(res));
+    return helper.getById(Mapper, req, res);
   }
 
   function saveMapper(req, res) {

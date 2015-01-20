@@ -44,10 +44,7 @@
   //         "__v":0
   //     }
   function getAPICallById(req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    return APICall.findById(id)
-      .exec()
-      .then(helper.sendAndResolve(res));
+    return helper.getById(APICall, req, res);
   }
 
   // Delete specific REST call from database by its ID
