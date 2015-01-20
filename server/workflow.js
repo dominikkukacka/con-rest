@@ -130,7 +130,7 @@
         var call = retrievedCalls[i];
 
         apiCallQueue = apiCallQueue.
-        then(api.executeAPICall(call)).
+        then(executeApiCallWith(call)).
         then(registerAPICallExecution(queue, callIndex, callResults));
       }
 
@@ -161,6 +161,12 @@
     catch(function error(err) {
       res.status(500).send(err.toString());
     });
+  }
+
+  function executeApiCallWith(call) {
+    return function wrapper() {
+      return api.executeAPICall(call);
+    };
   }
 
   function saveExecutions(workflow, callResults, results) {
