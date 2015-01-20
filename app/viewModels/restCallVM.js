@@ -12,7 +12,7 @@
     // The id can be provided by the parent.
 
     // Request can be passed a long or it could be empty.
-    $scope.originalRestCall = $scope.request || {
+    $scope.request = $scope.request || {
       _id: $scope.id || null,
       name: null,
       url: null,
@@ -20,7 +20,7 @@
       data: null,
       headers: null
     };
-    $scope.request = angular.copy($scope.originalRestCall, {});
+    $scope.originalRequest = angular.copy($scope.request);
     $scope.response = null;
 
     // A list of all available calls.
@@ -116,14 +116,14 @@
 
     $scope.removeRestCallFromModel = function removeRestCallFromModel() {
       // Remove the restcall now that the server has removed it too.
-      $scope.$emit(events.REQUEST_DELETED, $scope.originalRestCall);
+      $scope.$emit(events.REQUEST_DELETED, $scope.originalRequest);
       $scope.request = null;
     };
 
     $scope.executeRestCall = function executeRestCall(request) {
       requestDAO.executeCall(request._id)
         .then($scope.restCallExecuted(request),
-        $scope.restCallExecutionFailed(request));
+          $scope.restCallExecutionFailed(request));
     };
 
     $scope.restCallExecuted = function restCallExecuted(request) {
