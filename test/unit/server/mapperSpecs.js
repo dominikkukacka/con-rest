@@ -16,8 +16,6 @@
   var path = require('path');
   var mapper = require('../../../server/mapper');
 
-  var Mapper = mongoose.model('Mapper');
-
 
   describe('con-rest mapper', function conRestServerScope() {
 
@@ -263,4 +261,9 @@
     });
 
   });
-}(require('sinon'), require('nock'), require('underscore'), require('chai').expect));
+}(
+  require('sinon'),
+  require('nock'),
+  require('underscore'),
+  require('chai').expect
+));

@@ -3,27 +3,8 @@
 //
 // Author: Dominik Kukacka
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function connectorScope(mongoose, queue, Workflow) {
+(function connectorScope(mongoose, queue, Workflow, Connector) {
   'use strict';
-
-  var Schema = mongoose.Schema;
-
-  var connectorSchema = new Schema({
-    source: {
-      type: Schema.Types.ObjectId,
-      ref: 'APICall'
-    },
-    destination: {
-      type: Schema.Types.ObjectId,
-      ref: 'APICall'
-    },
-    mapper: {
-      type: Schema.Types.ObjectId,
-      ref: 'Mapper'
-    }
-  });
-
-  var Connector = mongoose.model('Connector', connectorSchema);
 
   function addConnectorToWorkflow(req, res) {
     var deferred = queue.defer();
@@ -59,42 +40,27 @@
   }
 
   function saveConnector(req, res) {
-    var deferred = queue.defer();
     var workflowId = mongoose.Types.ObjectId(req.params.workflowId);
     var connectorId = mongoose.Types.ObjectId(req.params.connectorId);
     var details = req.body;
 
-    queue().
-    then(function() {
-      var deferred = queue.defer();
-      Workflow.findById(workflowId, deferred.makeNodeResolver());
-      return deferred.promise;
-    }).
-    then(function(workflow) {
-      var deferred = queue.defer();
-
-      // TODO: check if the .id(ObjectId) function will be better for this
-      // idn't work when i checked, prob. Mockgoose does not support it
-      for (var i = 0; i < workflow.connectors.length; i++) {
-        var connector = workflow.connectors[i];
-        if (connector._id.toString() === connectorId.toString()) {
-          break;
-        }
+    return Workflow.findOneAndUpdate({
+      _id: workflowId,
+      'connectors._id': connectorId
+    }, {
+      '$set': {
+        'connectors.$.source': details.source,
+        'connectors.$.destination': details.destination,
+        'connectors.$.mapper': details.mapper
       }
-      workflow.connectors[i] = details;
-      workflow.save(deferred.makeNodeResolver());
-
-      return deferred.promise;
-    }).
-    then(function(workflow) {
-      res.send(workflow);
-      deferred.resolve(workflow);
-    }).
-    catch(function error(err) {
-      res.status(500).send(err.toString());
+    }).exec()
+    .then(function(data) {
+      res.send(data);
+      return data;
+    }, function(error){
+      res.status(500).send(error.toString());
+      throw error;
     });
-
-    return deferred.promise;
   }
 
   function getConnectorById(req, res) {
@@ -105,13 +71,12 @@
     queue().
     then(function() {
       var deferred = queue.defer();
-
       Workflow.find({
         _id: workflowId
       }, {
         connectors: {
           $elemMatch: {
-            _id: connectorId.toString()
+            _id: connectorId
           }
         }
       }, deferred.makeNodeResolver());
@@ -186,11 +151,15 @@
   }
 
   module.exports = {
-    Connector: Connector,
     getConnectorById: getConnectorById,
     getConnectorsByWorkflowId: getConnectorsByWorkflowId,
     addConnectorToWorkflow: addConnectorToWorkflow,
     saveConnector: saveConnector,
     deleteConnector: deleteConnector
   };
-}(require('mongoose'), require('q'), require('./workflow').Workflow));
+}(
+  require('mongoose'),
+  require('q'),
+  require('./resources/Workflow'),
+  require('./resources/Connector')
+));

@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(sinon, nock) {
+(function serverScope(sinon, nock, Execution) {
   'use strict';
 
   var mockgoose = require('mockgoose');
@@ -15,10 +15,6 @@
   var queue = require('q');
   var path = require('path');
   var workflow = require('../../../server/workflow');
-
-  var Execution = mongoose.model('Execution');
-  var WorkflowExecution = mongoose.model('WorkflowExecution');
-
 
   describe('con-rest server', function conRestServerScope() {
 
@@ -227,4 +223,8 @@
     });
   });
 
-}(require('sinon'), require('nock')));
+}(
+  require('sinon'),
+  require('nock'),
+  require('../../../server/resources/Execution')
+));

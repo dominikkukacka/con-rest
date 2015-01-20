@@ -3,24 +3,8 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function apiScope(mongoose, queue, api, Connector, WorkflowExecution) {
+(function workflowScope(mongoose, queue, api, Workflow, Connector, WorkflowExecution, Execution, APICall) {
   'use strict';
-
-  var Schema = mongoose.Schema;
-
-  var workflowSchema = new Schema({
-    name: String,
-    calls: [{
-      type: Schema.Types.ObjectId,
-      ref: 'APICall'
-    }],
-    connectors: [Connector]
-  });
-
-  var Workflow = mongoose.model('Workflow', workflowSchema);
-
-  var APICall = mongoose.model('APICall');
-  var Execution = mongoose.model('Execution');
 
   function getWorkflows(req, res) {
     var deferred = queue.defer();
@@ -260,7 +244,6 @@
   }
 
   module.exports = {
-    Workflow: Workflow,
     deleteWorkflow: deleteWorkflow,
     getWorkflows: getWorkflows,
     getWorkflowById: getWorkflowById,
@@ -268,4 +251,13 @@
     saveWorkflow: saveWorkflow,
     executeWorkflowById: executeWorkflowById
   };
-}(require('mongoose'), require('q'), require('./api.js'), require('./connector').Connector, require('./workflowExecution').WorkflowExecution));
+}(
+  require('mongoose'),
+  require('q'),
+  require('./api.js'),
+  require('./resources/Workflow'),
+  require('./resources/Connector'),
+  require('./resources/WorkflowExecution'),
+  require('./resources/Execution'),
+  require('./resources/APICall')
+));

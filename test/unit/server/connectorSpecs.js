@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(sinon, nock, _, expect, undefined) {
+(function connectorScope(sinon, nock, _, expect, Connector, Workflow, Mapper) {
   'use strict';
 
   var mockgoose = require('mockgoose');
@@ -14,10 +14,7 @@
 
   var queue = require('q');
   var path = require('path');
-  var mapper = require('../../../server/mapper');
   var connector = require('../../../server/connector');
-
-  var Connector = connector.Connector;
 
 
   describe('con-rest connector', function conRestServerScope() {
@@ -47,13 +44,10 @@
         }).
         then(function then() {
           var call = res.send.args[0][0];
-          expect(call._id).to.equal('545726928469e940235d0001');
+          expect(call._id.toString()).to.equal('545726928469e940235d0001');
           expect(call.source).to.exist;
-          expect(call.source).to.be.a('string');
           expect(call.destination).to.exist;
-          expect(call.destination).to.be.a('string');
           expect(call.mapper).to.exist;
-          expect(call.mapper).to.be.a('string');
         }).
         then(done).
         catch(done);
@@ -151,9 +145,9 @@
         then(function given() {
           req = {
             body: {
-              source: 'overwrittenSource',
-              destination: 'overwrittenDestination',
-              mapper: 'overwrittenMapper'
+              source: '545726928469e940235ce900',
+              destination: '545726928469e940235ce900',
+              mapper: '5464b1e2f8243a3c321a0002'
             },
             params: {
               workflowId: '545726928469e940235ce700',
@@ -166,17 +160,19 @@
         then(function when() {
           return connector.saveConnector(req, res);
         }).
-        then(function then() {
+        then(function then(data) {
+          // console.log(data);
           res.send.calledOnce.should.be.true;
         }).
         then(function when() {
           return connector.getConnectorById(req);
         }).
         then(function then(connector) {
-          var data = res.send.args[0][0][0];
+          var data = res.send.args[0][0];
           expect(data.connectors).to.have.length(3);
-          expect(data.connectors[2].source).to.equal('overwrittenSource');
-          expect(data.connectors[2].destination).to.equal('overwrittenDestination');
+          expect(data.connectors[2].source.toString()).to.equal(req.body.source);
+          expect(data.connectors[2].destination.toString()).to.equal(req.body.destination);
+          expect(data.connectors[2].mapper.toString()).to.equal(req.body.mapper);
         }).
         then(done).
         catch(done);
@@ -219,4 +215,12 @@
     });
 
   });
-}(require('sinon'), require('nock'), require('underscore'), require('chai').expect));
+}(
+  require('sinon'),
+  require('nock'),
+  require('underscore'),
+  require('chai').expect,
+  require('../../../server/resources/Connector'),
+  require('../../../server/resources/Workflow'),
+  require('../../../server/resources/Mapper')
+));
