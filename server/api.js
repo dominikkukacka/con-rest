@@ -9,13 +9,7 @@
   var PAYLOAD = 'payload';
   var FORM_DATA = 'formData';
 
-  // Helper function to send and resolve
-  function sendAndResolve(res) {
-    return function resultFound(result) {
-      res.send(result);
-      return result;
-    };
-  }
+  var helper = require('./serverHelper');
 
   // Receive all stored REST calls from the database.
   // Response is "Status: 200 OK" and an array of JSON objects. Response example:
@@ -33,7 +27,7 @@
   function getAPICalls(req, res) {
     return APICall.find()
       .exec()
-      .then(sendAndResolve(res));
+      .then(helper.sendAndResolve(res));
   }
 
   // Receive specific REST call from the database by its ID
@@ -53,7 +47,7 @@
     var id = mongoose.Types.ObjectId(req.params.id);
     return APICall.findById(id)
       .exec()
-      .then(sendAndResolve(res));
+      .then(helper.sendAndResolve(res));
   }
 
   // Delete specific REST call from database by its ID
@@ -92,7 +86,7 @@
         apiCall: id
       })
       .exec()
-      .then(sendAndResolve(res));
+      .then(helper.sendAndResolve(res));
   }
 
   // Add new REST call to the database and receive its ID

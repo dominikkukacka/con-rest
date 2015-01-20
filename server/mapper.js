@@ -6,62 +6,50 @@
 (function mapperScope(mongoose, queue, Mapper) {
   'use strict';
 
+  var helper = require('./serverHelper');
+
   function getMappers(req, res) {
-    var deferred = queue.defer();
-    Mapper.find(deferred.makeNodeResolver());
-    deferred.promise.then(function returnResults(results) {
-      res.send(results);
-    });
-    return deferred.promise;
+    return Mapper.find()
+      .exec()
+      .then(helper.sendAndResolve(res));
   }
 
   function getMapperById(req, res) {
-    var deferred = queue.defer();
     var id = mongoose.Types.ObjectId(req.params.id);
-    Mapper.findById(id, deferred.makeNodeResolver());
-    deferred.promise.then(function returnCall(call) {
-      res.send(call);
-    });
-    return deferred.promise;
+    return Mapper.findById(id)
+      .exec()
+      .then(helper.sendAndResolve(res));
   }
 
   function saveMapper(req, res) {
     var id = mongoose.Types.ObjectId(req.params.id);
     var details = req.body;
 
-    return queue().
-    then(function() {
-      var deferred = queue.defer();
-      Mapper.findByIdAndUpdate(id, {
+    return Mapper.findByIdAndUpdate(id, {
         $set: details
-      }, deferred.makeNodeResolver());
-    }).
-    then(function(mapper) {
-      var deferred = queue.defer();
-      deferred.resolve(mapper);
-      res.send('ok');
-      return deferred.promise;
-    });
+      })
+      .exec()
+      .then(function(mapper) {
+        res.send('ok');
+        return mapper;
+      });
   }
 
   function createMapper(req, res) {
-    var mapper = new Mapper(req.body);
-    var deferred = queue.defer();
-    mapper.save(deferred.makeNodeResolver());
-    deferred.promise.then(function saveNewCall() {
-      res.send(mapper.id);
-    });
-    return deferred.promise;
+    return Mapper.create(req.body)
+      .then(function saveNewCall(mapper) {
+        res.send(mapper._id.toString());
+        return mapper._id;
+      });
   }
 
   function deleteMapper(req, res) {
-    var deferred = queue.defer();
     var id = mongoose.Types.ObjectId(req.params.id);
-    Mapper.findByIdAndRemove(id, deferred.makeNodeResolver());
-    deferred.promise.then(function returnDeleted() {
-      res.send('deleted');
-    });
-    return deferred.promise;
+    return Mapper.findByIdAndRemove(id)
+      .exec()
+      .then(function returnDeleted() {
+        res.send('deleted');
+      });
   }
 
 
@@ -72,7 +60,6 @@
   //   * 'foo[0].bar' - goes into array `foo` index 0 and gets the object `bar`
   //   * 'foo[0][1][0].baz' - you can also go into nested arrays
   function singleMap(obj, map) {
-
     map = map.replace(/\]/g, '').replace(/\[/g, '.');
 
     var parts = map.split('.');
@@ -83,7 +70,6 @@
     }
 
     return currentPointer;
-
   }
 
   function map(obj, maps) {
@@ -96,7 +82,6 @@
     }
 
     return mappedValues;
-
   }
 
   module.exports = {
@@ -107,8 +92,7 @@
     deleteMapper: deleteMapper,
     map: map
   };
-}(
-  require('mongoose'),
+}(require('mongoose'),
   require('q'),
   require('./resources/Mapper')
 ));
