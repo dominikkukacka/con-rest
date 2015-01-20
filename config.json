@@ -23,5 +23,9 @@
       "user": "myUserName",
       "pass": "myPassword"
     }
-  }
+  },
+  "certificates": [
+    "certificates/test0x.pem",
+    "/var/lib/puppet/ssl/certs/ca.pem"
+  ]
 }

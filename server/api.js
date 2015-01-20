@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function apiScope(mongoose, queue, request, _, Execution, APICall) {
+(function apiScope(mongoose, queue, request, _, Execution, APICall, execution, config) {
   'use strict';
 
   var PAYLOAD = 'payload';
@@ -238,7 +238,10 @@
     var options = {
       method: apiCall.method,
       url: apiCall.url,
-      headers: headers
+      headers: headers,
+      agentOptions: {
+        ca: config.getCertificates()
+      }
     };
 
     var type = apiCall.type || null;
@@ -348,5 +351,7 @@
   require('request'),
   require('underscore'),
   require('./resources/Execution'),
-  require('./resources/APICall')
+  require('./resources/APICall'),
+  require('./execution'),
+  require('./getConfig.js')
 ));

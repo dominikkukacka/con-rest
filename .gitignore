@@ -175,3 +175,5 @@ coverageMidway
 .coverage
 .tox
 test-results.xml
+
+certificates/**/*
