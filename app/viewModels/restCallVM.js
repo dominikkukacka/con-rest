@@ -16,6 +16,7 @@
       _id: $scope.id || null,
       name: null,
       url: null,
+      type: null,
       method: null,
       data: null,
       headers: null
@@ -79,6 +80,7 @@
       $scope.request._id = request._id;
       $scope.request.name = request.name;
       $scope.request.url = request.url;
+      $scope.request.type = request.type;
       $scope.request.method = request.method;
       $scope.request.data = request.data;
       $scope.request.headers = request.headers;
