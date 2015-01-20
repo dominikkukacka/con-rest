@@ -11,7 +11,12 @@
 
     $scope.removedRestCall = function removedRestCall(event, restCall) {
       event.stopPropagation();
-      var index = $scope.restCalls.indexOf(restCall);
+      var index;
+      $scope.restCalls.forEach(function findCall(call, iterator) {
+        if (call._id === restCall._id) {
+          index = iterator;
+        }
+      });
       $scope.restCalls.splice(index, 1);
     };
 
