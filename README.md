@@ -1,7 +1,7 @@
 #conREST#
 conREST is an application to configure and chain multiple REST calls.
 
-[![Build Status](https://travis-ci.org/EnoF/con-rest.svg?branch=travis)](https://travis-ci.org/EnoF/con-rest)
+[![Build Status](https://travis-ci.org/Jumio/con-rest.svg?branch=travis)](https://travis-ci.org/EnoF/con-rest)
 
 ##Introduction##
 While testing our `REST services` we noticed that our `REST services test tool` are focusing on single calls.
