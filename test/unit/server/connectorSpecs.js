@@ -165,7 +165,9 @@
           res.send.calledOnce.should.be.true;
         }).
         then(function when() {
-          return connector.getConnectorById(req);
+          return connector.getConnectorById(req, {
+            send: sinon.stub()
+          });
         }).
         then(function then(connector) {
           var data = res.send.args[0][0];
@@ -204,7 +206,9 @@
           expect(data).to.equal('deleted');
         }).
         then(function when() {
-          return connector.getConnectorsByWorkflowId(req);
+          return connector.getConnectorsByWorkflowId(req, {
+            send: sinon.stub()
+          });
         }).
         then(function then(workflow) {
           expect(workflow).to.have.length(2);

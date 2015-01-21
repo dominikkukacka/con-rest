@@ -15,6 +15,10 @@
               source: connector.getSource(),
               destination: connector.getDestination()
             });
+        },
+        get: function get(id, workflowId) {
+          return this.private.request('GET',
+            '/api/workflows/' + workflowId + '/connectors/' + id);
         }
       }
     }

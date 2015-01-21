@@ -14,8 +14,6 @@
     queue().
     then(function() {
       var deferred = queue.defer();
-
-
       var connector = new Connector(details);
 
       Workflow.findOneAndUpdate({
@@ -45,33 +43,28 @@
     var details = req.body;
 
     return Workflow.findOneAndUpdate({
-      _id: workflowId,
-      'connectors._id': connectorId
-    }, {
-      '$set': {
-        'connectors.$.source': details.source,
-        'connectors.$.destination': details.destination,
-        'connectors.$.mapper': details.mapper
-      }
-    }).exec()
-    .then(function(data) {
-      res.send(data);
-      return data;
-    }, function(error){
-      res.status(500).send(error.toString());
-      throw error;
-    });
+        _id: workflowId,
+        'connectors._id': connectorId
+      }, {
+        '$set': {
+          'connectors.$.source': details.source,
+          'connectors.$.destination': details.destination,
+          'connectors.$.mapper': details.mapper
+        }
+      }).exec()
+      .then(function(data) {
+        res.send(data);
+        return data;
+      }, function(error) {
+        res.status(500).send(error.toString());
+        throw error;
+      });
   }
 
   function getConnectorById(req, res) {
-    var mainDeferred = queue.defer();
     var workflowId = mongoose.Types.ObjectId(req.params.workflowId);
     var connectorId = mongoose.Types.ObjectId(req.params.connectorId);
-
-    queue().
-    then(function() {
-      var deferred = queue.defer();
-      Workflow.find({
+    return Workflow.findOne({
         _id: workflowId
       }, {
         connectors: {
@@ -79,20 +72,18 @@
             _id: connectorId
           }
         }
-      }, deferred.makeNodeResolver());
-
-      return deferred.promise;
-    }).
-    then(function(connectors) {
-      var connector = connectors[0].connectors[0];
-      mainDeferred.resolve(connector);
-      res.send(connector);
-    }).
-    catch(function error(err) {
-      res.status(500).send(err.toString());
-    });
-
-    return mainDeferred.promise;
+      })
+      .populate('connectors.source')
+      .populate('connectors.destination')
+      .populate('connectors.mapper')
+      .exec()
+      .then(function extractConnector(workflow) {
+        var connector = workflow.connectors[0];
+        res.send(connector);
+        return connector;
+      }, function error(err) {
+        res.status(500).send(err.toString());
+      });
   }
 
   function getConnectorsByWorkflowId(req, res) {
