@@ -3,26 +3,11 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function apiScope(mongoose, queue, request, _) {
+(function apiScope(mongoose, queue, request, _, Execution, APICall) {
   'use strict';
-
-  var Schema = mongoose.Schema;
-
-  var apiCallSchema = new Schema({
-    name: String,
-    url: String,
-    method: String,
-    type: String,
-    data: Schema.Types.Mixed,
-    headers: Schema.Types.Mixed
-  });
 
   var PAYLOAD = 'payload';
   var FORM_DATA = 'formData';
-
-  var APICall = mongoose.model('APICall', apiCallSchema);
-
-  var Execution = mongoose.model('Execution');
 
   // Receive all stored REST calls from the database.
   // Response is "Status: 200 OK" and an array of JSON objects. Response example:
@@ -350,7 +335,6 @@
   module.exports = {
     deleteAPICall: deleteAPICall,
     saveAPICall: saveAPICall,
-    APICall: APICall,
     getAPICalls: getAPICalls,
     getAPICallById: getAPICallById,
     registerAPICall: registerAPICall,
@@ -358,4 +342,11 @@
     executeAPICallById: executeAPICallById,
     getExecutionsByAPICallId: getExecutionsByAPICallId
   };
-}(require('mongoose'), require('q'), require('request'), require('underscore'), require('./execution')));
+}(
+  require('mongoose'),
+  require('q'),
+  require('request'),
+  require('underscore'),
+  require('./resources/Execution'),
+  require('./resources/APICall')
+));

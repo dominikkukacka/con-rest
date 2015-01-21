@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution, workflowExecution, config,
+(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution, workflowExecution, connector, config,
   mapper) {
   'use strict';
 
@@ -49,6 +49,13 @@
     app.get('/api/mappers/:id', mapper.getMapperById);
     app.post('/api/mappers/:id', mapper.saveMapper);
     app.delete('/api/mappers/:id', mapper.deleteMapper);
+
+
+    app.get('/api/workflows/:workflowId/connectors', connector.getConnectorsByWorkflowId);
+    app.post('/api/workflows/:workflowId/connectors', connector.addConnectorToWorkflow);
+    app.get('/api/workflows/:workflowId/connectors/:connectorId', connector.getConnectorById);
+    app.put('/api/workflows/:workflowId/connectors/:connectorId', connector.saveConnector);
+    app.delete('/api/workflows/:workflowId/connectors/:connectorId', connector.deleteConnector);
   });
   module.exports = app;
 
@@ -61,6 +68,7 @@
   require('express-params'),
   require('./execution.js'),
   require('./workflowExecution.js'),
+  require('./connector.js'),
   require('./getConfig.js'),
   require('./mapper.js')
 ));

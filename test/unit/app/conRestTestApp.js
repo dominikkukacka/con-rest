@@ -34,6 +34,15 @@
       };
     }
 
+    function createDefaultConnectorResponse() {
+      return {
+        _id: 'connectorId1',
+        source: 'sourceId',
+        destination: 'destinationId',
+        mapper: 'mapperid'
+      };
+    }
+
     function createEmptyRequest() {
       return {
         _id: null,
@@ -62,6 +71,16 @@
         name: 'flow',
         calls: createDefaultRequests()
       };
+    }
+
+    function createDefaultMappersResponse() {
+      return [{
+        _id: 'map1',
+        maps: []
+      }, {
+        _id: 'map2',
+        maps: []
+      }];
     }
 
     function createDefaultRequestWorkflow() {
@@ -179,6 +198,8 @@
 
     function createDefaultTestGlobals() {
       return {
+        createDefaultMappersResponse: createDefaultMappersResponse,
+        createDefaultConnectorResponse: createDefaultConnectorResponse,
         createDefaultRequest: createDefaultRequest,
         createDefaultRequests: createDefaultRequests,
         createDefaultWorkflow: createDefaultWorkflow,

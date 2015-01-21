@@ -43,5 +43,24 @@
       expect(scope.request._id).toEqual(availableRequests[0]._id);
       expect(scope.request.name).toEqual(availableRequests[0].name);
     });
+
+    it('should be able to use the provided label', function providedLabel() {
+      // given
+      var directive = angular.element('<call-selector request="request"></call-selector>');
+
+      // predict
+      var availableRequests = [
+        testGlobals.createDefaultRequest()
+      ];
+
+      $httpBackend.expect('GET', '/api/requests/')
+        .respond(200, availableRequests);
+
+      // when
+      var $scope = testGlobals.initializeDirective(parentScope, directive);
+
+      // then
+      expect($scope.label).toEqual('api call');
+    });
   });
 }());

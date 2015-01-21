@@ -3,24 +3,8 @@
 //
 // Author: Dominik Kukacka
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function workflowExecutionScope(mongoose, queue) {
+(function workflowExecutionScope(mongoose, queue, WorkflowExecution) {
   'use strict';
-
-  var Schema = mongoose.Schema;
-
-  var workflowExecutionCallSchema = new Schema({
-    workflow: {
-      type: Schema.Types.ObjectId,
-      ref: 'Workflow'
-    },
-    executions: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Execution'
-    }],
-    executedAt: Date
-  });
-
-  var WorkflowExecution = mongoose.model('WorkflowExecution', workflowExecutionCallSchema);
 
   function getWorkflowExecutions(req, res) {
     var deferred = queue.defer();
@@ -75,10 +59,13 @@
   }
 
   module.exports = {
-    WorkflowExecution: WorkflowExecution,
     getWorkflowExecutions: getWorkflowExecutions,
     getWorkflowExecutionById: getWorkflowExecutionById,
     getWorkflowExecutionsByWorkflowId: getWorkflowExecutionsByWorkflowId,
     getExecutionsFromWorkflowId: getExecutionsFromWorkflowId
   };
-}(require('mongoose'), require('q')));
+}(
+  require('mongoose'),
+  require('q'),
+  require('./resources/WorkflowExecution')
+));

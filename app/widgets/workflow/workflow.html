@@ -8,9 +8,18 @@
            ng-if="!editing">
     <h2>{{ workflow.name }}</h2>
     <section layout="row">
-      <div layout="rows" layout-phone="column" layout-wrap flex>
-        <rest-call ng-repeat="call in workflow.calls"
-                   id="{{call._id}}"></rest-call>
+      <div layout="column">
+        <h3>Calls</h3>
+        <div layout="rows" layout-phone="column" layout-wrap flex>
+          <rest-call ng-repeat="call in workflow.calls"
+                     id="{{call._id}}"></rest-call>
+        </div>
+        <h3>Connectors</h3>
+        <div layout="column" flex>
+          <connector ng-repeat="connector in workflow.connectors"
+                     id="connector._id"
+                     workflow-id="workflow._id"></connector>
+        </div>
       </div>
       <section layout="column">
         <md-button class="md-fab"

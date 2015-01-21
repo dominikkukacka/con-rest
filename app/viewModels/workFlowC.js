@@ -8,11 +8,12 @@
 
   var app = angular.module('con-rest');
 
-  app.controller('workFlowC', function workFlowC($scope, workflowDAO, events) {
+  app.controller('workFlowC', function workFlowC($scope, workflowDAO, events, Connector) {
     // Set a default empty workflow if not provided.
     $scope.originalWorkflow = $scope.originalWorkflow || {
       _id: null,
-      calls: []
+      calls: [],
+      connectors: []
     };
 
     $scope.workflow = angular.copy($scope.originalWorkflow, {});
@@ -76,6 +77,13 @@
     // Remove a REST call which was added to the workflow.
     $scope.removeCall = function removeCall(index) {
       $scope.workflow.calls.splice(index, 1);
+    };
+
+    // Add an empty connector to the workflow.
+    $scope.addConnector = function addConnector() {
+      $scope.workflow.connectors.push(new Connector({
+        workflow: $scope.workflow._id
+      }));
     };
 
     $scope.extractCalls = function extractCalls() {

@@ -116,7 +116,7 @@
 
       // then
       $httpBackend.flush();
-      expect(parentScope.workflow).toEqual(scope.workflow);
+      expect(scope.workflow).toEqual(jasmine.objectContaining(parentScope.workflow));
       expect(parentScope.workflow).not.toEqual(originalWorkflow);
     });
   });

@@ -3,20 +3,8 @@
 //
 // Author: Dominik Kukacka
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function mapperScope(mongoose, queue) {
+(function mapperScope(mongoose, queue, Mapper) {
   'use strict';
-
-  var Schema = mongoose.Schema;
-
-  var mapperSchema = new Schema({
-    name: String,
-    maps: [{
-      source: String,
-      destination: String
-    }]
-  });
-
-  var Mapper = mongoose.model('Mapper', mapperSchema);
 
   function getMappers(req, res) {
     var deferred = queue.defer();
@@ -112,7 +100,6 @@
   }
 
   module.exports = {
-    Mapper: Mapper,
     getMappers: getMappers,
     getMapperById: getMapperById,
     saveMapper: saveMapper,
@@ -120,4 +107,8 @@
     deleteMapper: deleteMapper,
     map: map
   };
-}(require('mongoose'), require('q')));
+}(
+  require('mongoose'),
+  require('q'),
+  require('./resources/Mapper')
+));

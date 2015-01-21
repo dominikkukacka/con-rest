@@ -56,6 +56,7 @@ module.exports = function(grunt) {
         files: {
           '<%= app.tmp %>/js/con-rest.js': [
             '<%= app.app %>/dao/*.js',
+            '<%= app.app %>/models/*.js',
             '<%= app.app %>/modules/*.js',
             '<%= app.app %>/viewModels/*.js',
             '<%= app.app %>/widgets/**/*.js'

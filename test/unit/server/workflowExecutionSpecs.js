@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function workflowExecutionSpecScope(sinon, nock) {
+(function workflowExecutionSpecScope(sinon, nock, WorkflowExecution) {
   'use strict';
 
   var mockgoose = require('mockgoose');
@@ -73,4 +73,4 @@
     });
   });
 
-}(require('sinon'), require('nock')));
+}(require('sinon'), require('nock'), require('../../../server/resources/WorkflowExecution')));

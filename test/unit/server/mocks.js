@@ -3,9 +3,8 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function apiMocksScope(mongoose, queue, api, workflow) {
+(function apiMocksScope(mongoose, queue) {
   'use strict';
-
 
   var apiCalls = [{
       _id: '545726928469e940235ce769',
@@ -72,7 +71,23 @@
   }, {
     _id: '545726928469e940235ce700',
     name: 'secondWorkflow',
-    calls: ['545726928469e940235ce770', '545726928469e940235ce771', '545726928469e940235ce772']
+    calls: ['545726928469e940235ce770', '545726928469e940235ce771', '545726928469e940235ce772'],
+    connectors: [{
+      _id: '545726928469e940235d0001',
+      source: '545726928469e940235ce770',
+      destination: '545726928469e940235ce771',
+      mapper: '5464b1e2f8243a3c321a0001'
+    }, {
+      _id: '545726928469e940235d0002',
+      source: '545726928469e940235ce771',
+      destination: '545726928469e940235ce772',
+      mapper: '5464b1e2f8243a3c321a0001'
+    }, {
+      _id: '545726928469e940235d0003',
+      source: '545726928469e940235ce770',
+      destination: '545726928469e940235ce772',
+      mapper: '5464b1e2f8243a3c321a0001'
+    }]
   }];
 
   var workflowExecutions = [{
@@ -138,18 +153,42 @@
         source: 'user.name',
         destination: 'userName'
       }]
+    },
+    {
+      _id: '5464b1e2f8243a3c321a0002',
+      name: 'overwriter',
+      maps: [{
+        source: 'matha',
+        destination: 'faka'
+      }]
     }
   ];
 
   function createMocks(model, mocks) {
     var allMocksCreated = queue.defer();
-    var Model = mongoose.model(model);
     var allPromisses = [];
+    var Model = mongoose.model(model);
+    var Connector = mongoose.model('Connector');
+    // console.log(Model.modelName, Object.keys(Model.schema.tree).join(', '));
 
     for (var i = 0; i < mocks.length; i++) {
       var data = mocks[i];
       var deferred = queue.defer();
-      Model.create(data, deferred.makeNodeResolver());
+      if (model === 'Workflow') {
+        var connectors = data.connectors || [];
+        delete data.connectors;
+      }
+
+      var newModel = new Model(data);
+      if (model === 'Workflow') {
+        for (var i = 0; i < connectors.length; i++) {
+          var connector = connectors[i];
+          newModel.connectors.push(connector);
+        };
+
+        data.connectors = connectors;
+      }
+      newModel.save(deferred.makeNodeResolver());
       allPromisses.push(deferred);
     }
 
@@ -162,6 +201,8 @@
       });
     return allMocksCreated.promise;
   }
+
+
 
 
   function APIMocks(done) {
@@ -183,5 +224,7 @@
 
 
   module.exports = APIMocks;
-}(require('mongoose'), require('q'), require('../../../server/api.js'), require('../../../server/workflow.js'),
-  require('../../../server/mapper.js')));
+}(
+  require('mongoose'),
+  require('q')
+));
