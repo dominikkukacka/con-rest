@@ -25,7 +25,6 @@
     }
   },
   "certificates": [
-    "certificates/test0x.pem",
-    "/var/lib/puppet/ssl/certs/ca.pem"
+    "path/to/cerificate.pem"
   ]
 }
