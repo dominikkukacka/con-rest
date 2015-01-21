@@ -9,9 +9,7 @@
   var helper = require('./serverHelper');
 
   function getMappers(req, res) {
-    return Mapper.find()
-      .exec()
-      .then(helper.sendAndResolve(res));
+    return helper.getAll(Mapper, req, res);
   }
 
   function getMapperById(req, res) {
@@ -19,34 +17,15 @@
   }
 
   function saveMapper(req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    var details = req.body;
-
-    return Mapper.findByIdAndUpdate(id, {
-        $set: details
-      })
-      .exec()
-      .then(function(mapper) {
-        res.send('ok');
-        return mapper;
-      });
+    return helper.updateById(Mapper, req, res);
   }
 
   function createMapper(req, res) {
-    return Mapper.create(req.body)
-      .then(function saveNewCall(mapper) {
-        res.send(mapper._id.toString());
-        return mapper._id;
-      });
+    return helper.createAndReturnId(Mapper, req, res);
   }
 
   function deleteMapper(req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    return Mapper.findByIdAndRemove(id)
-      .exec()
-      .then(function returnDeleted() {
-        res.send('deleted');
-      });
+    return helper.deleteById(Mapper, req, res);
   }
 
 

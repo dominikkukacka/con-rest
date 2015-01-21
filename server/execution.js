@@ -6,40 +6,23 @@
 (function executionScope(mongoose, queue, Execution) {
   'use strict';
 
+  var helper = require('./serverHelper');
+
   function getExecutions(req, res) {
-    var deferred = queue.defer();
-    Execution.find(deferred.makeNodeResolver());
-    deferred.promise.then(function returnResults(results) {
-      res.send(results);
-    });
-    return deferred.promise;
+    return helper.getAll(Execution, req, res);
   }
 
   function getExecutionById(req, res) {
-    var deferred = queue.defer();
-    var id = mongoose.Types.ObjectId(req.params.id);
-    Execution.findById(id, deferred.makeNodeResolver());
-    deferred.promise.then(function returnCall(call) {
-      res.send(call);
-    });
-    return deferred.promise;
+    return helper.getById(Execution, req, res);
   }
 
   function getExecutionsOfWorkflow(req, res) {
-    var deferred = queue.defer();
     var id = mongoose.Types.ObjectId(req.params.id);
-    console.log('workflow:', id);
-
-    Execution.
-    find({
-      workflow: id
-    }).
-    exec(deferred.makeNodeResolver());
-
-    deferred.promise.then(function returnCall(call) {
-      res.send(call);
-    });
-    return deferred.promise;
+    return Execution
+      .find({
+        workflow: id
+      })
+      .exec(helper.sendAndResolve(res));
   }
 
   module.exports = {

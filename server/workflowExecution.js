@@ -6,56 +6,39 @@
 (function workflowExecutionScope(mongoose, queue, WorkflowExecution) {
   'use strict';
 
+  var helper = require('./serverHelper');
+
   function getWorkflowExecutions(req, res) {
-    var deferred = queue.defer();
-    WorkflowExecution.find(deferred.makeNodeResolver());
-    deferred.promise.then(function returnResults(results) {
-      res.send(results);
-    });
-    return deferred.promise;
+    return helper.getAll(WorkflowExecution, req, res);
   }
 
   function getWorkflowExecutionById(req, res) {
-    var deferred = queue.defer();
-    var id = mongoose.Types.ObjectId(req.params.id);
-    WorkflowExecution.findById(id, deferred.makeNodeResolver());
-    deferred.promise.then(function returnCall(call) {
-      res.send(call);
-    });
-    return deferred.promise;
+    return helper.getById(WorkflowExecution, req, res);
   }
 
   function getWorkflowExecutionsByWorkflowId(req, res) {
-    var deferred = queue.defer();
     var id = mongoose.Types.ObjectId(req.params.id);
-
-    WorkflowExecution.
-    find({
-      workflow: id
-    }).
-    exec(deferred.makeNodeResolver());
-
-    deferred.promise.then(function returnCall(call) {
-      res.send(call);
-    });
-    return deferred.promise;
+    return WorkflowExecution
+      .find({
+        workflow: id
+      })
+      .exec()
+      .then(function returnCall(call) {
+        res.send(call);
+      });
   }
 
   function getExecutionsFromWorkflowId(req, res) {
-    var deferred = queue.defer();
     var workflowExecutionId = mongoose.Types.ObjectId(req.params.workflowExecutionId);
-
-    WorkflowExecution.
-    find({
-      _id: workflowExecutionId
-    }).
-    populate('executions').
-    exec(deferred.makeNodeResolver());
-
-    deferred.promise.then(function returnCall(call) {
-      res.send(call);
-    });
-    return deferred.promise;
+    return WorkflowExecution
+      .find({
+        _id: workflowExecutionId
+      })
+      .populate('executions')
+      .exec()
+      .then(function returnCall(call) {
+        res.send(call);
+      });
   }
 
   module.exports = {

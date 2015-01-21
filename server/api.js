@@ -25,9 +25,7 @@
   //         "__v":0
   //     }]
   function getAPICalls(req, res) {
-    return APICall.find()
-      .exec()
-      .then(helper.sendAndResolve(res));
+    return helper.getAll(APICall, req, res);
   }
 
   // Receive specific REST call from the database by its ID
@@ -50,12 +48,7 @@
   // Delete specific REST call from database by its ID
   // Response is "Status: 200 OK" and "deleted" in body
   function deleteAPICall(req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    return APICall.findByIdAndRemove(id)
-      .exec()
-      .then(function returnDeleted() {
-        res.send('deleted');
-      });
+    return helper.deleteById(APICall, req, res);
   }
 
   // Receive all executions of a specific REST call by its ID
@@ -101,10 +94,7 @@
   //             "testParam":2 }
   //     }
   function registerAPICall(req, res) {
-    return APICall.create(req.body)
-      .then(function sendId(apiCall) {
-        res.send(apiCall._id.toString());
-      });
+    return helper.createAndReturnId(APICall, req, res);
   }
 
   function saveAPICall(req, res) {

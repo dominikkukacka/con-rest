@@ -9,42 +9,23 @@
   var helper = require('./serverHelper');
 
   function getWorkflows(req, res) {
-    return Workflow.find()
-      .exec()
-      .then(helper.sendAndResolve(res));
+    return helper.getAll(Workflow, req, res);
   }
 
   function getWorkflowById(req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    return Workflow.findById(id)
-      .exec()
-      .then(helper.sendAndResolve(res));
+    return helper.getById(Workflow, req, res);
   }
 
   function deleteWorkflow(req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    return Workflow.findByIdAndRemove(id)
-      .exec()
-      .then(function returnDeleted() {
-        res.send('deleted');
-      });
+    return helper.deleteById(Workflow, req, res);
   }
 
   function registerWorkflow(req, res) {
-    return Workflow.create(req.body)
-      .then(function saveNewCall(workflow) {
-        res.send(workflow._id.toString());
-      });
+    return helper.createAndReturnId(Workflow, req, res);
   }
 
   function saveWorkflow(req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    return Workflow.findByIdAndUpdate(id, req.body)
-      .exec()
-      .then(function resolveWithWorkflow(workflow) {
-        res.send('ok');
-        return workflow;
-      });
+    return helper.updateById(Workflow, req, res);
   }
 
   function getSorted(arr, sortArr) {
