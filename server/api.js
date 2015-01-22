@@ -71,12 +71,7 @@
   //         "__v":0
   //     }]
   function getExecutionsByAPICallId(req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    return Execution.find({
-        apiCall: id
-      })
-      .exec()
-      .then(helper.sendAndResolve(res));
+    return helper.getById(APICall, req, res);
   }
 
   // Add new REST call to the database and receive its ID
@@ -98,13 +93,7 @@
   }
 
   function saveAPICall(req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    return APICall.findOneAndUpdate(id, req.body)
-      .exec()
-      .then(function resolveOk(apiCall) {
-        res.send('ok');
-        return apiCall;
-      });
+    return helper.updateById(APICall, req, res);
   }
 
   // Execute a REST call from the database using its ID
