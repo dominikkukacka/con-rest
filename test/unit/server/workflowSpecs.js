@@ -121,7 +121,9 @@
           res.send.args[0][0].should.be.a.String;
         }).
         then(function when() {
-          return workflow.getWorkflowById(req);
+          return workflow.getWorkflowById(req, {
+            send: sinon.stub()
+          });
         }).
         then(function then(workflow) {
           workflow.name.should.be.exactly('overwritten');
@@ -153,7 +155,9 @@
           res.send.args[0][0].should.be.a.String;
         }).
         then(function when() {
-          return workflow.getWorkflowById(req);
+          return workflow.getWorkflowById(req, {
+            send: sinon.stub()
+          });
         }).
         then(function then(workflow) {
           (workflow === null).should.be.true;

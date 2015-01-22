@@ -17,3 +17,6 @@ env:
   global:
   - GH_REF: github.com/EnoF/con-rest.git
   - secure: EVDKvMXg4/e9nNLX3FioyQxR+Gzdzs4Eii2Wg95pi9+Cx8xAi1+vd4A4NbtmmksYtSlBfXqt2MN0MwceILoq/lQSlCJImiUymn79BeJdc8n+BCz4lmxa8pn6tTrB5MNUvxzc5kWGurVtp7MonfHt+iGIFAz/dnzmLehXo1CdYPI=
+addons:
+  code_climate:
+    repo_token: 595d5ededaf1a35799329eb35020e43cbaaa7fab05f8b53717c3a7279be0d5e0

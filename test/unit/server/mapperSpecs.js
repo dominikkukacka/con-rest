@@ -130,7 +130,9 @@
           res.send.args[0][0].should.be.a.String;
         }).
         then(function when() {
-          return mapper.getMapperById(req);
+          return mapper.getMapperById(req, {
+            send: sinon.stub()
+          });
         }).
         then(function then(mapper) {
           mapper.name.should.be.exactly('overwritten');
@@ -165,7 +167,9 @@
           res.send.args[0][0].should.be.a.String;
         }).
         then(function when() {
-          return mapper.getMapperById(req);
+          return mapper.getMapperById(req, {
+            send: sinon.stub()
+          });
         }).
         then(function then(mapper) {
           (mapper === null).should.be.true;

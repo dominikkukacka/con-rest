@@ -110,8 +110,6 @@
 
     describe('execution', function retrievalScope() {
       it('should execute a successful API call', function executeAPICall(done) {
-
-
         nock('http://httpbin.org').
         get('/get').
         reply(200, {

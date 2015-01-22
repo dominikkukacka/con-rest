@@ -7,41 +7,28 @@
   'use strict';
 
   function addConnectorToWorkflow(req, res) {
-    var deferred = queue.defer();
     var workflowId = mongoose.Types.ObjectId(req.params.workflowId);
-    var details = req.body;
-
-    queue().
-    then(function() {
-      var deferred = queue.defer();
-      var connector = new Connector(details);
-
-      Workflow.findOneAndUpdate({
+    var connector = new Connector(req.body);
+    return Workflow.findOneAndUpdate({
         _id: workflowId
       }, {
         $push: {
           connectors: connector
         }
-      }, deferred.makeNodeResolver());
-
-      return deferred.promise;
-    }).
-    then(function(workflow) {
-      res.send(workflow);
-      deferred.resolve(workflow);
-    }).
-    catch(function error(err) {
-      res.status(500).send(err.toString());
-    });
-
-    return deferred.promise;
+      })
+      .exec()
+      .then(function returnWorkflow(workflow) {
+        res.send(workflow);
+        return workflow;
+      }, function error(err) {
+        res.status(500).send(err.toString());
+      });
   }
 
   function saveConnector(req, res) {
     var workflowId = mongoose.Types.ObjectId(req.params.workflowId);
     var connectorId = mongoose.Types.ObjectId(req.params.connectorId);
     var details = req.body;
-
     return Workflow.findOneAndUpdate({
         _id: workflowId,
         'connectors._id': connectorId
@@ -52,9 +39,9 @@
           'connectors.$.mapper': details.mapper
         }
       }).exec()
-      .then(function(data) {
-        res.send(data);
-        return data;
+      .then(function resolveWithWorkflow(workflow) {
+        res.send(workflow);
+        return workflow;
       }, function(error) {
         res.status(500).send(error.toString());
         throw error;
@@ -87,38 +74,23 @@
   }
 
   function getConnectorsByWorkflowId(req, res) {
-    var mainDeferred = queue.defer();
     var workflowId = mongoose.Types.ObjectId(req.params.workflowId);
-
-    queue().
-    then(function() {
-      var deferred = queue.defer();
-      Workflow.findById(workflowId, deferred.makeNodeResolver());
-      return deferred.promise;
-    }).
-    then(function(workflow) {
-      var connectors = workflow.connectors;
-      mainDeferred.resolve(connectors);
-      res.send(connectors);
-    }).
-    catch(function error(err) {
-      res.status(500).send(err.toString());
-    });
-
-    return mainDeferred.promise;
+    return Workflow.findById(workflowId)
+      .exec()
+      .then(function extractConnectors(workflow) {
+        var connectors = workflow.connectors;
+        res.send(connectors);
+        return connectors;
+      }, function error(err) {
+        res.status(500).send(err.toString());
+      });
   }
 
 
   function deleteConnector(req, res) {
-    var mainDeferred = queue.defer();
     var workflowId = mongoose.Types.ObjectId(req.params.workflowId);
     var connectorId = mongoose.Types.ObjectId(req.params.connectorId);
-
-    queue().
-    then(function() {
-      var deferred = queue.defer();
-
-      Workflow.findOneAndUpdate({
+    return Workflow.findOneAndUpdate({
         _id: workflowId
       }, {
         $pull: {
@@ -126,19 +98,13 @@
             _id: connectorId
           }
         }
-      }, deferred.makeNodeResolver());
-
-      return deferred.promise;
-    }).
-    then(function() {
-      res.send('deleted');
-      mainDeferred.resolve('deleted');
-    }).
-    catch(function error(err) {
-      res.status(500).send(err.toString());
-    });
-
-    return mainDeferred.promise;
+      })
+      .exec()
+      .then(function deletedSuccessful() {
+        res.send('deleted');
+      }, function error(err) {
+        res.status(500).send(err.toString());
+      });
   }
 
   module.exports = {
