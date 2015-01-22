@@ -5,6 +5,15 @@
   'use strict';
 
   var config = JSON.parse(fs.readFileSync('./config.json'));
+  var certificates = config.certificates.map(function(item) {
+    var ca = '';
+    try {
+      ca = fs.readFileSync(item);
+    } catch(e) {
+
+    }
+    return ca;
+  });
 
   function getMongoConfig() {
     var connection = {};
@@ -23,8 +32,13 @@
     return config.server;
   }
 
+  function getCertificates() {
+    return certificates;
+  }
+
   module.exports = {
     getMongoConfig: getMongoConfig,
-    getServerConfig: getServerConfig
+    getServerConfig: getServerConfig,
+    getCertificates: getCertificates
   };
 }(require('fs')));

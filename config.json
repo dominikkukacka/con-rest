@@ -23,5 +23,8 @@
       "user": "myUserName",
       "pass": "myPassword"
     }
-  }
+  },
+  "certificates": [
+    "path/to/cerificate.pem"
+  ]
 }
