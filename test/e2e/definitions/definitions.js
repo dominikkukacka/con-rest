@@ -16,8 +16,8 @@ module.exports = function definitions() {
     next();
   });
 
-  this.When(/^clicking the "(.*)" button$/, function clickButton(buttonText, next) {
-    element(by.buttonText(buttonText)).click();
+  this.When(/^clicking the button with "(.*)" action$/, function clickButton(action, next) {
+    element(by.css('[ng-click="' + action + '()"]')).click();
     next();
   });
 

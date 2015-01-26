@@ -3,6 +3,11 @@ exports.config = {
   framework: 'cucumber',
   specs: ['e2e/**/*.feature'],
   baseUrl: 'http://localhost:9000',
+  multiCapabilities: [{
+    'browserName': 'firefox'
+  }, {
+    'browserName': 'chrome'
+  }],
   cucumberOpts: {
     require: 'e2e/definitions/*.js',
     format: 'progress'
