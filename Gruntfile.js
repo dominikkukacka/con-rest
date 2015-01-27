@@ -223,14 +223,16 @@ module.exports = function(grunt) {
       }
     },
     protractor: {
-      dev: {
+      ci: {
         options: {
-          configFile: 'test/e2e.conf.js',
+          configFile: 'test/ci.conf.js',
           keepAlive: true,
-          noColor: false,
-          capabilities: {
-            browserName: 'chrome'
-          }
+          noColor: false
+        },
+        args: {
+          multiCapabilities: [{
+            'browserName': 'firefox'
+          }]
         }
       },
       all: {
@@ -351,41 +353,45 @@ module.exports = function(grunt) {
     'concat:dev'
   ]);
 
-  grunt.registerTask('setupEnv', [
-    'build',
-    'express:dev'
-  ]);
+  grunt.registerTask('setupEnv', function env(target) {
+    if (target === 'e2e') {
+      process.env.MONGO_CONNECTION = 'mongodb://127.0.0.1:27017/test';
+    }
+    grunt.task.run([
+      'build',
+      'express:dev'
+    ]);
+  });
 
-  grunt.registerTask('test', [
-    'setupEnv',
-    'karma:unit',
-    'simplemocha',
-    'protractor_webdriver:test',
-    'protractor:all'
-  ]);
+  grunt.registerTask('test', function test(target) {
+    grunt.task.run([
+      'setupEnv:' + target,
+      'karma:unit',
+      'simplemocha'
+    ]);
+  });
 
-  grunt.registerTask('e2e', [
-    'protractor_webdriver:test',
-    'protractor:all'
-  ]);
+  grunt.registerTask('e2e', function testMode(target) {
+    grunt.task.run([
+      'protractor_webdriver:test',
+      'protractor:' + (target || 'all')
+    ]);
+  });
 
   grunt.registerTask('server', function serverMode(target) {
     var tasks = [
-      'setupEnv',
+      'setupEnv:' + target,
       'groc:dev',
       'karma:unitAuto',
       'watch'
     ];
-    if (target === 'e2e') {
-      tasks.push('karma:e2eAuto');
-    }
     grunt.task.run(tasks);
   });
 
   grunt.registerTask('package', [
     'version',
-    'test',
-    'e2e',
+    'test:e2e',
+    'e2e:ci',
     'ngtemplates:dist',
     'ngAnnotate',
     'uglify',
