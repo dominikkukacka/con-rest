@@ -1,0 +1,28 @@
+<md-whiteframe class="workflow-list-overview md-whiteframe-z1"
+               flex layout-padding layout="column">
+    <md-toolbar class="md-theme-light">
+        <div class="md-tile-content"
+             layout="row">
+            <span flex="15">Workflow Name</span>
+            <span flex="10"># of Calls</span>
+            <span flex="10">TEST</span>
+        </div>
+    </md-toolbar>
+    <section layout="row" layout-sm="column">
+        <md-content flex="40">
+            <md-list>
+                <md-item ng-repeat="workflow in workflows">
+                    <workflow-list-item workflow="workflow"></workflow-list-item>
+                    <md-divider ng-if="!$last"></md-divider>
+                </md-item>
+            </md-list>
+        </md-content>
+        <workflow workflow="workflow"
+                  flex="60"
+                  ng-if="showDetails"></workflow>
+    </section>
+    <md-button class="md-raised md-primary"
+               ng-click="addWorkflow()">
+        Add Workflow
+    </md-button>
+</md-whiteframe>

@@ -25,6 +25,7 @@
       WORKFLOW_CREATED: 'workflowCreated',
       WORKFLOW_DELETED: 'workflowDeleted',
       WORKFLOW_RECEIVED: 'workflowReceived',
+      WORKFLOW_REQUESTED: 'workflowRequested',
       WORKFLOW_UPDATED: 'workflowUpdated',
       WORKFLOWS_RETRIEVED: 'workflowsRetrieved'
     };

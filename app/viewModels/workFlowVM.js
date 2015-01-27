@@ -29,6 +29,10 @@
       }
     };
 
+    $scope.requestDetails = function requestDetails() {
+      $scope.$emit(events.WORKFLOW_REQUESTED, $scope.workflow);
+    };
+
     $scope.retrievedWorkflow = function retrievedWorkflow(response) {
       $scope.workflow.name = response.name;
       $scope.workflow.calls = [];
