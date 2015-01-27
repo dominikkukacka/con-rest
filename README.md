@@ -53,3 +53,16 @@ If you rather have the settings stored in a file, you can edit the `config.js` a
 
 ###Artifacts(INPROGRESS)###
 The artifacts will be available on github. Head over to the Releases and download the release.
+
+###E2E tests###
+E2E tests are performed with `protractor` with `mocha` and `yadda`. To run the E2E tests along with the other tests:
+
+    grunt package
+
+To kick off the tests on a running server:
+
+    # this will start the server with the db pointed to the test db
+    grunt server:e2e
+
+    # in a second terminal
+    grunt e2e
