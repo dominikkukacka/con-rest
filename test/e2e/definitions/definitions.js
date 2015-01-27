@@ -1,27 +1,17 @@
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
-chai.use(chaiAsPromised);
+var expect = require('chai').expect;
+var English = require('yadda').localisation.English;
 
-var expect = chai.expect;
-
-module.exports = function definitions() {
-  this.Given(/^I navigate to(?: a page)? "([^"]*)"$/, function navigateTo(url, next) {
-    browser.get('#/' + url);
-    next();
-  });
-
-  this.When(/^entering the (.*) with "(.*)"$/, function enterInput(input, value, next) {
+module.exports = English.library()
+  .given('I navigate to(?: a page)? "([^"]*)"', function navigateTo(url) {
+    browser.get('#/' + url, 4000);
+  })
+  .when('entering the (.*) with "(.*)"', function enterInput(input, value) {
     element(by.model('request.' + input))
       .element(by.model('value')).sendKeys(value);
-    next();
-  });
-
-  this.When(/^clicking the button with "(.*)" action$/, function clickButton(action, next) {
+  })
+  .when('clicking the button with "(.*)" action', function clickButton(action) {
     element(by.css('[ng-click="' + action + '()"]')).click();
-    next();
+  })
+  .then('the form header should become "(.*)"', function checkFormHeader(header) {
+    expect(element(by.cssContainingText('h3', header)).isPresent()).to.become(true);
   });
-
-  this.Then(/^the form header should become "(.*)"$/, function checkFormHeader(header, next) {
-    expect(element(by.cssContainingText('h3', header)).isPresent()).to.become(true).and.notify(next);
-  });
-};

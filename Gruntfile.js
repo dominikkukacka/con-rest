@@ -364,6 +364,11 @@ module.exports = function(grunt) {
     'protractor:all'
   ]);
 
+  grunt.registerTask('e2e', [
+    'protractor_webdriver:test',
+    'protractor:all'
+  ]);
+
   grunt.registerTask('server', function serverMode(target) {
     var tasks = [
       'setupEnv',
@@ -380,6 +385,7 @@ module.exports = function(grunt) {
   grunt.registerTask('package', [
     'version',
     'test',
+    'e2e',
     'ngtemplates:dist',
     'ngAnnotate',
     'uglify',

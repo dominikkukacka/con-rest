@@ -1,15 +1,15 @@
 exports.config = {
   seleniumAddress: 'http://localhost:4444/wd/hub',
-  framework: 'cucumber',
-  specs: ['e2e/**/*.feature'],
+  framework: 'mocha',
+  specs: ['e2e/testRunner.js'],
   baseUrl: 'http://localhost:9000',
   multiCapabilities: [{
     'browserName': 'firefox'
   }, {
     'browserName': 'chrome'
   }],
-  cucumberOpts: {
-    require: 'e2e/definitions/*.js',
-    format: 'progress'
+  mochaOpts: {
+    format: 'spec',
+    timeout: 4000
   }
 };

@@ -3,16 +3,16 @@ Feature: Call registration
   I want to register a new rest call
   So that I can test this rest call in a workflow
 
-  Scenario Outline: Registering google.com
+  Scenario Outline: Registering api's
     Given I navigate to "registerCall"
-    When entering the name with "<name>"
-      And entering the url with "<url>"
-      And entering the method with "<method>"
-      And entering the type with "<type>"
+    When entering the name with "[name]"
+      And entering the url with "[url]"
+      And entering the method with "[method]"
+      And entering the type with "[type]"
       And clicking the button with "save" action
     Then the form header should become "Edit API Call"
 
-    Examples:
+    Where:
       | name    | url               | method  | type      |
       | Google  | http://google.com | GET     | formData  |
       | Yahoo   | http://yahoo.com  | OPTIONS | payload   |
