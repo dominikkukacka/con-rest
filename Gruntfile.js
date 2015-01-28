@@ -211,6 +211,38 @@ module.exports = function(grunt) {
         }
       }
     },
+    'protractor_webdriver': {
+      options: {
+        keepAlive: true
+      },
+      test: {
+        options: {
+          path: 'node_modules/protractor/bin/',
+          command: 'webdriver-manager start --standalone'
+        }
+      }
+    },
+    protractor: {
+      ci: {
+        options: {
+          configFile: 'test/ci.conf.js',
+          keepAlive: true,
+          noColor: false
+        },
+        args: {
+          multiCapabilities: [{
+            'browserName': 'firefox'
+          }]
+        }
+      },
+      all: {
+        options: {
+          configFile: 'test/e2e.conf.js',
+          keepAlive: true,
+          noColor: false
+        }
+      }
+    },
     simplemocha: {
       all: {
         src: ['test/unit/server/**/*.js']
@@ -321,39 +353,70 @@ module.exports = function(grunt) {
     'concat:dev'
   ]);
 
-  grunt.registerTask('setupEnv', [
-    'build',
-    'express:dev'
-  ]);
+  grunt.registerTask('setupEnv', function env(target) {
+    if (target === 'e2e') {
+      process.env.MONGO_CONNECTION = 'mongodb://127.0.0.1:27017/test';
+    }
+    grunt.task.run([
+      'build',
+      'express:dev'
+    ]);
+  });
 
-  grunt.registerTask('test', [
-    'setupEnv',
-    'karma:unit',
-    'simplemocha'
-  ]);
+  grunt.registerTask('test', function test(target) {
+    grunt.task.run([
+      'setupEnv:' + target,
+      'karma:unit',
+      'simplemocha'
+    ]);
+  });
+
+  grunt.registerTask('e2e', function testMode(target) {
+    grunt.task.run([
+      'protractor_webdriver:test',
+      'protractor:' + (target || 'all')
+    ]);
+  });
 
   grunt.registerTask('server', function serverMode(target) {
     var tasks = [
-      'setupEnv',
+      'setupEnv:' + target,
       'groc:dev',
       'karma:unitAuto',
       'watch'
     ];
-    if (target === 'e2e') {
-      tasks.push('karma:e2eAuto');
-    }
     grunt.task.run(tasks);
   });
 
   grunt.registerTask('package', [
     'version',
-    'test',
+    'test:e2e',
+    'e2e:ci',
     'ngtemplates:dist',
     'ngAnnotate',
     'uglify',
     'copy',
     'concat'
   ]);
+
+  var seleniumChildProcesses = {};
+  grunt.event.on('selenium.start', function(target, process) {
+    grunt.log.ok('Saw process for target: ' + target);
+    seleniumChildProcesses[target] = process;
+  });
+
+  grunt.util.hooker.hook(grunt.fail, function() {
+    // Clean up selenium if we left it running after a failure.
+    grunt.log.writeln('Attempting to clean up running selenium server.');
+    for (var target in seleniumChildProcesses) {
+      grunt.log.ok('Killing selenium target: ' + target);
+      try {
+        seleniumChildProcesses[target].kill('SIGTERM');
+      } catch (e) {
+        grunt.log.warn('Unable to stop selenium target: ' + target);
+      }
+    }
+  });
 
   grunt.registerTask('default', [
     'bower',
