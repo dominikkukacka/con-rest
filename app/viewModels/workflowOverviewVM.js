@@ -12,12 +12,18 @@
     $scope.workflows = [];
     $scope.response = null;
 
-    $scope.workflow = null;
+    $scope.activeWorkflow = null;
 
-    $scope.showWorkflowDetails = function showWorkflowDetails(event, requestedWorkflow) {
+    $scope.showWorkflowDetails = function showWorkflowDetails(event, workflow) {
       event.stopPropagation();
-      $scope.showDetails = !$scope.showDetails;
-      $scope.workflow = requestedWorkflow;
+      $scope.showDetails = true;
+      $scope.activeWorkflow = workflow;
+    };
+    
+    $scope.closeWorkflowDetails = function closeWorkflowDetails(event) {
+      event.stopPropagation();
+      $scope.showDetails = false;
+      $scope.activeWorkflow = null;
     };
 
     $scope.addWorkflow = function addWorkflow() {

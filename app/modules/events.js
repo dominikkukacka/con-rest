@@ -11,6 +11,7 @@
   app.factory('events', function eventsFactory() {
     return {
       CANCEL_EDITING: 'cancelEditing',
+      CLOSE_WORKFLOW_DETAILS: 'closeWorkflowDetails',
       CONNECTOR_CREATED: 'connectorCreated',
       EXECUTION_DONE: 'executionDone',
       REGISTRATION_SUCCESSFUL: 'registrationSuccessful',
@@ -24,8 +25,8 @@
       RETRIEVAL_FAILED: 'retrievalFailed',
       WORKFLOW_CREATED: 'workflowCreated',
       WORKFLOW_DELETED: 'workflowDeleted',
+      WORKFLOW_DETAILS_REQUESTED: 'workflowDetailsRequested',
       WORKFLOW_RECEIVED: 'workflowReceived',
-      WORKFLOW_REQUESTED: 'workflowRequested',
       WORKFLOW_UPDATED: 'workflowUpdated',
       WORKFLOWS_RETRIEVED: 'workflowsRetrieved'
     };

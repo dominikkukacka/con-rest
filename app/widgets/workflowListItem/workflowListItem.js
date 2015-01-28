@@ -11,7 +11,8 @@
       controller: 'workFlowVM',
       restrict: 'E',
       scope: {
-        originalWorkflow: '=workflow'
+        originalWorkflow: '=workflow',
+        isActive: '=?isActive'
       },
       templateUrl: 'workflowListItem',
       link: function workflowListItemConstructor(scope) {

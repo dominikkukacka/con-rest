@@ -2,23 +2,29 @@
                flex layout-padding layout="column">
     <md-toolbar class="md-theme-light">
         <div class="md-tile-content"
+             flex-gt-md="40"
              layout="row">
-            <span flex="15">Workflow Name</span>
-            <span flex="10"># of Calls</span>
-            <span flex="10">TEST</span>
+            <span flex="33">Workflow Name</span>
+            <span flex="33"># of Calls</span>
         </div>
     </md-toolbar>
     <section layout="row" layout-sm="column">
-        <md-content flex="40">
+        <md-content flex-gt-md="40">
             <md-list>
                 <md-item ng-repeat="workflow in workflows">
-                    <workflow-list-item workflow="workflow"></workflow-list-item>
+                    <workflow-list-item workflow="workflow"
+                            is-active="activeWorkflow._id === workflow._id"></workflow-list-item>
                     <md-divider ng-if="!$last"></md-divider>
+                    <workflow workflow="activeWorkflow"
+                              hide-gt-md
+                              ng-if="showDetails"></workflow>
                 </md-item>
+
             </md-list>
         </md-content>
-        <workflow workflow="workflow"
+        <workflow workflow="activeWorkflow"
                   flex="60"
+                  show-gt-md
                   ng-if="showDetails"></workflow>
     </section>
     <md-button class="md-raised md-primary"

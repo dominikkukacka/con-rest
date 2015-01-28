@@ -16,7 +16,8 @@
         scope.getWorkflows();
         scope.showDetails = false;
 
-        scope.$on(events.WORKFLOW_REQUESTED, scope.showWorkflowDetails);
+        scope.$on(events.WORKFLOW_DETAILS_REQUESTED, scope.showWorkflowDetails);
+        scope.$on(events.CLOSE_WORKFLOW_DETAILS, scope.closeWorkflowDetails);
       }
     };
   });

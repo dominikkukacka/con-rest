@@ -22,6 +22,10 @@
           scope.editing = true;
         }
 
+        scope.$watch('originalWorkflow', function setNewWorkflow() {
+          scope.workflow = angular.copy(scope.originalWorkflow, {});
+        });
+
         scope.$on(events.WORKFLOW_CREATED, scope.endEditing);
         scope.$on(events.WORKFLOW_UPDATED, scope.endEditing);
         scope.$on(events.CANCEL_EDITING, scope.endEditing);

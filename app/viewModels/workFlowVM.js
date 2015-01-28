@@ -29,8 +29,12 @@
       }
     };
 
-    $scope.requestDetails = function requestDetails() {
-      $scope.$emit(events.WORKFLOW_REQUESTED, $scope.workflow);
+    $scope.requestShowDetails = function requestShowDetails() {
+      $scope.$emit(events.WORKFLOW_DETAILS_REQUESTED, $scope.workflow);
+    };
+
+    $scope.requestHideDetails = function requestHideDetails() {
+      $scope.$emit(events.CLOSE_WORKFLOW_DETAILS, $scope.workflow);
     };
 
     $scope.retrievedWorkflow = function retrievedWorkflow(response) {
