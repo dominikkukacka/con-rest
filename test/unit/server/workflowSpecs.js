@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(sinon, nock, Execution) {
+(function serverScope(sinon, nock, expect, Execution) {
   'use strict';
 
   var mockgoose = require('mockgoose');
@@ -224,11 +224,125 @@
         then(done).
         catch(done);
       });
+
+      it('should execute a workflow with connectors', function getRegisteredWorkflows(done) {
+
+        for (var i = 0; i < 2; i++) {
+          nock('http://httpbin.org').
+          get('/get').
+          reply(200, {
+            indicator: 100 + i,
+            path: {
+              to: {
+                follow: [
+                  1336,
+                  1337,
+                  1338
+                ]
+              }
+            }
+          });
+        }
+
+        nock('http://httpbin.org').
+        get('/get?testKey=1336').
+        reply(200, {
+          indicator: 100 + i,
+          path: {
+            to: {
+              follow: [
+                1336,
+                1337,
+                1338
+              ]
+            }
+          }
+        });
+
+        var req;
+        var res;
+        var startCount = 0;
+        queue().
+        then(function given() {
+          req = {
+            params: {
+              id: '545726928469e940235ce701'
+            }
+          };
+          res = {};
+          res.send = sinon.spy();
+        }).
+        then(function() {
+          return Execution.count().exec();
+        }).
+        then(function when(count) {
+          startCount = count;
+          return workflow.executeWorkflowById(req, res);
+        }).
+        then(function then() {
+
+          var call = res.send.args[0][0];
+          Object.keys(call).length.should.be.exactly(3);
+          String(call[0].apiCall).should.be.exactly('545726928469e940235ce770');
+          String(call[1].apiCall).should.be.exactly('545726928469e940235ce771');
+          String(call[2].apiCall).should.be.exactly('545726928469e940235ce773');
+
+          expect(call[0].url).to.equal('http://httpbin.org/get');
+          expect(call[0].response).to.deep.equal({
+            indicator: 100,
+            path: {
+              to: {
+                follow: [1336, 1337, 1338]
+              }
+            }
+          });
+          expect(call[0].headers).to.deep.equal({
+            referer: 'http://google.com',
+            'user-agent': 'con-rest'
+          });
+
+          expect(call[1].url).to.equal('http://httpbin.org/get');
+          expect(call[1].response).to.deep.equal({
+            indicator: 101,
+            path: {
+              to: {
+                follow: [1336, 1337, 1338]
+              }
+            }
+          });
+          expect(call[1].headers).to.deep.equal({
+            'x-indicator': 100,
+            'user-agent': 'TestUserAgent'
+          });
+
+
+          expect(call[2].url).to.equal('http://httpbin.org/get?testKey=1336');
+          expect(call[2].response).to.deep.equal({
+            indicator: 102,
+            path: {
+              to: {
+                follow: [1336, 1337, 1338]
+              }
+            }
+          });
+          expect(call[2].headers).to.deep.equal({
+            'x-indicator': 100,
+            'user-agent': 'con-rest'
+          });
+
+          // Check Mongo if three executions inserted
+          Execution.count().exec(function(err, endCount) {
+            endCount.should.be.exactly(startCount + 3);
+          });
+
+        }).then(done).catch(done);
+      });
     });
   });
 
 }(
   require('sinon'),
   require('nock'),
+  require('chai').expect,
   require('../../../server/resources/Execution')
 ));

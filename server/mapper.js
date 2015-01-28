@@ -48,13 +48,18 @@
     return currentPointer;
   }
 
-  function map(obj, maps) {
-    var mappedValues = {};
-    for (var i = 0; i < maps.length; i++) {
-      var _map = maps[i];
+  function map(obj, mapper) {
+    var mappedValues = [];
+    for (var i = 0; i < mapper.maps.length; i++) {
+      var _map = mapper.maps[i];
 
       var value = singleMap(obj, _map.source);
-      mappedValues[_map.destination] = value;
+      mappedValues.push({
+        place: _map.place,
+        source: _map.source,
+        destination: _map.destination,
+        value: value
+      });
     }
 
     return mappedValues;

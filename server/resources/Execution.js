@@ -18,6 +18,7 @@
       ref: 'APICall'
     },
     statusCode: Number,
+    url: String,
     response: Schema.Types.Mixed,
     headers: Schema.Types.Mixed,
     formData: Schema.Types.Mixed,

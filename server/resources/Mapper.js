@@ -11,6 +11,7 @@
   var mapperSchema = new Schema({
     name: String,
     maps: [{
+      place: String,
       source: String,
       destination: String
     }]

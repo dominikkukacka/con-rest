@@ -222,6 +222,7 @@
       deferred.resolve({
         statusCode: response.statusCode,
         apiCall: apiCall,
+        url: apiCall.url,
         response: parsedBody,
         headers: options.headers,
         type: options.type,
