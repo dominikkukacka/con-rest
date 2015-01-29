@@ -5,6 +5,7 @@
         <h3 flex>{{workflow.name}}</h3>
         <h3 flex>{{workflow.calls.length}}</h3>
         <md-button class="md-raised"
+                   aria-label="toggle workflow open"
                    ng-click="toggleRequestDetails()">
             <md-icon ng-if="!isActive"
                      icon="/icons/ic_chevron_right_18px.svg"></md-icon>
