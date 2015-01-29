@@ -309,6 +309,56 @@
       });
     });
 
+
+    describe('createObjectFromMap', function mapScope() {
+      it('should create a valid object', function testMap(done) {
+
+        var result = mapper.createObjectFromMap('a.b.c', 'd');
+        expect(result).to.deep.equal({
+          a: {
+            b: {
+              c: 'd'
+            }
+          }
+        });
+        done();
+      });
+
+      it('should create a valid object with array', function testMap(done) {
+
+        var result = mapper.createObjectFromMap('a.b[0]', 'c');
+        expect(result).to.deep.equal({
+          a: {
+            b: [
+              'c'
+            ]
+          }
+        });
+
+
+        done();
+      });
+
+      it('should create a valid object with nested array', function testMap(done) {
+
+        var result = mapper.createObjectFromMap('a[0][0][1].b', 1337);
+        expect(result).to.deep.equal({
+          a: [
+            [
+              [
+                ,
+                {
+                  b: 1337
+                }
+              ]
+            ]
+          ]
+        });
+
+        done();
+      });
+    });
+
   });
 }(
   require('sinon'),

@@ -337,6 +337,62 @@
 
         }).then(done).catch(done);
       });
+      it('should execute a workflow with connectors (data)', function getRegisteredWorkflows(done) {
+
+        nock('http://httpbin.org').
+        get('/get').
+        reply(200, {
+          origin: '10.10.10.10',
+          url: 'http://httpbin.org/get'
+        });
+
+        nock('http://httpbin.org').
+        filteringRequestBody(function(path) {
+          return 'foobar';
+        }).
+        post('/post', 'foobar').
+        reply(200);
+
+        var req;
+        var res;
+        var startCount = 0;
+        queue().
+        then(function given() {
+          req = {
+            params: {
+              id: '545726928469e940235ce702'
+            }
+          };
+          res = {};
+          res.send = sinon.spy();
+        }).
+        then(function() {
+          return Execution.count().exec();
+        }).
+        then(function when(count) {
+          startCount = count;
+          return workflow.executeWorkflowById(req, res);
+        }).
+        then(function then() {
+          var response = res.send.args[0][0][1];
+
+          expect(response.data).to.deep.equal({
+            array: ['10.10.10.10'],
+            obj: {
+              test: '10.10.10.10'
+            },
+            rootTest: '10.10.10.10',
+            username: 'max',
+            password: '123'
+          });
+
+          // Check Mongo if three executions inserted
+          Execution.count().exec(function(err, endCount) {
+            expect(endCount).to.equal(startCount + 2);
+          });
+
+        }).then(done).catch(done);
+      });
     });
   });
 

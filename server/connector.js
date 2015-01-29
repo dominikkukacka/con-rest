@@ -111,13 +111,12 @@
     return function(callFrom) {
       if(callFrom) {
         var connector = null;
-
         for (var i = 0; i < workflow.connectors.length; i++) {
           connector = workflow.connectors[i];
           var result = callResults[connector.source.toString()];
           if(!!result && connector.destination.toString() === callTo.id.toString()) {
             var mappedValues = mapper.map(result.response, connector.mapper);
-            modifyCall(callTo, mappedValues);
+            callTo = modifyCall(callTo, mappedValues);
           }
         }
       }
@@ -136,15 +135,25 @@
           break;
 
         case 'header':
-          var obj = {};
-          obj[mappedValue.destination] = mappedValue.value;
+          var additonalHeaders = {};
+          additonalHeaders[mappedValue.destination] = mappedValue.value;
           if(!call.headers) {
             call.headers = {};
           }
-          call.headers = _.extend(call.headers, obj);
+          call.headers = _.extend(call.headers, additonalHeaders);
+          break;
+
+        case 'data':
+          var additionalData = mapper.createObjectFromMap(mappedValue.destination, mappedValue.value);
+          if(!call.data) {
+            call.data = {};
+          }
+          call.data = _.extend(call.data, additionalData);
           break;
       }
     }
+
+    return call;
   }
 
   module.exports = {

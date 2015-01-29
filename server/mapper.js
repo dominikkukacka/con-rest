@@ -48,6 +48,36 @@
     return currentPointer;
   }
 
+  // will create an object which you can parse through the singleMap function
+  function createObjectFromMap(map, value) {
+    map = map.replace(/\]/g, '').replace(/\[/g, '.');
+
+    var obj = {};
+    var parts = map.split('.');
+    for (var i = parts.length -1; i >= 0; i--) {
+      var part = parts[i];
+
+      var newObj = {};
+      //create indexed array if part is numeric
+      if(!isNaN(part)) {
+        newObj = [];
+        part = parseInt(part, 10);
+      }
+
+
+      // the deepest key holds the value
+      if(i === parts.length - 1) {
+        newObj[part] = value;
+      } else {
+        newObj[part] = obj;
+      }
+      obj = newObj;
+    }
+
+    return obj;
+
+  }
+
   function map(obj, mapper) {
     var mappedValues = [];
     for (var i = 0; i < mapper.maps.length; i++) {
@@ -71,7 +101,8 @@
     saveMapper: saveMapper,
     createMapper: createMapper,
     deleteMapper: deleteMapper,
-    map: map
+    map: map,
+    createObjectFromMap: createObjectFromMap
   };
 }(require('mongoose'),
   require('q'),

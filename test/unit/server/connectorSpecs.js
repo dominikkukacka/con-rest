@@ -161,7 +161,6 @@
           return connector.saveConnector(req, res);
         }).
         then(function then(data) {
-          // console.log(data);
           res.send.calledOnce.should.be.true;
         }).
         then(function when() {

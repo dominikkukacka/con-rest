@@ -99,6 +99,16 @@
       destination: '545726928469e940235ce773',
       mapper: '5464b1e2f8243a3c321a0004'
     }]
+  }, {
+    _id: '545726928469e940235ce702',
+    name: 'fourthWorkflow (dconenctor data)',
+    calls: ['545726928469e940235ce770', '545726928469e940235ce900'],
+    connectors: [{
+      _id: '545726928469e940235e0001',
+      source: '545726928469e940235ce770',
+      destination: '545726928469e940235ce900',
+      mapper: '5464b1e2f8243a3c321a0005'
+    }]
   }];
 
   var workflowExecutions = [{
@@ -193,6 +203,23 @@
         source: 'path.to.follow[0]',
         destination: 'testValue'
       }]
+    },
+    {
+      _id: '5464b1e2f8243a3c321a0005',
+      name: 'post mapper',
+      maps: [{
+        place: 'data',
+        source: 'origin',
+        destination: 'rootTest'
+      },{
+        place: 'data',
+        source: 'origin',
+        destination: 'obj.test'
+      },{
+        place: 'data',
+        source: 'origin',
+        destination: 'array[0]'
+      }]
     }
   ];
 
@@ -201,7 +228,6 @@
     var allPromisses = [];
     var Model = mongoose.model(model);
     var Connector = mongoose.model('Connector');
-    // console.log(Model.modelName, Object.keys(Model.schema.tree).join(', '));
 
     for (var i = 0; i < mocks.length; i++) {
       var data = mocks[i];
@@ -213,8 +239,8 @@
 
       var newModel = new Model(data);
       if (model === 'Workflow' && connectors && connectors.length > 0) {
-        for (var i = 0; i < connectors.length; i++) {
-          var connector = connectors[i];
+        for (var n = 0; n < connectors.length; n++) {
+          var connector = connectors[n];
           newModel.connectors.push(connector);
         };
 
