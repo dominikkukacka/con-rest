@@ -111,6 +111,38 @@
           }));
       });
     });
+
+    describe('workflow list item', function workflowListItemSpecs() {
+      it('should request to open details of an list item', function requestOpen() {
+        // given
+        spyOn(scope, '$emit');
+        scope.isActive = false;
+        scope.workflow = {
+          mocked: 'workflow'
+        };
+
+        // when
+        scope.toggleRequestDetails();
+
+        // then
+        expect(scope.$emit).toHaveBeenCalledWith(events.WORKFLOW_DETAILS_REQUESTED, scope.workflow);
+      });
+
+      it('should request to close details of an list', function requestClose() {
+        // given
+        spyOn(scope, '$emit');
+        scope.workflow = {
+          mocked: 'workflow'
+        };
+        scope.isActive = true;
+
+        // when
+        scope.toggleRequestDetails();
+
+        // then
+        expect(scope.$emit).toHaveBeenCalledWith(events.CLOSE_WORKFLOW_DETAILS, scope.workflow);
+      });
+    });
   });
 
 }());

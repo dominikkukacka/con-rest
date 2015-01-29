@@ -15,6 +15,7 @@
       calls: []
     };
     $scope.workflow = angular.copy($scope.originalWorkflow, {});
+    $scope.isActive = $scope.isActive || false;
 
     $scope.editing = false;
 
@@ -26,6 +27,14 @@
       $scope.editing = false;
       if (!$scope.workflow._id) {
         $scope.$emit(events.WORKFLOW_DELETED, $scope.workflow);
+      }
+    };
+
+    $scope.toggleRequestDetails = function toggleRequestDetails() {
+      if (!$scope.isActive) {
+        $scope.requestShowDetails();
+      } else {
+        $scope.requestHideDetails();
       }
     };
 
