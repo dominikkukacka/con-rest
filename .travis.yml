@@ -16,7 +16,6 @@ before_script:
 - chmod +x ./build_scripts/groc.sh
 script:
 - grunt package
-- "./build_scripts/groc.sh"
 env:
   global:
   - GH_REF: github.com/EnoF/con-rest.git

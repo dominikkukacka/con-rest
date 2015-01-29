@@ -5,10 +5,10 @@ Feature: Call registration
 
   Scenario Outline: Registering api's
     Given I navigate to "registerCall"
-    When entering the name with "[name]"
-      And entering the url with "[url]"
-      And entering the method with "[method]"
-      And entering the type with "[type]"
+    When entering the name with "[name]" on request
+      And entering the url with "[url]" on request
+      And entering the method with "[method]" on request
+      And entering the type with "[type]" on request
       And clicking the button with "save" action
     Then the form header should become "Edit API Call"
 
