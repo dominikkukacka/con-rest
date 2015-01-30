@@ -3,7 +3,7 @@
 //
 // Author: Dominik Kukacka
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function mapperScope(mongoose, queue, Mapper) {
+(function mapperScope(mongoose, queue, _, Mapper) {
   'use strict';
 
   var helper = require('./serverHelper');
@@ -95,6 +95,38 @@
     return mappedValues;
   }
 
+  function modifyCall(call, mappedValues) {
+    for (var i = 0; i < mappedValues.length; i++) {
+      var mappedValue = mappedValues[i];
+      switch(mappedValue.place) {
+        case 'url':
+          var regex = new RegExp(mappedValue.destination, 'g');
+          var url = call.url.replace(regex, mappedValue.value);
+          call.url = url;
+          break;
+
+        case 'data':
+        case 'header':
+          var additionalData = createObjectFromMap(mappedValue.destination, mappedValue.value);
+
+          if(mappedValue.place === 'data') {
+            if(!!!call.data) {
+              call.data = {};
+            }
+            call.data = _.extend(call.data, additionalData);
+          } else {
+            if(!!!call.headers) {
+              call.headers = {};
+            }
+            call.headers = _.extend(call.headers, additionalData);
+          }
+          break;
+      }
+    }
+
+    return call;
+  }
+
   module.exports = {
     getMappers: getMappers,
     getMapperById: getMapperById,
@@ -102,9 +134,11 @@
     createMapper: createMapper,
     deleteMapper: deleteMapper,
     map: map,
-    createObjectFromMap: createObjectFromMap
+    createObjectFromMap: createObjectFromMap,
+    modifyCall: modifyCall,
   };
 }(require('mongoose'),
   require('q'),
+  require('underscore'),
   require('./resources/Mapper')
 ));

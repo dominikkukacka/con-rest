@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function workflowScope(mongoose, queue, api, connector, Workflow, Connector, WorkflowExecution, Execution, APICall) {
+(function workflowScope(mongoose, queue, api, connector, Workflow, WorkflowExecution, Execution, APICall) {
   'use strict';
 
   var helper = require('./serverHelper');
@@ -71,7 +71,7 @@
 
           apiCallQueue = apiCallQueue
             .then(connector.executeConnector(workflow, call, callResults))
-            .then(executeApiCallPromise())
+            .then(api.executeAPICall)
             .then(registerAPICallExecution(queue, callIndex, callResults));
         }
         return apiCallQueue;
@@ -91,13 +91,6 @@
         }
         throw err;
       });
-  }
-
-
-  function executeApiCallPromise() {
-    return function promise(call) {
-      return api.executeAPICall(call);
-    };
   }
 
   function saveExecutions(workflow, callResults, results) {
@@ -166,7 +159,6 @@
   require('./api.js'),
   require('./connector.js'),
   require('./resources/Workflow'),
-  require('./resources/Connector'),
   require('./resources/WorkflowExecution'),
   require('./resources/Execution'),
   require('./resources/APICall')

@@ -3,7 +3,7 @@
 //
 // Author: Dominik Kukacka
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function connectorScope(mongoose, queue, _, Workflow, Connector, mapper) {
+(function connectorScope(mongoose, queue, Workflow, Connector, mapper) {
   'use strict';
 
   function addConnectorToWorkflow(req, res) {
@@ -107,53 +107,21 @@
       });
   }
 
-  function executeConnector(workflow, callTo, callResults) {
-    return function(callFrom) {
-      if(callFrom) {
+  function executeConnector(workflow, nextCall, callResults) {
+    return function(lastCall) {
+      if(!!lastCall) {
         var connector = null;
         for (var i = 0; i < workflow.connectors.length; i++) {
           connector = workflow.connectors[i];
           var result = callResults[connector.source.toString()];
-          if(!!result && connector.destination.toString() === callTo.id.toString()) {
+          if(!!result && connector.destination.toString() === nextCall.id.toString()) {
             var mappedValues = mapper.map(result.response, connector.mapper);
-            callTo = modifyCall(callTo, mappedValues);
+            nextCall = mapper.modifyCall(nextCall, mappedValues);
           }
         }
       }
-      return callTo;
+      return nextCall;
     };
-  }
-
-  function modifyCall(call, mappedValues) {
-    for (var i = 0; i < mappedValues.length; i++) {
-      var mappedValue = mappedValues[i];
-      switch(mappedValue.place) {
-        case 'url':
-          var regex = new RegExp(mappedValue.destination, 'g');
-          var url = call.url.replace(regex, mappedValue.value);
-          call.url = url;
-          break;
-
-        case 'header':
-          var additonalHeaders = {};
-          additonalHeaders[mappedValue.destination] = mappedValue.value;
-          if(!call.headers) {
-            call.headers = {};
-          }
-          call.headers = _.extend(call.headers, additonalHeaders);
-          break;
-
-        case 'data':
-          var additionalData = mapper.createObjectFromMap(mappedValue.destination, mappedValue.value);
-          if(!call.data) {
-            call.data = {};
-          }
-          call.data = _.extend(call.data, additionalData);
-          break;
-      }
-    }
-
-    return call;
   }
 
   module.exports = {
@@ -167,7 +135,6 @@
 }(
   require('mongoose'),
   require('q'),
-  require('underscore'),
   require('./resources/Workflow'),
   require('./resources/Connector'),
   require('./mapper')
