@@ -16,7 +16,7 @@
                             is-active="activeWorkflow._id === workflow._id"></workflow-list-item>
                     <md-divider ng-if="!$last"></md-divider>
                     <workflow workflow="activeWorkflow"
-                              hide-gt-md
+                              hide-gt-lg
                               ng-if="showDetails && activeWorkflow._id === workflow._id"></workflow>
                 </md-item>
             </md-list>
@@ -26,6 +26,7 @@
                   show-gt-lg
                   hide-sm
                   hide-md
+                  hide-lg
                   ng-if="showDetails"></workflow>
     </section>
 </md-whiteframe>
