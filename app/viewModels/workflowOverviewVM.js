@@ -12,6 +12,20 @@
     $scope.workflows = [];
     $scope.response = null;
 
+    $scope.activeWorkflow = null;
+
+    $scope.showWorkflowDetails = function showWorkflowDetails(event, workflow) {
+      event.stopPropagation();
+      $scope.showDetails = true;
+      $scope.activeWorkflow = workflow;
+    };
+    
+    $scope.closeWorkflowDetails = function closeWorkflowDetails(event) {
+      event.stopPropagation();
+      $scope.showDetails = false;
+      $scope.activeWorkflow = null;
+    };
+
     $scope.addWorkflow = function addWorkflow() {
       $scope.workflows.push({
         name: 'New Workflow',

@@ -14,6 +14,10 @@
     templateUrl: 'pages/workflows.html',
     label: 'workflows'
   }, {
+    url: '/workflowList',
+    templateUrl:'pages/workflowList.html',
+    label: 'workflow list'
+  }, {
     url: '/mapper',
     templateUrl: 'pages/mapper.html',
     label: 'register mapper'

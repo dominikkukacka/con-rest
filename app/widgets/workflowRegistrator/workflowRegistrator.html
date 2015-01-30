@@ -45,14 +45,14 @@
         </section>
       </div>
       <md-button class="md-primary md-raised"
-                 data-ng-click="save()">save
+                 ng-click="save()">save
       </md-button>
       <md-button class="md-raised"
-                 data-ng-click="requestCancel()">cancel
+                 ng-click="requestCancel()">cancel
       </md-button>
     </form>
 
-    <div data-ng-repeat="call in newCalls">
+    <div ng-repeat="call in newCalls">
       <call-registrator rest-call="call">
       </call-registrator>
     </div>
