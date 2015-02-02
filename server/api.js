@@ -142,7 +142,7 @@
         res.send(data);
         return data;
       }, function error(err) {
-        res.status(500).send(err);
+        res.status(500).send(err.toString());
         throw err;
       });
   }

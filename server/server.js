@@ -3,7 +3,8 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution, workflowExecution, connector, config,
+(function serverScope(express, bodyParser, api, workflow, mongoose, params, execution, workflowExecution, connector,
+  config,
   mapper) {
   'use strict';
 
@@ -17,7 +18,7 @@
   mongoose.connect(connect.uri, connect.options);
 
   var db = mongoose.connection;
-  db.on('error', console.error);
+  db.on('error', console.log);
   db.once('open', function initiateServer() {
     app.param('id', String);
 
