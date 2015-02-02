@@ -171,7 +171,8 @@
       headers: headers,
       agentOptions: {
         ca: config.getCertificates()
-      }
+      },
+      strictSSL: false
     };
 
     var type = apiCall.type || null;
