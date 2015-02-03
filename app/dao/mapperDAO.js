@@ -9,9 +9,16 @@
 
       this.public = {
         create: function createMap(name, maps) {
+          var filledMaps = [];
+          maps.forEach(function checkMap(map) {
+            console.log(map);
+            if (!!map.place && !!map.source && !!map.destination) {
+              this.push(map);
+            }
+          }, filledMaps);
           return this.private.request('POST', '/api/mappers/', {
             name: name,
-            maps: maps
+            maps: filledMaps
           });
         },
         getAll: function getAll() {

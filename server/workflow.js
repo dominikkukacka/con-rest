@@ -86,7 +86,8 @@
             res.send(results);
           });
       }, function error(err) {
-        if(res.status) {
+        if (res.status) {
+          console.log(err.toString());
           res.status(500).send(err.toString());
         }
         throw err;

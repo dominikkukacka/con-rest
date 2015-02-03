@@ -23,7 +23,7 @@
       $scope.maps = [{
         place: 'banana',
         source: 'foo',
-        destionation: 'bar'
+        destination: 'bar'
       }];
 
       // predict

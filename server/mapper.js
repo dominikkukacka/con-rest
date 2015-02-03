@@ -54,19 +54,19 @@
 
     var obj = {};
     var parts = map.split('.');
-    for (var i = parts.length -1; i >= 0; i--) {
+    for (var i = parts.length - 1; i >= 0; i--) {
       var part = parts[i];
 
       var newObj = {};
       //create indexed array if part is numeric
-      if(!isNaN(part)) {
+      if (!isNaN(part)) {
         newObj = [];
         part = parseInt(part, 10);
       }
 
 
       // the deepest key holds the value
-      if(i === parts.length - 1) {
+      if (i === parts.length - 1) {
         newObj[part] = value;
       } else {
         newObj[part] = obj;
@@ -98,7 +98,7 @@
   function modifyCall(call, mappedValues) {
     for (var i = 0; i < mappedValues.length; i++) {
       var mappedValue = mappedValues[i];
-      switch(mappedValue.place) {
+      switch (mappedValue.place) {
         case 'url':
           var regex = new RegExp(mappedValue.destination, 'g');
           var url = call.url.replace(regex, mappedValue.value);
@@ -109,13 +109,13 @@
         case 'header':
           var additionalData = createObjectFromMap(mappedValue.destination, mappedValue.value);
 
-          if(mappedValue.place === 'data') {
-            if(!!!call.data) {
+          if (mappedValue.place === 'data') {
+            if (!!!call.data) {
               call.data = {};
             }
             call.data = _.extend(call.data, additionalData);
           } else {
-            if(!!!call.headers) {
+            if (!!!call.headers) {
               call.headers = {};
             }
             call.headers = _.extend(call.headers, additionalData);

@@ -83,6 +83,7 @@
             body: {
               name: 'fake mapper',
               maps: [{
+                place: 'data',
                 source: 'test.data',
                 destination: 'testData'
               }]
@@ -345,12 +346,9 @@
         expect(result).to.deep.equal({
           a: [
             [
-              [
-                ,
-                {
-                  b: 1337
-                }
-              ]
+              [, {
+                b: 1337
+              }]
             ]
           ]
         });
