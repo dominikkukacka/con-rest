@@ -172,7 +172,7 @@
       agentOptions: {
         ca: config.getCertificates()
       },
-      strictSSL: false
+      strictSSL: config.getSSLConfig()
     };
 
     var type = apiCall.type || null;

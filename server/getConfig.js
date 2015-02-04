@@ -33,12 +33,17 @@
   }
 
   function getCertificates() {
-    return certificates;
+      return certificates;
+    }
+
+  function getSSLConfig() {
+    return config.server.strictSSL;
   }
 
   module.exports = {
     getMongoConfig: getMongoConfig,
     getServerConfig: getServerConfig,
-    getCertificates: getCertificates
+    getCertificates: getCertificates,
+    getSSLConfig: getSSLConfig
   };
 }(require('fs')));
