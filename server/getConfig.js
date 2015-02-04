@@ -33,8 +33,11 @@
   }
 
   function getCertificates() {
+    if(!!certificates[0]) {
       return certificates;
     }
+    return null;
+  }
 
   function getSSLConfig() {
     return config.server.strictSSL;
