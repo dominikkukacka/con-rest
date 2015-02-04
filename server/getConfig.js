@@ -15,6 +15,9 @@
     return ca;
   });
 
+  // Return config of mongo connection
+  // Default: Environment variable
+  // Fallback: config.json
   function getMongoConfig() {
     var connection = {};
     if (process.env.MONGO_CONNECTION) {
@@ -25,6 +28,9 @@
     return connection;
   }
 
+  // Return server configuration
+  // Default: App port in environment variable + config.json
+  // Fallback: config.json
   function getServerConfig() {
     if (process.env.CON_REST_PORT) {
       config.server.port = process.env.CON_REST_PORT;
@@ -32,6 +38,8 @@
     return config.server;
   }
 
+  // Returns an array of certificates,
+  // If no certificate could be loaded it returns null
   function getCertificates() {
     if(!!certificates[0]) {
       return certificates;
@@ -39,6 +47,8 @@
     return null;
   }
 
+  // Returns value for strictSSL from config.json.
+  // Should be set to false if insecure connections are allowed
   function getSSLConfig() {
     return config.server.strictSSL;
   }
