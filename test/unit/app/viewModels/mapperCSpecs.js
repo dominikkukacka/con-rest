@@ -21,8 +21,9 @@
       // given
       $scope.name = 'newMap';
       $scope.maps = [{
+        place: 'banana',
         source: 'foo',
-        destionation: 'bar'
+        destination: 'bar'
       }];
 
       // predict
@@ -38,6 +39,7 @@
       // then
       expect($scope.name).toEqual(null);
       expect($scope.maps).toEqual([{
+        place: null,
         source: null,
         destination: null
       }]);

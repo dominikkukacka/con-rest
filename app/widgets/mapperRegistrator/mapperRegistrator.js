@@ -15,7 +15,7 @@
 
         scope.$watch('maps', function autoAdd(newMaps) {
           var lastMap = newMaps[newMaps.length - 1];
-          if (!!lastMap.source && !!lastMap.destination) {
+          if (!!lastMap.place && !!lastMap.source && !!lastMap.destination) {
             scope.addMap();
           }
         }, true);

@@ -3,7 +3,7 @@
 //
 // Author: Dominik Kukacka
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function connectorScope(mongoose, queue, Workflow, Connector) {
+(function connectorScope(mongoose, queue, Workflow, Connector, mapper) {
   'use strict';
 
   function addConnectorToWorkflow(req, res) {
@@ -107,16 +107,35 @@
       });
   }
 
+  function executeConnector(workflow, nextCall, callResults) {
+    return function(lastCall) {
+      if(!!lastCall) {
+        var connector = null;
+        for (var i = 0; i < workflow.connectors.length; i++) {
+          connector = workflow.connectors[i];
+          var result = callResults[connector.source.toString()];
+          if(!!result && connector.destination.toString() === nextCall.id.toString()) {
+            var mappedValues = mapper.map(result.response, connector.mapper);
+            nextCall = mapper.modifyCall(nextCall, mappedValues);
+          }
+        }
+      }
+      return nextCall;
+    };
+  }
+
   module.exports = {
     getConnectorById: getConnectorById,
     getConnectorsByWorkflowId: getConnectorsByWorkflowId,
     addConnectorToWorkflow: addConnectorToWorkflow,
     saveConnector: saveConnector,
-    deleteConnector: deleteConnector
+    deleteConnector: deleteConnector,
+    executeConnector: executeConnector,
   };
 }(
   require('mongoose'),
   require('q'),
   require('./resources/Workflow'),
-  require('./resources/Connector')
+  require('./resources/Connector'),
+  require('./mapper')
 ));

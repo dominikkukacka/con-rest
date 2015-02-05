@@ -83,6 +83,7 @@
             body: {
               name: 'fake mapper',
               maps: [{
+                place: 'data',
                 source: 'test.data',
                 destination: 'testData'
               }]
@@ -212,53 +213,145 @@
         };
 
         var testMaps = [{
+          place: 'url',
           source: 'foobar',
           destination: 'rootValue'
         }, {
+          place: 'url',
           source: 'ba.na',
           destination: 'bananaObj'
         }, {
+          place: 'url',
           source: 'ba.na.na',
           destination: 'bananaValue'
         }, {
+          place: 'url',
           source: 'testArray[1]',
           destination: 'arrayValue'
         }, {
+          place: 'url',
           source: 'testArray[2].test',
           destination: 'arrayObj'
         }, {
+          place: 'url',
           source: 'users[0].groups[0].name',
           destination: 'complexString'
         }, {
+          place: 'url',
           source: 'users[0].groups',
           destination: 'complexArray'
         }, {
+          place: 'url',
           source: 'arr[0][1][0]',
           destination: 'arrayArray'
         }, {
+          place: 'url',
           source: 'users[0].email',
           destination: 'noValue'
         }];
 
-        var testOutput = {
-          rootValue: 123,
-          bananaObj: {
-            na: 1337
-          },
-          bananaValue: 1337,
-          arrayValue: 'apple',
-          arrayObj: 'orange',
-          complexString: 'admin',
-          complexArray: [{
-            name: 'admin'
-          }],
-          arrayArray: 'baz',
-          noValue: undefined
-        };
+        var testOutput = [{
+          place: 'url',
+          source: 'foobar',
+          destination: 'rootValue',
+          value: 123
+        }, {
+          destination: 'bananaObj',
+          place: 'url',
+          source: 'ba.na',
+          value: {
+            'na': 1337,
+          }
+        }, {
+          destination: 'bananaValue',
+          place: 'url',
+          source: 'ba.na.na',
+          value: 1337
+        }, {
+          destination: 'arrayValue',
+          place: 'url',
+          source: 'testArray[1]',
+          value: 'apple',
+        }, {
+          destination: 'arrayObj',
+          place: 'url',
+          source: 'testArray[2].test',
+          value: 'orange',
+        }, {
+          destination: 'complexString',
+          place: 'url',
+          source: 'users[0].groups[0].name',
+          value: 'admin',
+        }, {
+          destination: 'complexArray',
+          place: 'url',
+          source: 'users[0].groups',
+          value: [{
+            'name': 'admin',
+          }]
+        }, {
+          destination: 'arrayArray',
+          place: 'url',
+          source: 'arr[0][1][0]',
+          value: 'baz',
+        }, {
+          destination: 'noValue',
+          place: 'url',
+          source: 'users[0].email',
+          value: undefined,
+        }];
 
-
-        var result = mapper.map(testObject, testMaps);
+        var result = mapper.map(testObject, {
+          maps: testMaps
+        });
         expect(result).to.deep.equal(testOutput);
+
+        done();
+      });
+    });
+
+
+    describe('createObjectFromMap', function mapScope() {
+      it('should create a valid object', function testMap(done) {
+
+        var result = mapper.createObjectFromMap('a.b.c', 'd');
+        expect(result).to.deep.equal({
+          a: {
+            b: {
+              c: 'd'
+            }
+          }
+        });
+        done();
+      });
+
+      it('should create a valid object with array', function testMap(done) {
+
+        var result = mapper.createObjectFromMap('a.b[0]', 'c');
+        expect(result).to.deep.equal({
+          a: {
+            b: [
+              'c'
+            ]
+          }
+        });
+
+
+        done();
+      });
+
+      it('should create a valid object with nested array', function testMap(done) {
+
+        var result = mapper.createObjectFromMap('a[0][0][1].b', 1337);
+        expect(result).to.deep.equal({
+          a: [
+            [
+              [, {
+                b: 1337
+              }]
+            ]
+          ]
+        });
 
         done();
       });

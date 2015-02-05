@@ -142,7 +142,7 @@
         res.send(data);
         return data;
       }, function error(err) {
-        res.status(500).send(err);
+        res.status(500).send(err.toString());
         throw err;
       });
   }
@@ -171,7 +171,8 @@
       headers: headers,
       agentOptions: {
         ca: config.getCertificates()
-      }
+      },
+      strictSSL: config.getSSLConfig()
     };
 
     var type = apiCall.type || null;
@@ -222,6 +223,7 @@
       deferred.resolve({
         statusCode: response.statusCode,
         apiCall: apiCall,
+        url: apiCall.url,
         response: parsedBody,
         headers: options.headers,
         type: options.type,

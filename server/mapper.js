@@ -3,7 +3,7 @@
 //
 // Author: Dominik Kukacka
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function mapperScope(mongoose, queue, Mapper) {
+(function mapperScope(mongoose, queue, _, Mapper) {
   'use strict';
 
   var helper = require('./serverHelper');
@@ -48,16 +48,83 @@
     return currentPointer;
   }
 
-  function map(obj, maps) {
-    var mappedValues = {};
-    for (var i = 0; i < maps.length; i++) {
-      var _map = maps[i];
+  // will create an object which you can parse through the singleMap function
+  function createObjectFromMap(map, value) {
+    map = map.replace(/\]/g, '').replace(/\[/g, '.');
+
+    var obj = {};
+    var parts = map.split('.');
+    for (var i = parts.length - 1; i >= 0; i--) {
+      var part = parts[i];
+
+      var newObj = {};
+      //create indexed array if part is numeric
+      if (!isNaN(part)) {
+        newObj = [];
+        part = parseInt(part, 10);
+      }
+
+
+      // the deepest key holds the value
+      if (i === parts.length - 1) {
+        newObj[part] = value;
+      } else {
+        newObj[part] = obj;
+      }
+      obj = newObj;
+    }
+
+    return obj;
+
+  }
+
+  function map(obj, mapper) {
+    var mappedValues = [];
+    for (var i = 0; i < mapper.maps.length; i++) {
+      var _map = mapper.maps[i];
 
       var value = singleMap(obj, _map.source);
-      mappedValues[_map.destination] = value;
+      mappedValues.push({
+        place: _map.place,
+        source: _map.source,
+        destination: _map.destination,
+        value: value
+      });
     }
 
     return mappedValues;
+  }
+
+  function modifyCall(call, mappedValues) {
+    for (var i = 0; i < mappedValues.length; i++) {
+      var mappedValue = mappedValues[i];
+      switch (mappedValue.place) {
+        case 'url':
+          var regex = new RegExp(mappedValue.destination, 'g');
+          var url = call.url.replace(regex, mappedValue.value);
+          call.url = url;
+          break;
+
+        case 'data':
+        case 'header':
+          var additionalData = createObjectFromMap(mappedValue.destination, mappedValue.value);
+
+          if (mappedValue.place === 'data') {
+            if (!!!call.data) {
+              call.data = {};
+            }
+            call.data = _.extend(call.data, additionalData);
+          } else {
+            if (!!!call.headers) {
+              call.headers = {};
+            }
+            call.headers = _.extend(call.headers, additionalData);
+          }
+          break;
+      }
+    }
+
+    return call;
   }
 
   module.exports = {
@@ -66,9 +133,12 @@
     saveMapper: saveMapper,
     createMapper: createMapper,
     deleteMapper: deleteMapper,
-    map: map
+    map: map,
+    createObjectFromMap: createObjectFromMap,
+    modifyCall: modifyCall,
   };
 }(require('mongoose'),
   require('q'),
+  require('underscore'),
   require('./resources/Mapper')
 ));

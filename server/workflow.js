@@ -3,7 +3,7 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function workflowScope(mongoose, queue, api, Workflow, Connector, WorkflowExecution, Execution, APICall) {
+(function workflowScope(mongoose, queue, api, connector, Workflow, WorkflowExecution, Execution, APICall) {
   'use strict';
 
   var helper = require('./serverHelper');
@@ -51,6 +51,7 @@
     var callResults = {};
 
     return Workflow.findById(id)
+      .populate('connectors.mapper')
       .exec()
       .then(function getCalls(retrievedWorkflow) {
         workflow = retrievedWorkflow;
@@ -69,7 +70,8 @@
           var call = retrievedCalls[i];
 
           apiCallQueue = apiCallQueue
-            .then(executeApiCallWith(call))
+            .then(connector.executeConnector(workflow, call, callResults))
+            .then(api.executeAPICall)
             .then(registerAPICallExecution(queue, callIndex, callResults));
         }
         return apiCallQueue;
@@ -84,14 +86,12 @@
             res.send(results);
           });
       }, function error(err) {
-        res.status(500).send(err.toString());
+        if (res.status) {
+          console.log(err.toString());
+          res.status(500).send(err.toString());
+        }
+        throw err;
       });
-  }
-
-  function executeApiCallWith(call) {
-    return function wrapper() {
-      return api.executeAPICall(call);
-    };
   }
 
   function saveExecutions(workflow, callResults, results) {
@@ -128,6 +128,7 @@
       return Execution.create({
         workflow: workflow._id,
         apiCall: result.apiCall._id,
+        url: result.url,
         statusCode: result.statusCode,
         response: result.response,
         headers: result.headers,
@@ -157,8 +158,8 @@
   require('mongoose'),
   require('q'),
   require('./api.js'),
+  require('./connector.js'),
   require('./resources/Workflow'),
-  require('./resources/Connector'),
   require('./resources/WorkflowExecution'),
   require('./resources/Execution'),
   require('./resources/APICall')

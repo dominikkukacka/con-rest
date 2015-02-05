@@ -37,6 +37,11 @@
       headers: {
         'user-agent': 'TestUserAgent'
       }
+    }, {
+      _id: '545726928469e940235ce773',
+      name: 'queue call #3',
+      url: 'http://httpbin.org/get?testKey=testValue',
+      method: 'GET'
     },
 
     {
@@ -67,26 +72,42 @@
   var workflows = [{
     _id: '545726928469e940235ce769',
     name: 'firstWorkflow',
-    calls: ['545726928469e940235ce769', '545726928469e940235ce770']
+    calls: ['545726928469e940235ce769', '545726928469e940235ce770'],
+    connectors: []
   }, {
     _id: '545726928469e940235ce700',
     name: 'secondWorkflow',
     calls: ['545726928469e940235ce770', '545726928469e940235ce771', '545726928469e940235ce772'],
+    connectors: []
+  }, {
+    _id: '545726928469e940235ce701',
+    name: 'thirdWorkflow (connectors)',
+    calls: ['545726928469e940235ce770', '545726928469e940235ce771', '545726928469e940235ce773'],
     connectors: [{
       _id: '545726928469e940235d0001',
       source: '545726928469e940235ce770',
       destination: '545726928469e940235ce771',
-      mapper: '5464b1e2f8243a3c321a0001'
+      mapper: '5464b1e2f8243a3c321a0003'
     }, {
       _id: '545726928469e940235d0002',
-      source: '545726928469e940235ce771',
-      destination: '545726928469e940235ce772',
-      mapper: '5464b1e2f8243a3c321a0001'
+      source: '545726928469e940235ce770',
+      destination: '545726928469e940235ce773',
+      mapper: '5464b1e2f8243a3c321a0003'
     }, {
       _id: '545726928469e940235d0003',
+      source: '545726928469e940235ce771',
+      destination: '545726928469e940235ce773',
+      mapper: '5464b1e2f8243a3c321a0004'
+    }]
+  }, {
+    _id: '545726928469e940235ce702',
+    name: 'fourthWorkflow (dconenctor data)',
+    calls: ['545726928469e940235ce770', '545726928469e940235ce900'],
+    connectors: [{
+      _id: '545726928469e940235e0001',
       source: '545726928469e940235ce770',
-      destination: '545726928469e940235ce772',
-      mapper: '5464b1e2f8243a3c321a0001'
+      destination: '545726928469e940235ce900',
+      mapper: '5464b1e2f8243a3c321a0005'
     }]
   }];
 
@@ -147,9 +168,11 @@
       _id: '5464b1e2f8243a3c321a0001',
       name: 'extractor for banana and userid',
       maps: [{
+        place: 'body',
         source: 'user.id',
         destination: 'ba.na.na'
       }, {
+        place: 'body',
         source: 'user.name',
         destination: 'userName'
       }]
@@ -158,8 +181,44 @@
       _id: '5464b1e2f8243a3c321a0002',
       name: 'overwriter',
       maps: [{
+        place: 'body',
         source: 'matha',
         destination: 'faka'
+      }]
+    },
+    {
+      _id: '5464b1e2f8243a3c321a0003',
+      name: 'against mock #1',
+      maps: [{
+        place: 'header',
+        source: 'indicator',
+        destination: 'x-indicator'
+      }]
+    },
+    {
+      _id: '5464b1e2f8243a3c321a0004',
+      name: 'against mock #2',
+      maps: [{
+        place: 'url',
+        source: 'path.to.follow[0]',
+        destination: 'testValue'
+      }]
+    },
+    {
+      _id: '5464b1e2f8243a3c321a0005',
+      name: 'post mapper',
+      maps: [{
+        place: 'data',
+        source: 'origin',
+        destination: 'rootTest'
+      },{
+        place: 'data',
+        source: 'origin',
+        destination: 'obj.test'
+      },{
+        place: 'data',
+        source: 'origin',
+        destination: 'array[0]'
       }]
     }
   ];
@@ -169,20 +228,19 @@
     var allPromisses = [];
     var Model = mongoose.model(model);
     var Connector = mongoose.model('Connector');
-    // console.log(Model.modelName, Object.keys(Model.schema.tree).join(', '));
 
     for (var i = 0; i < mocks.length; i++) {
       var data = mocks[i];
       var deferred = queue.defer();
-      if (model === 'Workflow') {
+      if (model === 'Workflow' && data.connectors && data.connectors.length > 0) {
         var connectors = data.connectors || [];
         delete data.connectors;
       }
 
       var newModel = new Model(data);
-      if (model === 'Workflow') {
-        for (var i = 0; i < connectors.length; i++) {
-          var connector = connectors[i];
+      if (model === 'Workflow' && connectors && connectors.length > 0) {
+        for (var n = 0; n < connectors.length; n++) {
+          var connector = connectors[n];
           newModel.connectors.push(connector);
         };
 

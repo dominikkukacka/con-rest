@@ -12,7 +12,20 @@
     <md-text-float label="Mapper name"
                    ng-model="name"></md-text-float>
     <section ng-repeat="map in maps"
+             class="row"
              layout="row">
+      <div layout="column">
+        <md-text-float label="place"
+                     ng-model="map.place"
+                     data-ng-click="togglePlacesDropdown()"></md-text-float>
+        <md-list ng-show="openPlaces">
+          <md-item ng-repeat="place in availablePlaces"
+                   data-ng-click="selectPlace(map, place)">
+            <p>{{ place }}</p>
+            <md-divider ng-if="!$last"></md-divider>
+          </md-item>
+        </md-list>
+      </div>
       <md-text-float label="source"
                      ng-model="map.source"></md-text-float>
       <md-text-float label="destination"
@@ -26,6 +39,7 @@
     </section>
     <md-button class="md-primary md-raised"
                aria-label="save map"
+               type="submit"
                ng-click="save()">
       save
     </md-button>
