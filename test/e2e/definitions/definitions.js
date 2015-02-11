@@ -21,6 +21,13 @@ module.exports = English.library(dictionary)
     inputElement.clear();
     inputElement.sendKeys(value);
   })
+  .when('entering the (.*) with "(.*)"', function enterInputOnScope(input, value) {
+    var inputElement = element(by.model(input))
+      .element(by.model('value'));
+    inputElement.click();
+    inputElement.clear();
+    inputElement.sendKeys(value);
+  })
   .when('clicking the button with "(.*)" action', function clickButton(action) {
     element(by.css('[ng-click="' + action + '()"]')).click();
   })
@@ -30,6 +37,10 @@ module.exports = English.library(dictionary)
   })
   .then('the form header should become "(.*)"', function checkFormHeader(header) {
     expect(element(by.cssContainingText('h3', header)).isPresent()).to.become(true);
+  })
+  .then('the (.*) should be empty', function checkInputToBeEmpty(input) {
+    var inputValue = element(by.model(input)).getAttribute('value');
+    expect(inputValue).to.eventually.equal(null);
   })
   .then('I should see the details of workflow #$NUM', function detailsOfNumberOne(workflowIndex) {
     var listName = element.all(by.css('workflow-list-item'))
