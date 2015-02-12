@@ -35,8 +35,17 @@ module.exports = English.library(dictionary)
     element(by.css('workflow-list-item:nth-child(' + itemNumber + ')'))
       .element(by.css('[ng-click="toggleRequestDetails()"]')).click();
   })
+  .when('I click "(.*)" action on workflow item #$NUM', function clickActionOnItem(action, itemNumber) {
+    element(by.repeater('workflow in workflows').row(itemNumber-1))
+      .element(by.css('[ng-click="' + action + '(workflow)"]')).click();
+  })
   .then('the form header should become "(.*)"', function checkFormHeader(header) {
     expect(element(by.cssContainingText('h3', header)).isPresent()).to.become(true);
+  })
+  .then('the (.*) widget should become available on workflow item #$NUM', function checkForElement(value, itemNumber) {
+    var widget = element(by.repeater('workflow in workflows').row(itemNumber-1))
+      .element(by.css(value));
+    expect(widget.isPresent()).to.become(true);
   })
   .then('the (.*) should be empty', function checkInputToBeEmpty(input) {
     var inputValue = element(by.model(input)).getAttribute('value');
