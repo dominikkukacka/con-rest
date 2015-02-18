@@ -66,7 +66,7 @@
         var file = req.files[key];
         data[key] = {
           mime: file.mimetype,
-          bin: file.buffer
+          buffer: file.buffer
         };
       }
     }

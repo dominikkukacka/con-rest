@@ -254,6 +254,19 @@
       });
   }
 
+  function getAPICallImageById(req, res) {
+    var id = mongoose.Types.ObjectId(req.params.id);
+    return APICall.findById(id)
+      .exec()
+      .then(function(data) {
+        res.type(data.file.mime);
+        res.end(data.file.buffer, "binary");
+      }, function(err) {
+        res.send(500, err);
+      });
+
+  }
+
   module.exports = {
     deleteAPICall: deleteAPICall,
     saveAPICall: saveAPICall,
@@ -262,7 +275,8 @@
     registerAPICall: registerAPICall,
     executeAPICall: executeAPICall,
     executeAPICallById: executeAPICallById,
-    getExecutionsByAPICallId: getExecutionsByAPICallId
+    getExecutionsByAPICallId: getExecutionsByAPICallId,
+    getAPICallImageById: getAPICallImageById
   };
 }(
   require('mongoose'),
