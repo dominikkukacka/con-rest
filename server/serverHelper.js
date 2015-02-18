@@ -18,18 +18,32 @@
   }
 
   // Default get all
-  function getAll(model, req, res) {
+  function getAll(model, req, res, modifier) {
     return model.find()
       .exec()
+      .then(function(data) {
+        if(modifier){
+          return modifier(data);
+        }
+
+        return data;
+      })
       .then(sendAndResolve(res),
         errorHandler(res));
   }
 
   // Default get by id
-  function getById(model, req, res) {
+  function getById(model, req, res, modifier) {
     var id = mongoose.Types.ObjectId(req.params.id);
     return model.findById(id)
       .exec()
+      .then(function(data) {
+        if(modifier){
+          return modifier(data);
+        }
+
+        return data;
+      })
       .then(sendAndResolve(res),
         errorHandler(res));
   }
