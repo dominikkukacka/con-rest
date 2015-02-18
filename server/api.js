@@ -25,7 +25,13 @@
   //         "__v":0
   //     }]
   function getAPICalls(req, res) {
-    return helper.getAll(APICall, req, res);
+    return helper.getAll(APICall, req, res, function(data) {
+      // set file to true if buffer is set, to keep json small
+      for(var i = 0; i < data.length; i++) {
+        data[i].file = !!data[i].file.buffer;
+      }
+      return data;
+    });
   }
 
   // Receive specific REST call from the database by its ID
@@ -42,7 +48,11 @@
   //         "__v":0
   //     }
   function getAPICallById(req, res) {
-    return helper.getById(APICall, req, res);
+    return helper.getById(APICall, req, res, function(data) {
+      // set file to true if buffer is set, to keep json small
+      data.file = !!data.file.buffer;
+      return data;
+    });
   }
 
   // Delete specific REST call from database by its ID
