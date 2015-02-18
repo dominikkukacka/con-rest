@@ -47,6 +47,31 @@
   // Default creating new by id
   function createAndReturnId(model, req, res) {
 
+    var data = extractData(req);
+
+    return model.create(data)
+      .then(function sendId(result) {
+        res.send(result._id.toString());
+      }, errorHandler(res));
+  }
+
+  // Default update by id
+  function updateById(model, req, res) {
+    var id = mongoose.Types.ObjectId(req.params.id);
+    // Make sure the _id will not be reAssigned.
+    var data = extractData(req);
+    delete data.id;
+    return model.findByIdAndUpdate(id, {
+        $set: data
+      })
+      .exec()
+      .then(function(result) {
+        res.send('ok');
+        return result;
+      }, errorHandler(res));
+  }
+
+  function extractData(req) {
     var data = {};
     if(req.body) {
       for(var key in req.body) {
@@ -71,25 +96,7 @@
       }
     }
 
-    return model.create(data)
-      .then(function sendId(result) {
-        res.send(result._id.toString());
-      }, errorHandler(res));
-  }
-
-  // Default update by id
-  function updateById(model, req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    // Make sure the _id will not be reAssigned.
-    delete req.body._id;
-    return model.findByIdAndUpdate(id, {
-        $set: req.body
-      })
-      .exec()
-      .then(function(result) {
-        res.send('ok');
-        return result;
-      }, errorHandler(res));
+    return data;
   }
 
   module.exports = {
