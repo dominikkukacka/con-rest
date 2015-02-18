@@ -17,7 +17,7 @@
     headers: Schema.Types.Mixed,
     file: {
       mime: String,
-      bin: Buffer
+      buffer: Buffer
     }
   });
 
