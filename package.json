@@ -76,6 +76,7 @@
   },
   "repository": "ssh://git@github.com:EnoF/con-rest.git",
   "dependencies": {
+    "multer": "^0.1.7",
     "nock": "~0.48.2",
     "request": "~2.47.0",
     "underscore": "~1.6.0"

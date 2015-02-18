@@ -1,4 +1,4 @@
-(function serverHelperScope() {
+(function serverHelperScope(_) {
   'use strict';
   var mongoose = require('mongoose');
 
@@ -46,7 +46,32 @@
 
   // Default creating new by id
   function createAndReturnId(model, req, res) {
-    return model.create(req.body)
+
+    var data = {};
+    if(req.body) {
+      for(var key in req.body) {
+        var value = req.body[key];
+
+        // try to json parse value
+        try {
+          value = JSON.parse(value);
+        } catch(e) {}
+
+        data[key] = value;
+      }
+    }
+
+    if(req.files) {
+      for(var key in req.files) {
+        var file = req.files[key];
+        data[key] = {
+          mime: file.mimetype,
+          bin: file.buffer
+        };
+      }
+    }
+
+    return model.create(data)
       .then(function sendId(result) {
         res.send(result._id.toString());
       }, errorHandler(res));
@@ -75,4 +100,4 @@
     sendAndResolve: sendAndResolve,
     updateById: updateById
   };
-}());
+}(require('underscore')));
