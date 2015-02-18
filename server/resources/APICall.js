@@ -14,7 +14,11 @@
     method: String,
     type: String,
     data: Schema.Types.Mixed,
-    headers: Schema.Types.Mixed
+    headers: Schema.Types.Mixed,
+    file: {
+      mime: String,
+      bin: Buffer
+    }
   });
 
   module.exports = mongoose.model('APICall', apiCallSchema);
