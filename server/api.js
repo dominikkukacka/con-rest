@@ -28,7 +28,7 @@
     return helper.getAll(APICall, req, res, function(data) {
       // set file to true if buffer is set, to keep json small
       for(var i = 0; i < data.length; i++) {
-        data[i].file = !!data[i].file.buffer;
+        data[i].file = !!data[i].files.length;
       }
       return data;
     });
@@ -50,7 +50,7 @@
   function getAPICallById(req, res) {
     return helper.getById(APICall, req, res, function(data) {
       // set file to true if buffer is set, to keep json small
-      data.file = !!data.file.buffer;
+      data.file = !!data.files.length;
       return data;
     });
   }
@@ -146,13 +146,13 @@
   function executeAPICallById(req, res) {
     var id = mongoose.Types.ObjectId(req.params.id);
     return APICall.findById(id)
+      .populate('files.file')
       .exec()
       .then(function returnCall(call) {
         return executeAPICall(call);
       })
       .then(saveExecution)
       .then(function(data) {
-        data.apiCall.file = !!data.apiCall.file.buffer;
         res.send(data);
         return data;
       }, function error(err) {
@@ -245,13 +245,20 @@
         data: options.data
       });
     });
-    if(!!apiCall.file.buffer) {
+    if(apiCall.files.length > 0) {
       var form = r.form();
       for(var key in options.formData) {
         var value = options.formData[key];
         form.append(key, value);
       }
-      form.append('file', apiCall.file.buffer, {filename: 'file.jpg'});
+
+      for(var i = 0; i < apiCall.files.length; i++ ){
+        var file = apiCall.files[i];
+        form.append(file.name, file.file.buffer, {filename: file.name});
+
+        //remove it so it doesn't get send over the wire in the repsonse
+        delete apiCall.files[i];
+      }
     }
     return deferred.promise;
   }

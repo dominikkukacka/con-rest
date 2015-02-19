@@ -15,14 +15,18 @@
     type: String,
     data: Schema.Types.Mixed,
     headers: Schema.Types.Mixed,
-    file: {
-      mime: String,
-      buffer: Buffer
-    }
+    files: [{
+      name: String,
+      file: {
+       type: Schema.Types.ObjectId,
+       ref: 'File'
+     }
+    }]
   });
 
   module.exports = mongoose.model('APICall', apiCallSchema);
 
 }(
-  require('mongoose')
+  require('mongoose'),
+  require('./File')
 ));
