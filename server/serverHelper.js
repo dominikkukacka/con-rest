@@ -1,4 +1,4 @@
-(function serverHelperScope(_) {
+(function serverHelperScope() {
   'use strict';
   var mongoose = require('mongoose');
 
@@ -101,9 +101,9 @@
     }
 
     if(req.files) {
-      for(var key in req.files) {
-        var file = req.files[key];
-        data[key] = {
+      for(var filename in req.files) {
+        var file = req.files[filename];
+        data[filename] = {
           mime: file.mimetype,
           buffer: file.buffer
         };
@@ -121,4 +121,4 @@
     sendAndResolve: sendAndResolve,
     updateById: updateById
   };
-}(require('underscore')));
+}());

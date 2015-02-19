@@ -16,7 +16,7 @@
 
   app.use(multer({
     inMemory: true
-  }))
+  }));
   app.use(bodyParser.json(serverConfig.parser));
 
   mongoose.connect(connect.uri, connect.options);

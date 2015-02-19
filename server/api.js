@@ -81,7 +81,10 @@
   //         "__v":0
   //     }]
   function getExecutionsByAPICallId(req, res) {
-    return helper.getById(APICall, req, res);
+    return helper.getById(APICall, req, res, function(data) {
+      data.file = true;
+      return data;
+    });
   }
 
   // Add new REST call to the database and receive its ID
@@ -149,6 +152,7 @@
       })
       .then(saveExecution)
       .then(function(data) {
+        data.apiCall.file = !!data.apiCall.file.buffer;
         res.send(data);
         return data;
       }, function error(err) {
@@ -215,7 +219,8 @@
   function executeAPICall(apiCall) {
     var deferred = queue.defer();
     var options = getOptions(apiCall);
-    request(options, function(err, response, body) {
+
+    var r = request(options, function(err, response, body) {
       if (err) {
         deferred.reject(err);
         return;
@@ -240,6 +245,14 @@
         data: options.data
       });
     });
+    if(!!apiCall.file.buffer) {
+      var form = r.form();
+      for(var key in options.formData) {
+        var value = options.formData[key];
+        form.append(key, value);
+      }
+      form.append('file', apiCall.file.buffer, {filename: 'file.jpg'});
+    }
     return deferred.promise;
   }
 
@@ -270,7 +283,7 @@
       .exec()
       .then(function(data) {
         res.type(data.file.mime);
-        res.end(data.file.buffer, "binary");
+        res.end(data.file.buffer, 'binary');
       }, function(err) {
         res.send(500, err);
       });
