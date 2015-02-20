@@ -67,7 +67,10 @@
 
 
     app.get('/api/files', file.getFiles);
+    app.post('/api/files', file.createFile);
     app.get('/api/files/:id', file.getFileById);
+    app.put('/api/files/:id', file.saveFile);
+    app.delete('/api/files/:id', file.deleteFile);
   });
   module.exports = app;
 

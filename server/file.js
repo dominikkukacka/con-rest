@@ -26,8 +26,12 @@
     return File.findById(id)
       .exec()
       .then(function(data) {
-        res.type(data.mime);
-        res.end(data.buffer, 'binary');
+        if(data) {
+          res.type(data.mime);
+          res.end(data.buffer, 'binary');
+        } else {
+          res.send(404);
+        }
       }, function(err) {
         res.send(500, err);
       });

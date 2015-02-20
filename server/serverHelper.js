@@ -55,6 +55,7 @@
   function createAndReturnId(model, req, res) {
 
     var data = extractData(req);
+    console.log(data);
 
     return model.create(data)
       .then(function sendId(result) {
@@ -96,10 +97,8 @@
     if (req.files) {
       for (var filename in req.files) {
         var file = req.files[filename];
-        data[filename] = {
-          mime: file.mimetype,
-          buffer: file.buffer
-        };
+        data.mime = file.mimetype;
+        data.buffer = file.buffer;
       }
     }
 
