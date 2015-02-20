@@ -18,32 +18,25 @@
   }
 
   // Default get all
-  function getAll(model, req, res, modifier) {
+  function getAll(model, req, res) {
     return model.find()
       .exec()
-      .then(function(data) {
-        if(modifier){
-          return modifier(data);
-        }
-
-        return data;
-      })
       .then(sendAndResolve(res),
         errorHandler(res));
   }
 
   // Default get by id
-  function getById(model, req, res, modifier) {
+  function getById(model, req, res) {
     var id = mongoose.Types.ObjectId(req.params.id);
     return model.findById(id)
       .exec()
-      .then(function(data) {
-        if(modifier){
-          return modifier(data);
-        }
-
-        return data;
-      })
+      .then(sendAndResolve(res),
+        errorHandler(res));
+  }
+  // Default get by
+  function getBy(model, by, req, res) {
+    return model.find(by)
+      .exec()
       .then(sendAndResolve(res),
         errorHandler(res));
   }
@@ -76,8 +69,8 @@
     var data = extractData(req);
     delete data.id;
     return model.findByIdAndUpdate(id, {
-        $set: data
-      })
+      $set: data
+    })
       .exec()
       .then(function(result) {
         res.send('ok');
@@ -87,21 +80,21 @@
 
   function extractData(req) {
     var data = {};
-    if(req.body) {
-      for(var key in req.body) {
+    if (req.body) {
+      for (var key in req.body) {
         var value = req.body[key];
 
         // try to json parse value
         try {
           value = JSON.parse(value);
-        } catch(e) {}
+        } catch (e) {}
 
         data[key] = value;
       }
     }
 
-    if(req.files) {
-      for(var filename in req.files) {
+    if (req.files) {
+      for (var filename in req.files) {
         var file = req.files[filename];
         data[filename] = {
           mime: file.mimetype,
@@ -118,6 +111,7 @@
     deleteById: deleteById,
     getAll: getAll,
     getById: getById,
+    getBy: getBy,
     sendAndResolve: sendAndResolve,
     updateById: updateById
   };
