@@ -3,9 +3,12 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
-(function serverScope(express, bodyParser, multer, api, workflow, mongoose, params, execution, workflowExecution, connector,
-  config,
-  mapper) {
+(function serverScope(
+  express, bodyParser, multer, api,
+  workflow, mongoose, params, execution,
+  workflowExecution, connector, config,
+  mapper, file
+) {
   'use strict';
 
   var app = express();
@@ -28,7 +31,6 @@
 
     app.get('/api/requests', api.getAPICalls);
     app.get('/api/requests/:id', api.getAPICallById);
-    app.get('/api/requests/:id/image', api.getAPICallImageById);
     app.post('/api/requests', api.registerAPICall);
     app.put('/api/requests/:id', api.saveAPICall);
     app.delete('/api/requests/:id', api.deleteAPICall);
@@ -62,6 +64,10 @@
     app.get('/api/workflows/:workflowId/connectors/:connectorId', connector.getConnectorById);
     app.put('/api/workflows/:workflowId/connectors/:connectorId', connector.saveConnector);
     app.delete('/api/workflows/:workflowId/connectors/:connectorId', connector.deleteConnector);
+
+
+    app.get('/api/files', file.getFiles);
+    app.get('/api/files/:id', file.getFileById);
   });
   module.exports = app;
 
@@ -77,5 +83,6 @@
   require('./workflowExecution.js'),
   require('./connector.js'),
   require('./getConfig.js'),
-  require('./mapper.js')
+  require('./mapper.js'),
+  require('./file.js')
 ));

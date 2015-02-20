@@ -25,13 +25,7 @@
   //         "__v":0
   //     }]
   function getAPICalls(req, res) {
-    return helper.getAll(APICall, req, res, function(data) {
-      // set file to true if buffer is set, to keep json small
-      for(var i = 0; i < data.length; i++) {
-        data[i].file = !!data[i].files.length;
-      }
-      return data;
-    });
+    return helper.getAll(APICall, req, res);
   }
 
   // Receive specific REST call from the database by its ID
@@ -48,11 +42,7 @@
   //         "__v":0
   //     }
   function getAPICallById(req, res) {
-    return helper.getById(APICall, req, res, function(data) {
-      // set file to true if buffer is set, to keep json small
-      data.file = !!data.files.length;
-      return data;
-    });
+    return helper.getById(APICall, req, res);
   }
 
   // Delete specific REST call from database by its ID
@@ -81,10 +71,10 @@
   //         "__v":0
   //     }]
   function getExecutionsByAPICallId(req, res) {
-    return helper.getById(APICall, req, res, function(data) {
-      data.file = true;
-      return data;
-    });
+    var id = mongoose.Types.ObjectId(req.params.id);
+    return helper.getBy(Execution, {
+      apiCall: id
+    }, req, res);
   }
 
   // Add new REST call to the database and receive its ID
@@ -284,19 +274,6 @@
       });
   }
 
-  function getAPICallImageById(req, res) {
-    var id = mongoose.Types.ObjectId(req.params.id);
-    return APICall.findById(id)
-      .exec()
-      .then(function(data) {
-        res.type(data.file.mime);
-        res.end(data.file.buffer, 'binary');
-      }, function(err) {
-        res.send(500, err);
-      });
-
-  }
-
   module.exports = {
     deleteAPICall: deleteAPICall,
     saveAPICall: saveAPICall,
@@ -305,8 +282,7 @@
     registerAPICall: registerAPICall,
     executeAPICall: executeAPICall,
     executeAPICallById: executeAPICallById,
-    getExecutionsByAPICallId: getExecutionsByAPICallId,
-    getAPICallImageById: getAPICallImageById
+    getExecutionsByAPICallId: getExecutionsByAPICallId
   };
 }(
   require('mongoose'),
