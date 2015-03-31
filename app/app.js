@@ -29,6 +29,14 @@
     url: '/restcalls',
     templateUrl: 'pages/restCalls.html',
     label: 'rest calls'
+  }, {
+    url: '/files',
+    templateUrl: 'pages/files.html',
+    label: 'files'
+  }, {
+    url: '/createFile',
+    templateUrl: 'pages/createFile.html',
+    label: 'create file'
   }];
 
   app.factory('sitemap', function siteMap() {
