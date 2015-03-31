@@ -36,8 +36,29 @@
           this.private.requestRaw(method, url, data)
             .then(this.private.exposeData(deferred),
               deferred.reject);
+              return deferred.promise;
+        },
+        postWithFile: function postWithFile(url, data, file) {
+          var deferred = $q.defer();
+
+          var fd = new FormData();
+          fd.append('file', file);
+
+          for(var key in data) {
+            fd.append(key, data[key]);
+          }
+
+          $http.post(url, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+          }).then(
+            this.private.exposeData(deferred),
+            deferred.reject
+          );
+
           return deferred.promise;
         },
+
         requestRaw: function requestRaw(method, url, data) {
           return $http(this.private.createConfig(method, url, data));
         }
