@@ -7,7 +7,7 @@
   var app = angular.module('con-rest');
 
   app.controller('fileOverviewVM', function fileOverviewVM($scope, $mdDialog, events, fileDAO) {
-    $scope.images = [];
+    $scope.files = [];
 
     $scope.getFiles = function getFiles() {
       fileDAO.getAll()

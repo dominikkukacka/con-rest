@@ -5,7 +5,7 @@
 
   app.controller('fileC', function fileC($scope, fileDAO, events) {
 
-    $scope.file = {
+    $scope.file = $scope.file || {
       _id: $scope.id || null,
       name: null
     };
@@ -45,7 +45,7 @@
     };
 
     $scope.updateFile = function updateFile() {
-      fileDAO.updateFile($scope.file)
+      fileDAO.updateFile($scope.file, $scope.buffer)
         .then($scope.restCallUpdated);
     };
 

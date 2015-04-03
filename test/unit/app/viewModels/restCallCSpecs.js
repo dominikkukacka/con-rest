@@ -23,6 +23,7 @@
         // given
         testGlobals.givenRequest($scope.request).isDefault();
         spyOn($scope, '$emit');
+        $httpBackend.expect('GET', '/api/files/').respond(200, {});
 
         // when
         $httpBackend.expect('POST', '/api/requests', {
@@ -46,6 +47,7 @@
         testGlobals.givenRequest($scope.request).isDefault();
         $scope.request._id = 'someguidid';
         spyOn($scope, '$emit');
+        $httpBackend.expect('GET', '/api/files/').respond(200, {});
 
         // when
         $httpBackend.expect('PUT', '/api/requests/' + $scope.request._id, {
@@ -68,6 +70,7 @@
       it('should display an handle errors accordingly', function emitFailed() {
         // given
         spyOn($scope, '$emit');
+        $httpBackend.expect('GET', '/api/files/').respond(200, {});
 
         // when
         $httpBackend.when('POST', '/api/requests').respond(400, 'bad request');

@@ -81,6 +81,7 @@
 
   function extractData(req) {
     var data = {};
+console.log(req.body,req.files);
     if (req.body) {
       for (var key in req.body) {
         var value = req.body[key];

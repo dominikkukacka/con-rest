@@ -20,15 +20,13 @@
           return this.private.request('GET', '/api/files/' + id);
         },
         createFile: function createfile(data, file) {
-console.log(data,file);
-          return this.private.postWithFile('/api/files', data, file);
+          return this.private.requestWithFile('POST', '/api/files', data, file);
         },
         remove: function remove(id) {
           return this.private.request('DELETE', '/api/files/' + id);
         },
-        updateFile: function updatefile(file) {
-          return this.private.request('PUT', '/api/files/' + file._id,
-            file);
+        updateFile: function updatefile(data, file) {
+          return this.private.requestWithFile('PUT', '/api/files/' + data._id, data, file);
         }
       };
     }
