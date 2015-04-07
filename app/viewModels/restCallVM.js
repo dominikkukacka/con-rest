@@ -19,7 +19,8 @@
       type: null,
       method: null,
       data: null,
-      headers: null
+      headers: null,
+      files: []
     };
     $scope.originalRequest = angular.copy($scope.request);
     $scope.response = null;

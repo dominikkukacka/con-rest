@@ -9,7 +9,6 @@
 
     fileDAO.getAll()
       .then(function filesRetrieved(files) {
-        console.log(files);
         $scope.files = files;
       });
 
@@ -41,7 +40,8 @@
         url: null,
         method: null,
         data: null,
-        headers: null
+        headers: null,
+        files: []
       };
     }
 
@@ -65,7 +65,8 @@
         method: $scope.request.method,
         type: $scope.request.type,
         data: extractJSONObject($scope.request.data),
-        headers: extractJSONObject($scope.request.headers)
+        headers: extractJSONObject($scope.request.headers),
+        files: $scope.request.files
       }).then($scope.emitRegistrationSuccessfull, $scope.emitRegistrationFailed);
     };
 
@@ -109,7 +110,7 @@
 
     $scope.addNewFile = function addFile() {
       $scope.request.files.push({});
-    }
+    };
 
     // Open the dropdown for methods.
     $scope.toggleMethodsDropdown = function toggleMethodsDropdown() {

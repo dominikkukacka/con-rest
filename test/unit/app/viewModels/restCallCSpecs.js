@@ -31,7 +31,8 @@
           url: $scope.request.url,
           method: $scope.request.method,
           data: $scope.request.data,
-          headers: $scope.request.headers
+          headers: $scope.request.headers,
+          files: $scope.request.files
         }).respond(200, 'someguidid');
         $scope.save();
 
@@ -56,7 +57,8 @@
           url: $scope.request.url,
           method: $scope.request.method,
           data: $scope.request.data,
-          headers: $scope.request.headers
+          headers: $scope.request.headers,
+          files: $scope.request.files
         }).respond(200, 'someguidid');
         $scope.save();
 

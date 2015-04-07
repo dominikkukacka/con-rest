@@ -11,7 +11,6 @@
         create: function createMap(name, maps) {
           var filledMaps = [];
           maps.forEach(function checkMap(map) {
-            console.log(map);
             if (!!map.place && !!map.source && !!map.destination) {
               this.push(map);
             }
