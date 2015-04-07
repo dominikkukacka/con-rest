@@ -55,7 +55,6 @@
   function createAndReturnId(model, req, res) {
 
     var data = extractData(req);
-    console.log(data);
 
     return model.create(data)
       .then(function sendId(result) {
@@ -81,7 +80,7 @@
 
   function extractData(req) {
     var data = {};
-console.log(req.body,req.files);
+
     if (req.body) {
       for (var key in req.body) {
         var value = req.body[key];

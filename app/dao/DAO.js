@@ -38,7 +38,7 @@
               deferred.reject);
               return deferred.promise;
         },
-        requestWithFile: function postWithFile(method, url, data, file) {
+        requestWithFile: function requestWithFile(method, url, data, file) {
           var deferred = $q.defer();
 
           var fd = new FormData();
@@ -48,11 +48,7 @@
             fd.append(key, data[key]);
           }
 
-
-          $http({
-            method: method,
-            url: url
-          }, fd, {
+          $http[method.toLowerCase()](url, fd, {
               transformRequest: angular.identity,
               headers: {'Content-Type': undefined}
           }).then(
