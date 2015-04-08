@@ -108,6 +108,13 @@
       $scope.openFiles = false;
     };
 
+    // Select iamge
+    $scope.removeFile = function removeFile(file) {
+      $scope.request.files = $scope.request.files.filter(function(a) {
+        return a._id !== file._id;
+      });
+    };
+
     $scope.addNewFile = function addFile() {
       $scope.request.files.push({});
     };
