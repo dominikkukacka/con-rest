@@ -59,7 +59,7 @@
           _id: {
             $in: workflow.calls
           }
-        }).exec();
+        }).populate('files.file').exec();
       })
       .then(function orderCalls(retrievedCalls) {
         return getSorted(retrievedCalls, workflow.calls);
