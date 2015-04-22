@@ -3,7 +3,15 @@
 
   var app = angular.module('con-rest');
 
-  app.controller('restCallC', function restCallC($scope, requestDAO, events) {
+  app.controller('restCallC', function restCallC($scope, requestDAO, fileDAO, events) {
+
+    $scope.files = [];
+
+    fileDAO.getAll()
+      .then(function filesRetrieved(files) {
+        $scope.files = files;
+      });
+
     //Helper functions
     function extractJSONObject(data) {
       try {
@@ -32,7 +40,8 @@
         url: null,
         method: null,
         data: null,
-        headers: null
+        headers: null,
+        files: []
       };
     }
 
@@ -56,7 +65,8 @@
         method: $scope.request.method,
         type: $scope.request.type,
         data: extractJSONObject($scope.request.data),
-        headers: extractJSONObject($scope.request.headers)
+        headers: extractJSONObject($scope.request.headers),
+        files: $scope.request.files
       }).then($scope.emitRegistrationSuccessfull, $scope.emitRegistrationFailed);
     };
 
@@ -92,6 +102,23 @@
       $scope.openTypes = false;
     };
 
+    // Select iamge
+    $scope.selectFile = function selectFile(file) {
+      $scope.requestFile.file = file._id;
+      $scope.openFiles = false;
+    };
+
+    // Select iamge
+    $scope.removeFile = function removeFile(file) {
+      $scope.request.files = $scope.request.files.filter(function(a) {
+        return a._id !== file._id;
+      });
+    };
+
+    $scope.addNewFile = function addFile() {
+      $scope.request.files.push({});
+    };
+
     // Open the dropdown for methods.
     $scope.toggleMethodsDropdown = function toggleMethodsDropdown() {
       $scope.openMethods = !$scope.openMethods;
@@ -100,6 +127,12 @@
     // Open the dropdown for types.
     $scope.toggleTypesDropdown = function toggleTypesDropdown() {
       $scope.openTypes = !$scope.openTypes;
+    };
+
+    // Open the dropdown for images.
+    $scope.toggleFileDropdown = function toggleFileDropdown(requestFile) {
+      $scope.requestFile = requestFile;
+      $scope.openFiles = !$scope.openFiles;
     };
 
     $scope.updateRestCall = function updateRestCall() {

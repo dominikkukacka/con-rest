@@ -24,6 +24,7 @@
     it('should load the widget with a provided model', function providedModel() {
       // given
       parentScope.request = {};
+      $httpBackend.expect('GET', '/api/files/').respond(200, {});
       var directive = angular.element('<call-registrator rest-call="request">');
 
       // when

@@ -71,7 +71,10 @@
   //         "__v":0
   //     }]
   function getExecutionsByAPICallId(req, res) {
-    return helper.getById(APICall, req, res);
+    var id = mongoose.Types.ObjectId(req.params.id);
+    return helper.getBy(Execution, {
+      apiCall: id
+    }, req, res);
   }
 
   // Add new REST call to the database and receive its ID
@@ -133,6 +136,7 @@
   function executeAPICallById(req, res) {
     var id = mongoose.Types.ObjectId(req.params.id);
     return APICall.findById(id)
+      .populate('files.file')
       .exec()
       .then(function returnCall(call) {
         return executeAPICall(call);
@@ -205,7 +209,8 @@
   function executeAPICall(apiCall) {
     var deferred = queue.defer();
     var options = getOptions(apiCall);
-    request(options, function(err, response, body) {
+
+    var r = request(options, function(err, response, body) {
       if (err) {
         deferred.reject(err);
         return;
@@ -230,6 +235,21 @@
         data: options.data
       });
     });
+    if(apiCall.files.length > 0) {
+      var form = r.form();
+      for(var key in options.formData) {
+        var value = options.formData[key];
+        form.append(key, value);
+      }
+
+      for(var i = 0; i < apiCall.files.length; i++ ){
+        var file = apiCall.files[i];
+        form.append(file.name, file.file.buffer, {filename: file.name});
+
+        //remove it so it doesn't get send over the wire in the repsonse
+        delete apiCall.files[i];
+      }
+    }
     return deferred.promise;
   }
 
