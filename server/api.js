@@ -147,6 +147,7 @@
         return data;
       }, function error(err) {
         res.status(500).send(err.toString());
+        console.error(err);
         throw err;
       });
   }
@@ -235,6 +236,7 @@
         data: options.data
       });
     });
+
     if(apiCall.files.length > 0) {
       var form = r.form();
       for(var key in options.formData) {
@@ -244,7 +246,7 @@
 
       for(var i = 0; i < apiCall.files.length; i++ ){
         var file = apiCall.files[i];
-        form.append(file.name, file.file.buffer, {filename: file.name});
+        form.append(file.name, file.file.buffer, {filename: file.name, contentType: file.file.mime});
 
         //remove it so it doesn't get send over the wire in the repsonse
         delete apiCall.files[i];
