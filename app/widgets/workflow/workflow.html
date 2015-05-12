@@ -8,7 +8,7 @@
            ng-if="!editing">
     <h2>{{ workflow.name }}</h2>
     <section layout="row">
-      <div layout="column">
+      <div layout="column" flex>
         <h3>Calls</h3>
         <div layout="rows" layout-phone="column" layout-wrap flex>
           <rest-call ng-repeat="call in workflow.calls"
@@ -21,7 +21,7 @@
                      workflow-id="workflow._id"></connector>
         </div>
       </div>
-      <section layout="column">
+      <section layout="column" class="side-buttons">
         <md-button class="md-fab"
                    ng-click="executeWorkflow(workflow)"
                    aria-label="execute workflow">
