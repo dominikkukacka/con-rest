@@ -10,7 +10,7 @@ module.exports = function(config) {
     basePath: '..',
 
     // testing framework to use (jasmine/mocha/qunit/...)
-    frameworks: ['jasmine'],
+    frameworks: ['mocha', 'sinon-chai'],
 
     // list of files / patterns to load in the browser
     files: [
@@ -18,33 +18,26 @@ module.exports = function(config) {
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/bower_components/angular-aria/angular-aria.min.js',
-      'app/bower_components/angular-animate/angular-animate.min.js',
-      'app/bower_components/hammerjs/hammer.min.js',
-      'app/bower_components/angular-material/angular-material.min.js',
-      'app/bower_components/enofjs/src/clazz.js',
-      // App wiring
-      'app/app.js',
-      // DAO
-      'app/dao/**/*.js',
-      // Models
-      'app/models/**/*.js',
-      // Modules
-      'app/modules/*.js',
-      // Directives
-      'app/directives/*.js',
-      // View Models
-      'app/viewModels/**/*.js',
-      // Views encapsuled in widgets
-      'app/widgets/**/*.js',
-      // Templates for the widgets
-      '.tmp/scripts/templates.js',
-      // The specs for unit testing
-      'test/unit/**/*.js'
+      'app/bower_components/angular-aria/angular-aria.js',
+      'app/bower_components/angular-animate/angular-animate.js',
+      'app/bower_components/angular-material/angular-material.js',
+      '.tmp/js/test/*.js',
+      '.tmp/js/app/core/models/**/*.js',
+      '.tmp/js/app/core/dao/**/*.js',
+      '.tmp/js/app/core/modules/**/*.js',
+      '.tmp/js/app/core/widgets/**/src/**/*.js',
+      '.tmp/js/app/core/widgets/**/*.js',
+      '.tmp/js/app/widgets/**/src/**/*.js',
+      '.tmp/js/app/widgets/**/*.js',
+      '.tmp/js/app.js',
+      '.tmp/js/templates.js',
+      '.tmp/js/app/core/widgets/**/test/unit/*.js',
+      '.tmp/js/app/widgets/**/test/unit/*.js',
+      '.tmp/test.spec.js'
     ],
 
     // list of files / patterns to exclude
-    exclude: ['test/unit/server/**/*.js'],
+    exclude: [],
 
     // web server port
     port: 5050,
@@ -69,16 +62,11 @@ module.exports = function(config) {
     browsers: ['PhantomJS'],
 
     // coverage reporter generates the coverage
-    reporters: ['progress', 'coverage'],
+    reporters: ['mocha', 'coverage'],
 
     preprocessors: {
-      // source files, that you wanna generate coverage for
-      // do not include tests or libraries
-      // (these files will be instrumented by Istanbul)
-      'app/models/**/*.js': ['coverage'],
-      'app/modules/**/*.js': ['coverage'],
-      'app/directives/**/*.js': ['coverage'],
-      'app/viewModels/**/*.js': ['coverage']
+      '.tmp/js/widgets/**/*.js': ['coverage'],
+      '.tmp/js/core/**/*.js': ['coverage']
     },
 
     // optionally, configure the reporter

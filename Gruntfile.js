@@ -186,7 +186,7 @@ module.exports = function(grunt) {
         options: {
           module: 'con-rest.templates',
           url: function(url) {
-            return url.replace(/(app\/widgets\/([\s\S]*?)\/)/, '').replace(/.html/, '');
+            return url.replace(/(([\s\S]*?)\/widgets\/([\s\S]*?)\/src\/)|.html/g, '').replace(/.html/, '');
           }
         }
       },
