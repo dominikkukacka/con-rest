@@ -1,4 +1,4 @@
-(function fielCScope(angular) {
+(function fileCScope(angular) {
   'use strict';
 
   var app = angular.module('con-rest');
