@@ -1,0 +1,45 @@
+{
+    "version": "1.5.0-alpha",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "outDir": "./build/"
+    },
+    "filesGlob": [
+        "./app/*.ts",
+        "./app/core/**/*.ts",
+        "./app/widgets/**/*.ts",
+        "./test/*.ts",
+        "./app/bower_components/type-def/angularjs/angular.d.ts",
+        "./app/bower_components/type-def/node/node.d.ts",
+        "./app/bower_components/type-def/node/node.d.ts",
+        "./app/bower_components/type-def/mocha/mocha.d.ts",
+        "./app/bower_components/type-def/sinon-chai/sinon-chai.d.ts",
+        "./app/bower_components/type-def/express/express.d.ts",
+        "./app/bower_components/type-def/mongoose/mongoose.d.ts",
+        "./app/bower_components/type-def/cryptojs/cryptojs.d.ts",
+        "./app/bower_components/type-def/q/Q.d.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./app/app.ts",
+        "./app/reference.ts",
+        "./app/bower_components/type-def/angularjs/angular.d.ts",
+        "./app/bower_components/type-def/node/node.d.ts",
+        "./app/bower_components/type-def/mocha/mocha.d.ts",
+        "./app/bower_components/type-def/sinon-chai/sinon-chai.d.ts",
+        "./app/bower_components/type-def/express/express.d.ts",
+        "./app/bower_components/type-def/mongoose/mongoose.d.ts",
+        "./app/bower_components/type-def/cryptojs/cryptojs.d.ts",
+        "./app/bower_components/type-def/q/Q.d.ts"
+    ],
+    "formatCodeOptions": {
+        "indentSize": 2,
+        "tabSize": 2,
+        "convertTabsToSpaces": true
+    }
+}

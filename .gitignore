@@ -177,3 +177,7 @@ coverageMidway
 test-results.xml
 
 certificates/**/*
+
+tsconfig.json
+.tscache
+.baseDir.ts

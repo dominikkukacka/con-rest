@@ -182,9 +182,9 @@ module.exports = function(grunt) {
     ngtemplates: {
       dev: {
         src: '<%= app.app %>/widgets/**/*.html',
-        dest: '<%= app.tmp %>/scripts/templates.js',
+        dest: '<%= app.tmp %>/js/templates.js',
         options: {
-          module: 'con-rest',
+          module: 'con-rest.templates',
           url: function(url) {
             return url.replace(/(app\/widgets\/([\s\S]*?)\/)/, '').replace(/.html/, '');
           }
@@ -246,6 +246,45 @@ module.exports = function(grunt) {
     simplemocha: {
       all: {
         src: ['test/unit/server/**/*.js']
+      }
+    },
+    ts: {
+      all: {
+        src: [
+          'app/bower_components/type-def/angularjs/angular.d.ts',
+          'app/core/models/**/*.ts',
+          'app/core/dao/**/*.ts',
+          'app/core/modules/**/*.ts',
+          'app/core/widgets/**/src/**/*.ts',
+          'app/core/widgets/**/*.ts',
+          '!app/core/widgets/**/test/**',
+          'app/widgets/**/src/**/*.ts',
+          'app/widgets/**/*.ts',
+          '!app/widgets/**/test/**',
+          'app/app.ts'
+        ],
+        reference: 'app/reference.ts',
+        out: '.tmp/js/build.js'
+      },
+      seperate: {
+        src: [
+          'app/bower_components/type-def/angularjs/angular.d.ts',
+          'app/bower_components/type-def/node/node.d.ts',
+          'app/bower_components/type-def/mocha/mocha.d.ts',
+          'app/bower_components/type-def/sinon-chai/sinon-chai.d.ts',
+          'test/angular-mocks.d.ts',
+          'test/*.ts',
+          'app/core/models/**/*.ts',
+          'app/core/dao/**/*.ts',
+          'app/core/modules/**/*.ts',
+          'app/core/widgets/**/src/**/*.ts',
+          'app/core/widgets/**/*.ts',
+          'app/widgets/**/src/**/*.ts',
+          'app/widgets/**/*.ts',
+          'app/app.ts'
+        ],
+        reference: 'app/reference.ts',
+        outDir: '.tmp/js'
       }
     },
     uglify: {
@@ -313,16 +352,12 @@ module.exports = function(grunt) {
           livereload: true
         }
       },
-      testsApp: {
+      ts: {
         files: [
-          '<%= app.app %>/**/*.js',
-          '<%= app.test %>/unit/app/**/*.js'
+          'app/core/**/*.ts',
+          'app/widgets/**/*.ts'
         ],
-        tasks: ['karma:unitAuto:run', 'concat:dev'],
-        options: {
-          // Start a live reload server on the default port 35729
-          livereload: true
-        }
+        tasks: ['ts', 'karma:unitAuto:run']
       },
       testsServer: {
         files: [
@@ -350,7 +385,7 @@ module.exports = function(grunt) {
     'concat:less',
     'less',
     'ngtemplates:dev',
-    'concat:dev'
+    'ts'
   ]);
 
   grunt.registerTask('setupEnv', function env(target) {

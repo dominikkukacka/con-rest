@@ -40,6 +40,7 @@
     "grunt-shell": "~0.7.0",
     "grunt-simple-mocha": "^0.4.0",
     "grunt-string-replace": "^0.2.7",
+    "grunt-ts": "^4.1.0",
     "grunt-version": "~0.3.0",
     "karma": "~0.12.16",
     "karma-chrome-launcher": "~0.1.0",
