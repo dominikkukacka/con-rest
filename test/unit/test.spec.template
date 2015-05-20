@@ -1,0 +1,32 @@
+(function(window, $) {
+  'use strict';
+
+  var Yadda = require('yadda');
+  var English = Yadda.localisation.English;
+  var FeatureParser = Yadda.parsers.FeatureParser;
+  var parser = new FeatureParser(English);
+
+  window.initModule = window.module;
+
+  var featuresSpecs = [];
+  <% features.forEach(function(feature){ %>
+  featuresSpecs.push(parser.parse('<%= feature.replace(/\r\n|\r|\n/g, '\\r\\n').replace(/[']+/g, '\\\'') %>'));
+  <% }); %>
+
+  var yadda = new Yadda.Yadda(StepLibrary.library);
+
+  Yadda.plugins.mocha.ScenarioLevelPlugin.init();
+
+  features(featuresSpecs, function(feature){
+    beforeEach(initModule('<%= module %>'));
+
+    beforeEach(function() {
+      StepLibrary.ctx.renew();
+    });
+
+    scenarios(feature.scenarios, function(scenario) {
+      yadda.run(scenario.steps);
+    });
+  });
+
+}(window, $));

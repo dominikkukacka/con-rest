@@ -15,13 +15,16 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // Angular dependencies
+      'node_modules/yadda/dist/yadda-0.11.4.js',
+      'app/bower_components/jquery/dist/jquery.js',
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
       'app/bower_components/angular-aria/angular-aria.js',
       'app/bower_components/angular-animate/angular-animate.js',
       'app/bower_components/angular-material/angular-material.js',
-      '.tmp/js/test/*.js',
+      '.tmp/js/test/unit/*.js',
+      '.tmp/js/app/core/models/serializable.js',
       '.tmp/js/app/core/models/**/*.js',
       '.tmp/js/app/core/dao/**/*.js',
       '.tmp/js/app/core/modules/**/*.js',
@@ -29,7 +32,7 @@ module.exports = function(config) {
       '.tmp/js/app/core/widgets/**/*.js',
       '.tmp/js/app/widgets/**/src/**/*.js',
       '.tmp/js/app/widgets/**/*.js',
-      '.tmp/js/app.js',
+      '.tmp/js/app/app.js',
       '.tmp/js/templates.js',
       '.tmp/js/app/core/widgets/**/test/unit/*.js',
       '.tmp/js/app/widgets/**/test/unit/*.js',

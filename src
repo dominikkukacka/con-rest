@@ -1,0 +1,32 @@
+(function(window, $) {
+  'use strict';
+
+  var Yadda = require('yadda');
+  var English = Yadda.localisation.English;
+  var FeatureParser = Yadda.parsers.FeatureParser;
+  var parser = new FeatureParser(English);
+
+  window.initModule = window.module;
+
+  var featuresSpecs = [];
+  
+  featuresSpecs.push(parser.parse('Feature: View Workflows\r\n  As an Tester\r\n  I want to see the workflows registered\r\n  So that I can use an workflow\r\n\r\n  Background:\r\n\r\n  Given 10 workflows have been registered\r\n    And workflow 1 contains 2 connectors\r\n    And workflow 1 contains 4 calls\r\n    And workflow 2 contains 1 connector\r\n    And workflow 2 contains 2 calls\r\n    And workflow 3 contains 1 call\r\n\r\n  Scenario: Inspecting workflow [Workflow]\r\n    Given the workflows will be received successfully\r\n    When the "workflow overview" widget is initialized\r\n    Then I should see 10 workflows\r\n\r\n    Where:\r\n    Workflow  | Connectors  | Calls\r\n    1         | 2           | 4\r\n    2         | 1           | 2\r\n    3         | 0           | 1\r\n'));
+  
+
+  var yadda = new Yadda.Yadda(StepLibrary.library);
+
+  Yadda.plugins.mocha.ScenarioLevelPlugin.init();
+
+  features(featuresSpecs, function(feature){
+    beforeEach(initModule('imber'));
+
+    beforeEach(function() {
+      StepLibrary.ctx.renew();
+    });
+
+    scenarios(feature.scenarios, function(scenario) {
+      yadda.run(scenario.steps);
+    });
+  });
+
+}(window, $));

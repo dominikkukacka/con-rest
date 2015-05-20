@@ -8,6 +8,32 @@
 
 module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
+  var fs = require('fs');
+
+  function addFeatures(baseFolder, features) {
+    try {
+      var featureFiles = fs.readdirSync(baseFolder + '/test/features/');
+      featureFiles.forEach(function(feature) {
+        this.push(fs.readFileSync(baseFolder +
+          '/test/features/' + feature, {
+            encoding: 'utf8'
+          }));
+      }, features);
+    } catch (e) {
+      console.warn(baseFolder + ' does not contain any tests');
+    }
+  }
+
+  function addWidgetFeatures(baseFolder, features) {
+    try {
+      var widgets = fs.readdirSync(baseFolder);
+      widgets.forEach(function(widget) {
+        addFeatures(baseFolder + widget, features);
+      });
+    } catch (e) {
+      console.warn(baseFolder + ' does not exist');
+    }
+  }
 
   var pkg = grunt.file.readJSON('package.json');
 
@@ -248,6 +274,23 @@ module.exports = function(grunt) {
         src: ['test/unit/server/**/*.js']
       }
     },
+    template: {
+      options: {
+        data: function() {
+          var features = [];
+          addWidgetFeatures('app/widgets/', features);
+          addWidgetFeatures('app/core/widgets/', features);
+          return {
+            features: features,
+            module: 'con-rest'
+          };
+        }
+      },
+      template: {
+        src: 'test/unit/test.spec.template',
+        dest: '.tmp/test.spec.js'
+      }
+    },
     ts: {
       all: {
         src: [
@@ -273,7 +316,7 @@ module.exports = function(grunt) {
           'app/bower_components/type-def/mocha/mocha.d.ts',
           'app/bower_components/type-def/sinon-chai/sinon-chai.d.ts',
           'test/angular-mocks.d.ts',
-          'test/*.ts',
+          'test/**/*.ts',
           'app/core/models/**/*.ts',
           'app/core/dao/**/*.ts',
           'app/core/modules/**/*.ts',
@@ -359,6 +402,12 @@ module.exports = function(grunt) {
         ],
         tasks: ['ts', 'karma:unitAuto:run']
       },
+      features: {
+        files: [
+          'app/**/widgets/**/*.feature'
+        ],
+        tasks: ['template', 'karma:unitAuto:run']
+      },
       testsServer: {
         files: [
           '<%= app.server %>/**/*.js',
@@ -385,6 +434,7 @@ module.exports = function(grunt) {
     'concat:less',
     'less',
     'ngtemplates:dev',
+    'template',
     'ts'
   ]);
 
