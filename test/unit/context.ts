@@ -1,4 +1,6 @@
 module StepLibrary {
+  import IWorkflow = Models.IWorkflow;
+
   class Context {
     $parent: any;
     $scope: IScopeVM;
@@ -6,6 +8,7 @@ module StepLibrary {
     $element: ng.IRootElementService;
     directive: string;
     attributes: Object = {};
+    workflows: Array<IWorkflow> = [];
 
     constructor() {
       this.renew();
@@ -15,6 +18,7 @@ module StepLibrary {
       inject(($rootScope: ng.IRootScopeService, $httpBackend: ng.IHttpBackendService) => {
         this.$parent = $rootScope.$new();
         this.$httpBackend = $httpBackend;
+        this.workflows = [];
       });
     }
 

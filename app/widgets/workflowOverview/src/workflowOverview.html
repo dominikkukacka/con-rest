@@ -1,1 +1,19 @@
-<h2>Workflow Overview</h2>
+<md-toolbar md-scroll-schrink>
+  <div class="md-toolbar-tools">
+    <h2>
+      Workflows
+    </h2>
+  </div>
+</md-toolbar>
+<md-content>
+  <md-list>
+    <md-list-item class="md-2-line"
+      ng-repeat="workflow in vm.workflows">
+      <div class="md-list-item-text">
+        <h3>{{ workflow.name }}</h3>
+        <p>Calls: {{ workflow.calls.length }}</p>
+      </div>
+      <md-divider ng-if="!$last"></md-divider>
+    </md-list-item>
+  </md-list>
+</md-content>

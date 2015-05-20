@@ -1,9 +1,18 @@
 module WorkflowOverviewVMS {
-  export class WorkflowOverviewVM {
-    static $inject = ['$scope'];
+  import WorkflowDAO = DAO.WorkflowDAO;
+  import Workflow = Models.Workflow;
 
-    constructor($scope) {
+  export class WorkflowOverviewVM {
+    static $inject = ['$scope', 'workflowDAO'];
+    workflows: Array<Workflow>;
+
+    constructor($scope, workflowDAO: WorkflowDAO) {
       $scope.vm = this;
+
+      workflowDAO.getAll()
+        .then((workflows: Array<Workflow>) => {
+          this.workflows = workflows;
+        });
     }
   }
 }

@@ -17,16 +17,18 @@ module Models {
 
     convertContentToClass(array: Array<any>, Class) {
       var convertedArray: Array<any> = [];
-      array.forEach((value: string) => {
-        convertedArray.push(new Class({
-          _id: value
-        }));
-      });
+      if (array instanceof Array) {
+        array.forEach((value: string) => {
+          convertedArray.push(new Class({
+            _id: value
+          }));
+        });
+      }
       return convertedArray;
     }
 
     convertIdToClass(id: string, Class) {
-      if(!!id) {
+      if (!!id) {
         return new Class({
           _id: id
         });
@@ -36,7 +38,7 @@ module Models {
     toJSON() {
       var json = {};
       this.forEach(this, (value, prop) => {
-        if(value instanceof Function) {
+        if (value instanceof Function) {
           return;
         }
         json[prop] = value;

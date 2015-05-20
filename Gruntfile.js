@@ -113,7 +113,13 @@ module.exports = function(grunt) {
       dev: {
         options: {
           port: 9000,
-          script: './devServer.js'
+          hostname: '0.0.0.0',
+          server: 'server/server',
+          bases: ['app', '.tmp'],
+          middleware: [function(req, res, next) {
+            req.url = req.url.replace(/\/app\//, '/');
+            next();
+          }]
         }
       }
     },
@@ -295,6 +301,8 @@ module.exports = function(grunt) {
       all: {
         src: [
           'app/bower_components/type-def/angularjs/angular.d.ts',
+          'app/bower_components/type-def/angular-material/angular-material.d.ts',
+          'app/core/models/serializable.ts',
           'app/core/models/**/*.ts',
           'app/core/dao/**/*.ts',
           'app/core/modules/**/*.ts',
@@ -312,6 +320,7 @@ module.exports = function(grunt) {
       seperate: {
         src: [
           'app/bower_components/type-def/angularjs/angular.d.ts',
+          'app/bower_components/type-def/angular-material/angular-material.d.ts',
           'app/bower_components/type-def/node/node.d.ts',
           'app/bower_components/type-def/mocha/mocha.d.ts',
           'app/bower_components/type-def/sinon-chai/sinon-chai.d.ts',
@@ -376,29 +385,26 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+      options: {
+        livereload: true
+      },
       less: {
         files: [
           '<%= app.app %>/styles/*.less',
           '<%= app.app %>/widgets/**/*.less'
         ],
-        tasks: ['concat:less', 'less:main'],
-        options: {
-          // Start a live reload server on the default port 35729
-          livereload: true
-        }
+        tasks: ['concat:less', 'less:main']
       },
       ngTemplates: {
         files: ['<%= app.app %>/widgets/**/*.html'],
-        tasks: ['ngtemplates'],
-        options: {
-          // Start a live reload server on the default port 35729
-          livereload: true
-        }
+        tasks: ['ngtemplates']
       },
       ts: {
         files: [
           'app/core/**/*.ts',
-          'app/widgets/**/*.ts'
+          'app/widgets/**/*.ts',
+          'test/**/*.ts',
+          'app/app.ts'
         ],
         tasks: ['ts', 'karma:unitAuto:run']
       },
@@ -420,10 +426,7 @@ module.exports = function(grunt) {
           '<%= app.server %>/**/*.js',
           '<%= app.test %>/unit/server/**/*.js'
         ],
-        tasks: ['express:dev'],
-        options: {
-          spawn: false // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded
-        }
+        tasks: ['express:dev']
       }
     }
   });
@@ -466,7 +469,6 @@ module.exports = function(grunt) {
   grunt.registerTask('server', function serverMode(target) {
     var tasks = [
       'setupEnv:' + target,
-      'groc:dev',
       'karma:unitAuto',
       'watch'
     ];

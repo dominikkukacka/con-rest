@@ -10,15 +10,17 @@ Feature: View Workflows
     And workflow 1 contains 4 calls
     And workflow 2 contains 1 connector
     And workflow 2 contains 2 calls
-    And workflow 3 contains 1 call
+    And workflow 10 contains 1 call
 
   Scenario: Inspecting workflow [Workflow]
     Given the workflows will be received successfully
     When the "workflow overview" widget is initialized
-    Then I should see 10 workflows
+      And the service has responded
+    Then workflow [Workflow] has [Connectors] connectors
+      And workflow [Workflow] has [Calls] calls
 
     Where:
     Workflow  | Connectors  | Calls
     1         | 2           | 4
     2         | 1           | 2
-    3         | 0           | 1
+    10        | 0           | 1
