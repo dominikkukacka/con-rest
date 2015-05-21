@@ -13,6 +13,7 @@ module StepLibrary {
     workflows: Array<IWorkflow> = [];
     calls: Array<ICall> = [];
     session: Session;
+    call: ICall;
 
     constructor() {
       this.renew();
@@ -23,6 +24,7 @@ module StepLibrary {
         session: Session) => {
         this.$parent = $rootScope.$new();
         this.$httpBackend = $httpBackend;
+        this.attributes = {};
         this.workflows = [];
         this.calls = [];
         this.session = session;

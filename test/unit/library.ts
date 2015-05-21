@@ -22,6 +22,9 @@ module StepLibrary {
     .given('parent scope is initialized', () => {
       ctx.renew();
     })
+    .given('the widget binds "(.*)" with "(.*)"', (attr: string, value: string) => {
+      ctx.attributes[attr] = value;
+    })
     .when('the "(.*)" widget is initialized', (widget: string) => {
       ctx.initializeDirective(widget);
     })
@@ -30,5 +33,5 @@ module StepLibrary {
     })
     .when('I press the "(.*)" button', (action: string) => {
       ctx.$scope.vm[action.toCamelCase()]();
-    })
+    });
 }

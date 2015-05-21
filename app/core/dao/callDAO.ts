@@ -19,6 +19,15 @@ module DAO {
         }, deferred.reject);
       return deferred.promise;
     }
+
+    getById(id: string): ng.IPromise<Call> {
+      var deferred = this.$q.defer();
+      this.get('/api/requests/' + id, null)
+        .then((response: any) => {
+          deferred.resolve(new Call(response.data));
+        }, deferred.reject);
+      return deferred.promise;
+    }
   }
 
   var instance = null;

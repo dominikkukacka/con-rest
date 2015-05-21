@@ -1,0 +1,45 @@
+<md-toolbar md-scroll-schrink>
+  <div class="md-toolbar-tools">
+    <h2>
+      Call Details
+    </h2>
+  </div>
+</md-toolbar>
+<md-content layout-padding>
+  <div layout="row" layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">name</p>
+    <p flex="65">{{ vm.call.name }}</p>
+  </div>
+  <div layout="row" layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">url</p>
+    <p flex="65">{{ vm.call.url }}</p>
+  </div>
+  <div layout="row" layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">method</p>
+    <p flex="65">{{ vm.call.method }}</p>
+  </div>
+  <div layout="row" layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">type</p>
+    <p flex="65">{{ vm.call.type }}</p>
+  </div>
+  <div layout="row" layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">data</p>
+    <p flex="65">{{ vm.convertToJSON(vm.call.data) }}</p>
+  </div>
+  <div layout="row" layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">headers</p>
+    <p flex="65">{{ vm.convertToJSON(vm.call.headers) }}</p>
+  </div>
+</md-content>
