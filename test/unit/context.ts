@@ -1,5 +1,7 @@
 module StepLibrary {
   import IWorkflow = Models.IWorkflow;
+  import ICall = Models.ICall;
+  import Session = Models.Session;
 
   class Context {
     $parent: any;
@@ -9,16 +11,21 @@ module StepLibrary {
     directive: string;
     attributes: Object = {};
     workflows: Array<IWorkflow> = [];
+    calls: Array<ICall> = [];
+    session: Session;
 
     constructor() {
       this.renew();
     }
 
     renew() {
-      inject(($rootScope: ng.IRootScopeService, $httpBackend: ng.IHttpBackendService) => {
+      inject(($rootScope: ng.IRootScopeService, $httpBackend: ng.IHttpBackendService,
+        session: Session) => {
         this.$parent = $rootScope.$new();
         this.$httpBackend = $httpBackend;
         this.workflows = [];
+        this.calls = [];
+        this.session = session;
       });
     }
 

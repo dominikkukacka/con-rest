@@ -3,6 +3,7 @@ module ConREST {
   angular.module('con-rest.workflow-overview', [
     'con-rest.templates',
     'con-rest.dao',
+    'con-rest.models',
     'ngMaterial'
   ])
     .config(appConfig)

@@ -304,6 +304,7 @@ module.exports = function(grunt) {
           'app/bower_components/type-def/angular-material/angular-material.d.ts',
           'app/core/models/serializable.ts',
           'app/core/models/**/*.ts',
+          'app/core/dao/dao.ts',
           'app/core/dao/**/*.ts',
           'app/core/modules/**/*.ts',
           'app/core/widgets/**/src/**/*.ts',

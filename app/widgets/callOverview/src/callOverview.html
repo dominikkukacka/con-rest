@@ -1,18 +1,18 @@
 <md-toolbar md-scroll-schrink>
   <div class="md-toolbar-tools">
     <h2>
-      Workflows
+      Calls
     </h2>
   </div>
 </md-toolbar>
 <md-content>
   <md-list>
-    <md-list-item class="md-2-line"
-      ng-repeat="workflow in vm.workflows"
-      ng-click="vm.select(workflow)">
+    <md-list-item class="md-3-line"
+      ng-repeat="call in vm.calls">
       <div class="md-list-item-text">
-        <h3>{{ workflow.name }}</h3>
-        <p>Calls: {{ workflow.calls.length }}</p>
+        <h3>{{ call.name }}</h3>
+        <h4>{{ call.method }}</h4>
+        <p>{{ call.url }}</p>
       </div>
       <md-divider ng-if="!$last"></md-divider>
     </md-list-item>

@@ -26,6 +26,7 @@ module.exports = function(config) {
       '.tmp/js/test/unit/*.js',
       '.tmp/js/app/core/models/serializable.js',
       '.tmp/js/app/core/models/**/*.js',
+      '.tmp/js/app/core/dao/dao.js',
       '.tmp/js/app/core/dao/**/*.js',
       '.tmp/js/app/core/modules/**/*.js',
       '.tmp/js/app/core/widgets/**/src/**/*.js',
