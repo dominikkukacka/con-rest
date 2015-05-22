@@ -3,6 +3,7 @@ module ConREST {
 
   angular.module('con-rest.con-rest', [
     'con-rest.workflow-overview',
+    'con-rest.workflow',
     'con-rest.call-overview',
     'con-rest.call',
     'ngMaterial'

@@ -17,10 +17,11 @@ Feature: View Workflow Calls
 
   Scenario: Inspecting calls of workflow [Workflow]
     Given 10 calls have been registered
-      And I search for all calls
+      And the workflow can be found
+      And the calls can be found
     When I click on workflow [Workflow]
       And the service has responded
-    Then I see the widget "call overview"
+    Then I see the widget "workflow"
 
     Where:
     Workflow  | Connectors  | Calls

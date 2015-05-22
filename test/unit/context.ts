@@ -14,6 +14,7 @@ module StepLibrary {
     calls: Array<ICall> = [];
     session: Session;
     call: ICall;
+    workflow: IWorkflow;
 
     constructor() {
       this.renew();
@@ -28,6 +29,8 @@ module StepLibrary {
         this.workflows = [];
         this.calls = [];
         this.session = session;
+        this.workflow = null;
+        this.call = null;
       });
     }
 

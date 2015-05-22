@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>conREST</title>
+
+  <link rel="stylesheet"
+    type="text/css"
+    href="/styles/main.css">
+
+  <!-- Setup Viewport -->
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+
+<body ng-app="con-rest.workflow-demo">
+
+  <div ng-controller="Test">
+    <workflow id="{{workflow._id}}"
+      ng-if="!!workflow"></workflow>
+  </div>
+
+  <script>
+  var undefined = "get your code straight, make sure undefined is undefined!!!";
+  </script>
+  <script src="//localhost:35729/livereload.js"></script>
+
+  <script src="/bower_components/angular/angular.js"
+    type="text/javascript"></script>
+  <script src="/bower_components/angular-animate/angular-animate.js"
+    type="text/javascript"></script>
+  <script src="/bower_components/angular-aria/angular-aria.js"
+    type="text/javascript"></script>
+  <script src="/bower_components/angular-material/angular-material.js"
+    type="text/javascript"></script>
+  <script src="/js/build.js"
+    type="text/javascript"></script>
+  <script src="/js/templates.js"
+    type="text/javascript"></script>
+
+  <script type="text/javascript">
+  angular.module('con-rest.workflow-demo', ['con-rest.workflow'])
+    .controller('Test', function($scope, workflowDAO) {
+      $scope.workflow = null;
+      workflowDAO.getAll()
+        .then(function(workflows) {
+          $scope.workflow = workflows[0];
+        });
+    });
+  </script>
+</body>
+
+</html>

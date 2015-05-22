@@ -1,0 +1,8 @@
+<md-list-item class="md-2-line"
+  layout="column">
+  <div class="md-list-item-text">
+    <h3>{{ vm.call.name }} [ {{ vm.call.method }} ]</h3>
+    <p>{{ vm.call.url }}</p>
+  </div>
+  <md-divider ng-if="!$last"></md-divider>
+</md-list-item>

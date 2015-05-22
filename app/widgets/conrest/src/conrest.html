@@ -5,4 +5,5 @@
   </div>
 </md-toolbar>
 <workflow-overview></workflow-overview>
-<call-overview ng-if="!!vm.session.workflow"></call-overview>
+<workflow ng-if="!!vm.session.workflow"
+  id="{{ vm.session.workflow._id }}"></workflow>

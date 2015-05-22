@@ -14,8 +14,8 @@ module Models {
 
   export interface IWorkflow {
     _id: string;
-    name: string;
-    calls: Array<string>;
-    connectors: Array<string>;
+    name?: string;
+    calls?: Array<string>;
+    connectors?: Array<string>;
   }
 }
