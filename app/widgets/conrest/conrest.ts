@@ -6,6 +6,7 @@ module ConREST {
     'con-rest.workflow',
     'con-rest.call-overview',
     'con-rest.call',
+    'con-rest.connector',
     'ngMaterial'
   ])
     .config(appConfig)

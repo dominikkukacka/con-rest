@@ -1,6 +1,7 @@
 module StepLibrary {
   import IWorkflow = Models.IWorkflow;
   import ICall = Models.ICall;
+  import IConnector = Models.IConnector;
   import Session = Models.Session;
 
   class Context {
@@ -15,6 +16,7 @@ module StepLibrary {
     session: Session;
     call: ICall;
     workflow: IWorkflow;
+    connector: IConnector;
 
     constructor() {
       this.renew();
@@ -31,6 +33,7 @@ module StepLibrary {
         this.session = session;
         this.workflow = null;
         this.call = null;
+        this.connector = null;
       });
     }
 

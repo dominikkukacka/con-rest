@@ -23,6 +23,10 @@ module ConRESTTest {
         .respond(200, {
           _id: 'someid'
         });
+      ctx.$httpBackend.when('GET', /\/api\/workflows\/(.*)\/connectors\/(.*)/)
+        .respond(200, {
+          _id: 'someid'
+        });
     })
     .then('the workflow is displayed', () => {
       expect(ctx.$scope.vm.workflow._id).to.equal(ctx.workflow._id);

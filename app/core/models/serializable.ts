@@ -18,10 +18,14 @@ module Models {
     convertContentToClass(array: Array<any>, Class) {
       var convertedArray: Array<any> = [];
       if (array instanceof Array) {
-        array.forEach((value: string) => {
-          convertedArray.push(new Class({
-            _id: value
-          }));
+        array.forEach((value: any) => {
+          var json = value;
+          if(typeof value === 'string') {
+            json = {
+              _id: value
+            };
+          }
+          convertedArray.push(new Class(json));
         });
       }
       return convertedArray;
@@ -32,6 +36,12 @@ module Models {
         return new Class({
           _id: id
         });
+      }
+    }
+
+    instantiateClass(json: Object, Class) {
+      if(json instanceof Object) {
+        return new Class(json);
       }
     }
 

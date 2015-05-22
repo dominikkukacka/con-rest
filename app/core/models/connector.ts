@@ -7,16 +7,16 @@ module Models {
 
     constructor(json: IConnector) {
       super(json);
-      this.source = this.convertIdToClass(json.source, Call);
-      this.destination = this.convertIdToClass(json.destination, Call);
-      this.mapper = this.convertIdToClass(json.destination, Mapper);
+      this.source = this.instantiateClass(json.source, Call);
+      this.destination = this.instantiateClass(json.destination, Call);
+      this.mapper = this.instantiateClass(json.mapper, Mapper);
     }
   }
 
   export interface IConnector {
     _id: string;
-    source?: string;
-    destination?: string;
-    mapper?: string;
+    source?: ICall;
+    destination?: ICall;
+    mapper?: IMapper;
   }
 }

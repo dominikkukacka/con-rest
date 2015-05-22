@@ -1,0 +1,35 @@
+<md-toolbar md-scroll-schrink>
+  <div class="md-toolbar-tools">
+    <h2>
+      Connector Details
+    </h2>
+  </div>
+</md-toolbar>
+<md-content ng-if="!!vm.connector">
+  <section>
+    <md-subheader class="md-primary">source</md-subheader>
+    <md-list>
+      <call-item id="{{ vm.connector.source._id }}"></call-item>
+    </md-list>
+  </section>
+  <section>
+    <md-subheader class="md-primary">destination</md-subheader>
+    <md-list>
+      <call-item id="{{ vm.connector.destination._id }}"></call-item>
+    </md-list>
+  </section>
+  <section>
+    <md-subheader class="md-primary">maps</md-subheader>
+    <md-list>
+      <md-list-item class="md-3-line"
+        ng-repeat="map in vm.connector.mapper.maps">
+        <div class="md-list-item-text">
+        <h3>place: {{ map.place }}</h3>
+        <h4>source: {{ map.source }}</h4>
+        <p>destination: {{ map.destination }}</p>
+      </div>
+        <md-divider ng-if="!$last"></md-divider>
+      </md-list-item>
+    </md-list>
+  </section>
+</md-content>
