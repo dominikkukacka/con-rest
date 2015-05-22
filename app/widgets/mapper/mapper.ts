@@ -1,14 +1,15 @@
+/**
+ * Created by sschacherl on 22.05.2015.
+ */
 module ConREST {
   import appConfig = Modules.appConfig;
-  angular.module('con-rest.connector', [
+  angular.module('con-rest.mapper', [
     'con-rest.templates',
     'con-rest.dao',
     'con-rest.models',
-    'con-rest.call',
-    'con-rest.mapper',
     'ngMaterial'
   ])
     .config(appConfig)
-    .controller(ConnectorVMS)
-    .directive(ConnectorDirectives);
+    .controller(MapperVMS)
+    .directive(MapperDirectives);
 }

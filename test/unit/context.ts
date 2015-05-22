@@ -2,6 +2,7 @@ module StepLibrary {
   import IWorkflow = Models.IWorkflow;
   import ICall = Models.ICall;
   import IConnector = Models.IConnector;
+  import IMapper = Models.IMapper;
   import Session = Models.Session;
 
   class Context {
@@ -17,6 +18,7 @@ module StepLibrary {
     call: ICall;
     workflow: IWorkflow;
     connector: IConnector;
+    mapper: IMapper;
 
     constructor() {
       this.renew();

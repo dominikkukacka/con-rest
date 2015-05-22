@@ -33,6 +33,10 @@ module ConRESTTest {
         .respond(200, {
           _id: 'someid'
         });
+      ctx.$httpBackend.when('GET', /\/api\/mappers\/(.*)/)
+        .respond(200, {
+          _id: 'someid'
+        });
     })
     .then('the connector is displayed', () => {
       expect(ctx.$scope.vm.connector._id).to.equal(ctx.connector._id);

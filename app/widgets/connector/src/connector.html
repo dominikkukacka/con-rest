@@ -19,17 +19,9 @@
     </md-list>
   </section>
   <section>
-    <md-subheader class="md-primary">maps</md-subheader>
+    <md-subheader class="md-primary">mapper</md-subheader>
     <md-list>
-      <md-list-item class="md-3-line"
-        ng-repeat="map in vm.connector.mapper.maps">
-        <div class="md-list-item-text">
-        <h3>place: {{ map.place }}</h3>
-        <h4>source: {{ map.source }}</h4>
-        <p>destination: {{ map.destination }}</p>
-      </div>
-        <md-divider ng-if="!$last"></md-divider>
-      </md-list-item>
+      <mapper-item id="{{ vm.connector.mapper._id }}"></mapper-item>
     </md-list>
   </section>
 </md-content>
