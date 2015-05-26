@@ -3,7 +3,8 @@ module CallDirectives {
     return {
       restrict: 'EA',
       scope: {
-        id: '@'
+        id: '@',
+        workflowId: '@'
       },
       controller: 'CallVM',
       templateUrl: 'call'

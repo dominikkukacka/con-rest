@@ -1,0 +1,20 @@
+<md-toolbar md-scroll-schrink
+  class="md-hue-2">
+  <div class="md-toolbar-tools">
+    <h1>[conREST]</h1>
+  </div>
+</md-toolbar>
+<section hide-gt-sm>
+  <call workflow-id="{{ vm.$routeParams.workflowId }}"
+    id="{{ vm.$routeParams.callId }}"></call>
+</section>
+<section hide-sm
+  layout="row">
+  <md-card flex-gt-sm="35">
+    <workflow id="{{ vm.$routeParams.workflowId }}"></workflow>
+  </md-card>
+  <md-card flex-gt-sm="60">
+    <call workflow-id="{{ vm.$routeParams.workflowId }}"
+      id="{{ vm.$routeParams.callId }}"></call>
+  </md-card>
+</section>

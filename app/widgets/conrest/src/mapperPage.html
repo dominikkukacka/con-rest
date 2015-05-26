@@ -1,0 +1,23 @@
+<md-toolbar md-scroll-schrink
+  class="md-hue-2">
+  <div class="md-toolbar-tools">
+    <h1>[conREST]</h1>
+  </div>
+</md-toolbar>
+<section hide-gt-sm>
+  <mapper connector-id="{{ vm.$routeParams.connectorId }}"
+    workflow-id="{{ vm.$routeParams.workflowId }}"
+    id="{{ vm.$routeParams.mapperId }}"></mapper>
+</section>
+<section hide-sm
+  layout="row">
+  <md-card flex-gt-sm="35">
+    <connector workflow-id="{{ vm.$routeParams.workflowId }}"
+      connector-id="{{ vm.$routeParams.connectorId }}"></connector>
+  </md-card>
+  <md-card flex-gt-sm="60">
+    <mapper connector-id="{{ vm.$routeParams.connectorId }}"
+      workflow-id="{{ vm.$routeParams.workflowId }}"
+      id="{{ vm.$routeParams.mapperId }}"></mapper>
+  </md-card>
+</section>

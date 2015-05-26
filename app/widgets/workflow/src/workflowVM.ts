@@ -21,8 +21,13 @@ module WorkflowVMS {
         });
     }
 
+    goToCall(callId: string) {
+      this.$location.path('/workflows/' +
+        this.workflow._id + '/calls/' + callId);
+    }
+
     goToConnector(connectorId: string) {
-      this.$location.path('/workflows/' + 
+      this.$location.path('/workflows/' +
         this.workflow._id + '/connectors/' + connectorId);
     }
   }

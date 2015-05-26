@@ -16,19 +16,22 @@
   <section>
     <md-subheader class="md-primary">source</md-subheader>
     <md-list>
-      <call-item id="{{ vm.connector.source._id }}"></call-item>
+      <call-item id="{{ vm.connector.source._id }}"
+        ng-click="vm.goToCall(vm.connector.source._id)"></call-item>
     </md-list>
   </section>
   <section>
     <md-subheader class="md-primary">destination</md-subheader>
     <md-list>
-      <call-item id="{{ vm.connector.destination._id }}"></call-item>
+      <call-item id="{{ vm.connector.destination._id }}"
+        ng-click="vm.goToCall(vm.connector.destination._id)"></call-item>
     </md-list>
   </section>
   <section>
     <md-subheader class="md-primary">mapper</md-subheader>
     <md-list>
-      <mapper-item id="{{ vm.connector.mapper._id }}"></mapper-item>
+      <mapper-item id="{{ vm.connector.mapper._id }}"
+        ng-click="vm.goToMapper()"></mapper-item>
     </md-list>
   </section>
 </md-content>

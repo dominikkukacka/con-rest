@@ -6,7 +6,9 @@ module MapperDirectives {
     return {
       restrict: 'EA',
       scope: {
-        id: '@'
+        id: '@',
+        connectorId: '@',
+        workflowId: '@'
       },
       controller: 'MapperVM',
       templateUrl: 'mapper'

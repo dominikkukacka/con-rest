@@ -17,6 +17,7 @@
     <md-subheader class="md-primary">calls</md-subheader>
     <md-list>
       <call-item ng-repeat="call in vm.workflow.calls"
+        ng-click="vm.goToCall(call._id)"
         id="{{ call._id }}"></call-item>
     </md-list>
   </section>
@@ -25,7 +26,7 @@
     <md-list>
       <connector-item ng-repeat="connector in vm.workflow.connectors"
         workflow-id="{{ vm.workflow._id}}"
-        ng-click="vm.goToConnector(connector._id)"        
+        ng-click="vm.goToConnector(connector._id)"
         connector-id="{{ connector._id}}"></connector-item>
     </md-list>
   </section>
