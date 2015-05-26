@@ -30,7 +30,8 @@
         },
         headers: {
           to: 'ken'
-        }
+        },
+        files: []
       };
     }
 
@@ -50,7 +51,8 @@
         url: null,
         method: null,
         data: null,
-        headers: null
+        headers: null,
+        files: []
       };
     }
 
@@ -122,6 +124,7 @@
           request.headers = {
             foo: 'bar'
           };
+          request.files = [];
         }
       };
     }
@@ -134,6 +137,7 @@
           expect(request.method).toEqual(expectedRequest.method);
           expect(request.data).toEqual(expectedRequest.data);
           expect(request.headers).toEqual(expectedRequest.headers);
+          expect(request.files).toEqual(expectedRequest.files);
         }
       };
     }

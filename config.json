@@ -7,7 +7,7 @@
       "limit": "5mb",
       "type": "json"
     },
-    "strictSSL": "false"
+    "strictSSL": false
   },
   "mongoDb": {
     "uri": "mongodb://localhost:27017/conRest",
