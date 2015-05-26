@@ -12,6 +12,7 @@ Feature: View Workflow Calls
     And workflow 5 contains 2 calls
     And workflow 10 contains 1 call
     And the workflows will be received successfully
+    And the workflow can be found
     And the "con rest" widget is initialized
     And the service has responded
 
@@ -21,7 +22,7 @@ Feature: View Workflow Calls
       And the calls can be found
     When I click on workflow [Workflow]
       And the service has responded
-    Then I see the widget "workflow"
+    Then I see the widget "workflow" 2 times
 
     Where:
     Workflow  | Connectors  | Calls

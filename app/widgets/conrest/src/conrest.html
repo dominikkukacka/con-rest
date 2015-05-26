@@ -1,9 +1,1 @@
-<md-toolbar md-scroll-schrink
-  class="md-hue-2">
-  <div class="md-toolbar-tools">
-    <h1>[conREST]</h1>
-  </div>
-</md-toolbar>
-<workflow-overview></workflow-overview>
-<workflow ng-if="!!vm.session.workflow"
-  id="{{ vm.session.workflow._id }}"></workflow>
+<ng-view autoscroll="true"></ng-view>

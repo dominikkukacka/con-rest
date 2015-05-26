@@ -1,5 +1,19 @@
 module ConREST {
-  import appConfig = Modules.appConfig;
+  import routeConfig = Modules.routeConfig;
+
+  var routes: Array<Modules.IRouteSetting> = [{
+    templateUrl: 'workflowsPage',
+    routeUrl: '/',
+    controller: 'ConRESTVM'
+  }, {
+    templateUrl: 'workflowPage',
+    routeUrl: '/workflows/:workflowId',
+    controller: 'ConRESTVM'
+  }, {
+    templateUrl: 'connectorPage',
+    routeUrl: '/workflows/:workflowId/connectors/:connectorId',
+    controller: 'ConRESTVM'
+  }];
 
   angular.module('con-rest.con-rest', [
     'con-rest.workflow-overview',
@@ -7,9 +21,10 @@ module ConREST {
     'con-rest.call-overview',
     'con-rest.call',
     'con-rest.connector',
+    'ngRoute',
     'ngMaterial'
   ])
-    .config(appConfig)
+    .config(routeConfig(routes))
     .controller(ConRESTVMS)
     .directive(ConRESTDirectives);
 }

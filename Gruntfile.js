@@ -98,6 +98,20 @@ module.exports = function(grunt) {
       }
     },
     copy: {
+      dev: {
+        files: [{
+          expand: true,
+          cwd: '<%= app.app %>/bower_components/bootstrap-material-design/fonts/',
+          dest: '<%= app.tmp %>/fonts/',
+          src: [
+            '*.eot',
+            '*.svg',
+            '*.ttf',
+            '*.woff',
+            '*.woff2'
+          ]
+        }]
+      },
       dist: {
         files: [{
           expand: true,
@@ -437,6 +451,7 @@ module.exports = function(grunt) {
     'jshint',
     'concat:less',
     'less',
+    'copy:dev',
     'ngtemplates:dev',
     'template',
     'ts'

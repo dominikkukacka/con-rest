@@ -21,7 +21,8 @@ module ConRESTTest {
       workflowElement.click();
       ctx.$scope.$apply();
     })
-    .then('I see the widget "(.*)"', (widget: string) => {
-      expect(ctx.$element.find(widget.toSnakeCase()).length).to.equal(1);
+    .then('I see the widget "(.*)" $NUM times', (widget: string, amount: string) => {
+      // it's present twice, one for mobile view and one for desktop view
+      expect(ctx.$element.find(widget.toSnakeCase()).length).to.equal(parseInt(amount, 10));
     });
 }

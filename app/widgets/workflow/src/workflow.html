@@ -1,5 +1,12 @@
 <md-toolbar md-scroll-schrink>
   <div class="md-toolbar-tools">
+    <md-button class="md-icon-button"
+      aria-label="back">
+      <a href="#/workflows">
+        <md-icon md-font-icon="Material-Design-Icons"
+          class="mdi-navigation-arrow-back"></md-icon>
+      </a>
+    </md-button>
     <h2>
       {{ vm.workflow.name }}
     </h2>
@@ -18,6 +25,7 @@
     <md-list>
       <connector-item ng-repeat="connector in vm.workflow.connectors"
         workflow-id="{{ vm.workflow._id}}"
+        ng-click="vm.goToConnector(connector._id)"        
         connector-id="{{ connector._id}}"></connector-item>
     </md-list>
   </section>
