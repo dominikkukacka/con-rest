@@ -18,7 +18,7 @@ module CallVMS {
       if (!json) {
         return '-';
       }
-      JSON.stringify(json, null, 4);
+     return JSON.stringify(json, null, 4);
     }
   }
 }

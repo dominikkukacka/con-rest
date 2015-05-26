@@ -41,12 +41,12 @@
     <p flex="25"
       class="label"
       layout-align="end">data</p>
-    <p flex="65">{{ vm.convertToJSON(vm.call.data) }}</p>
+    <pre flex="65">{{ vm.convertToJSON(vm.call.data) }}</pre>
   </div>
   <div layout="row" layout-margin>
     <p flex="25"
       class="label"
       layout-align="end">headers</p>
-    <p flex="65">{{ vm.convertToJSON(vm.call.headers) }}</p>
+    <pre flex="65">{{ vm.convertToJSON(vm.call.headers) }}</pre>
   </div>
 </md-content>
