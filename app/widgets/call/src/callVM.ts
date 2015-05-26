@@ -7,11 +7,8 @@ module CallVMS {
     call: Call;
 
     constructor($scope, callDAO: CallDAO) {
-      this.call = new Call({
-        _id: $scope.id
-      });
       $scope.vm = this;
-      callDAO.getById($scope.vm.call._id)
+      callDAO.getById($scope.id)
         .then((call) => {
           this.call = call;
         });
