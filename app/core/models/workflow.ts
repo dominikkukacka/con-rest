@@ -5,7 +5,7 @@ module Models {
     calls: Array<any> = [];
     connectors: Array<any> = [];
 
-    constructor(json: IWorkflow) {
+    constructor(json: IWorkflow = {}) {
       super(json);
       this.calls = this.convertContentToClass(json.calls, Call);
       this.connectors = this.convertContentToClass(json.connectors, Connector);
@@ -13,7 +13,7 @@ module Models {
   }
 
   export interface IWorkflow {
-    _id: string;
+    _id?: string;
     name?: string;
     calls?: Array<string>;
     connectors?: Array<string>;

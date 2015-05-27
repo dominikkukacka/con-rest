@@ -5,19 +5,26 @@ module WorkflowVMS {
 
   export class WorkflowVM {
     static $inject = ['$scope', 'workflowDAO', '$location'];
-    workflow: Workflow;
+    workflow: Workflow = new Workflow();
     $location: ILocationService;
+    workflowDAO: WorkflowDAO;
 
     constructor($scope, workflowDAO: WorkflowDAO, $location: ILocationService) {
-      this.workflow = new Workflow({
-        _id: $scope.id
-      });
       this.$location = $location;
+      this.workflowDAO = workflowDAO;
       $scope.vm = this;
+      if (!!$scope.id) {
+        workflowDAO.getById($scope.id)
+          .then((workflow: Workflow) => {
+            this.workflow = workflow;
+          });
+      }
+    }
 
-      workflowDAO.getById(this.workflow._id)
-        .then((workflow: Workflow) => {
-          this.workflow = workflow;
+    save() {
+      this.workflowDAO.create(this.workflow)
+        .then(() => {
+          this.$location.path('/workflows/' + this.workflow._id);
         });
     }
 

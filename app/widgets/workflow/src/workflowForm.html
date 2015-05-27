@@ -1,0 +1,25 @@
+<md-toolbar md-scroll-schrink>
+  <div class="md-toolbar-tools">
+    <md-button class="md-icon-button"
+      aria-label="back">
+      <a href="#/workflows">
+        <md-icon md-font-icon="Material-Design-Icons"
+          class="mdi-navigation-arrow-back"></md-icon>
+      </a>
+    </md-button>
+    <h2>
+      Register Workflow
+    </h2>
+  </div>
+</md-toolbar>
+<md-content>
+  <form ng-submit="save()">
+    <md-input-container>
+      <label for="name-{{ $id }}">name</label>
+      <input type="text"
+        id="name-{{ $id }}"
+        ng-model="vm.workflow.name"
+        required>
+    </md-input-container>
+  </form>
+</md-content>

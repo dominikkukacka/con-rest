@@ -1,6 +1,7 @@
 module DAO {
   import IInjectorService = ng.auto.IInjectorService;
   import Workflow = Models.Workflow;
+  import Call = Models.Call;
 
   export class WorkflowDAO extends DAO {
     constructor($injector: IInjectorService) {
@@ -20,12 +21,28 @@ module DAO {
       return deferred.promise;
     }
 
-    getById(id: string) {
+    getById(id: string): ng.IPromise<Workflow> {
       var deferred = this.$q.defer();
       this.get('/api/workflows/' + id, null)
         .then((response: any) => {
           deferred.resolve(new Workflow(response.data));
         }, deferred.reject);
+      return deferred.promise;
+    }
+
+    create(workflow: Workflow): ng.IPromise<string> {
+      var deferred = this.$q.defer();
+      var callIds: Array<String> = [];
+      workflow.calls.forEach((call) => {
+        callIds.push(call._id);
+      });
+      this.post('/api/workflows/', {
+        name: workflow.name,
+        calls: callIds
+      }).then((response: any) => {
+        workflow._id = response.data;
+        deferred.resolve(workflow);
+      }, deferred.reject);
       return deferred.promise;
     }
   }
