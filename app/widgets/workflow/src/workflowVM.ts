@@ -34,6 +34,11 @@ module WorkflowVMS {
       this.callQuery = null;
     }
 
+    removeCall(call: Call) {
+      var index = this.workflow.calls.indexOf(call);
+      this.workflow.calls.splice(index, 1);
+    }
+
     searchCall() {
       return this.callDAO.search(this.callQuery);
     }

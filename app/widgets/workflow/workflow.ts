@@ -5,6 +5,7 @@ module ConREST {
     'con-rest.dao',
     'con-rest.models',
     'con-rest.call',
+    'ngMessages',
     'ngMaterial'
   ])
     .config(appConfig)
