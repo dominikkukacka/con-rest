@@ -25,7 +25,11 @@
   //         "__v":0
   //     }]
   function getAPICalls(req, res) {
-    return helper.getAll(APICall, req, res);
+    if (!!req.query && !!req.query.search) {
+      return searchByName(req, res);
+    } else {
+      return helper.getAll(APICall, req, res);
+    }
   }
 
   // Receive specific REST call from the database by its ID
@@ -43,6 +47,30 @@
   //     }
   function getAPICallById(req, res) {
     return helper.getById(APICall, req, res);
+  }
+
+  // Search API's based on name
+  // Response is "Status: 200 OK" and an array of JSON objects. Response example:
+
+  //     [{
+  //         "_id":"547874b2281a1fbc22e2284b",
+  //         "name":"sampleRestCall",
+  //         "url":"http://this.sample.call",
+  //         "method":"POST",
+  //         "type":"formData",
+  //         "data":"{\n\"sampleParam\":\"sampleValue\",\n\"testParam\":\"2\"\n}",
+  //         "headers":"{\n\"sampleAuthorization\":\"sampleValue\"\n}",
+  //         "__v":0
+  //     }]
+  function searchByName(req, res) {
+    var name = req.query.search;
+    return APICall.find({
+        name: new RegExp('^' + name, 'i')
+      })
+      .limit(10)
+      .exec()
+      .then(helper.sendAndResolve(res),
+        helper.errorHandler(res));
   }
 
   // Delete specific REST call from database by its ID
@@ -237,16 +265,19 @@
       });
     });
 
-    if(apiCall.files.length > 0) {
+    if (apiCall.files.length > 0) {
       var form = r.form();
-      for(var key in options.formData) {
+      for (var key in options.formData) {
         var value = options.formData[key];
         form.append(key, value);
       }
 
-      for(var i = 0; i < apiCall.files.length; i++ ){
+      for (var i = 0; i < apiCall.files.length; i++) {
         var file = apiCall.files[i];
-        form.append(file.name, file.file.buffer, {filename: file.name, contentType: file.file.mime});
+        form.append(file.name, file.file.buffer, {
+          filename: file.name,
+          contentType: file.file.mime
+        });
 
         //remove it so it doesn't get send over the wire in the repsonse
         delete apiCall.files[i];
@@ -281,6 +312,7 @@
     saveAPICall: saveAPICall,
     getAPICalls: getAPICalls,
     getAPICallById: getAPICallById,
+    searchByName: searchByName,
     registerAPICall: registerAPICall,
     executeAPICall: executeAPICall,
     executeAPICallById: executeAPICallById,
