@@ -1,19 +1,19 @@
 <md-toolbar md-scroll-schrink>
   <div class="md-toolbar-tools">
-    <md-button class="md-icon-button"
+    <a href="#/workflows"
+      class="md-icon-button md-button"
       aria-label="back">
-      <a href="#/workflows">
-        <md-icon md-font-icon="Material-Design-Icons"
-          class="mdi-navigation-arrow-back"></md-icon>
-      </a>
-    </md-button>
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-navigation-arrow-back"></md-icon>
+    </a>
     <h2>
       Register Workflow
     </h2>
   </div>
 </md-toolbar>
 <md-content>
-  <form ng-submit="save()">
+  <form ng-submit="save()"
+    name="workflowForm">
     <md-input-container>
       <label for="name-{{ $id }}">name</label>
       <input type="text"
@@ -21,5 +21,36 @@
         ng-model="vm.workflow.name"
         required>
     </md-input-container>
+    <div layout="row">
+      <md-autocomplete md-items="call in vm.searchCall()"
+        md-search-text="vm.callQuery"
+        md-item-text="call.name"
+        md-selected-item="vm.selectedCall"
+        md-min-length="2"
+        placeholder="select call"
+        flex>
+        <md-item-template>
+          <span md-highlight-text="vm.callQuery"
+            md-highlight-flags="^i">{{ call.name }}</span>
+        </md-item-template>
+        <md-not-found>
+          call is not found
+        </md-not-found>
+      </md-autocomplete>
+      <md-button ng-click="vm.addCall()"
+        class="md-icon-button"
+        aria-label="add call"
+        ng-disabled="!vm.selectedCall">
+        <md-icon md-font-icon="Material-Design-Icons"
+          class="mdi-content-add-circle"></md-icon>
+      </md-button>
+    </div>
+    <md-list>
+      <call-item ng-repeat="call in vm.workflow.calls"
+        call="call"></call-item>
+    </md-list>
+    <md-button class="md-raised md-primary"
+      ng-disabled="!workflowForm.$valid"
+      type="submit">save</md-button>
   </form>
 </md-content>

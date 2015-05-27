@@ -28,6 +28,20 @@ module DAO {
         }, deferred.reject);
       return deferred.promise;
     }
+
+    search(name: string): ng.IPromise<Array<Call>> {
+      var deferred = this.$q.defer();
+      this.get('/api/requests/', {
+        search: name
+      }).then((response: any) => {
+        var calls = [];
+        for(var i = 0; i < response.data.length; i++ ) {
+          calls.push(new Call(response.data[i]));
+        }
+        deferred.resolve(calls);
+      }, deferred.reject);
+      return deferred.promise;
+    }
   }
 
   var instance = null;

@@ -70,6 +70,7 @@
         "./app/widgets/workflow/src/workflowForm.ts",
         "./app/widgets/workflow/src/workflowVM.ts",
         "./app/widgets/workflow/test/definitions/registerWorkflow.step.ts",
+        "./app/widgets/workflow/test/definitions/searchCall.step.ts",
         "./app/widgets/workflow/test/definitions/viewWorkflowDetails.step.ts",
         "./app/widgets/workflow/workflow.ts",
         "./app/widgets/workflowOverview/src/workflowOverview.ts",

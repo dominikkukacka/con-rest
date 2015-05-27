@@ -18,18 +18,19 @@ module DAO {
       this.$q = $injector.get('$q');
     }
 
-    execute(method, url, data?) {
+    execute(method, url, data?, params?) {
       var config: IRequestConfig = {
         method: method,
         url: url,
         data: data,
+        params: params,
         headers: {}
       };
       return this.$http(config);
     }
 
     get(url: string, params: Object) {
-      return this.execute(this.GET, url, params);
+      return this.execute(this.GET, url, null, params);
     }
 
     post(url: string, data: Object) {

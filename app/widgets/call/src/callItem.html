@@ -4,5 +4,5 @@
     <h3>{{ vm.call.name }} [ {{ vm.call.method }} ]</h3>
     <p>{{ vm.call.url }}</p>
   </div>
-  <md-divider ng-if="!$last"></md-divider>
+  <md-divider ng-if="!$parent.$last"></md-divider>
 </md-list-item>

@@ -2,6 +2,7 @@ module WorkflowVMS {
   import CallDAO = DAO.CallDAO;
   import WorkflowDAO = DAO.WorkflowDAO;
   import Workflow = Models.Workflow;
+  import Call = Models.Call;
   import ILocationService = ng.ILocationService;
 
   export class WorkflowVM {
@@ -10,6 +11,9 @@ module WorkflowVMS {
     $location: ILocationService;
     workflowDAO: WorkflowDAO;
     callDAO: CallDAO;
+
+    callQuery: string;
+    selectedCall: Call;
 
     constructor($scope, workflowDAO: WorkflowDAO, callDAO: CallDAO, $location: ILocationService) {
       this.$location = $location;
@@ -24,8 +28,14 @@ module WorkflowVMS {
       }
     }
 
-    searchCall(callName: string) {
+    addCall() {
+      this.workflow.calls.push(this.selectedCall);
+      this.selectedCall = null;
+      this.callQuery = null;
+    }
 
+    searchCall() {
+      return this.callDAO.search(this.callQuery);
     }
 
     save() {

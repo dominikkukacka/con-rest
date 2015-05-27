@@ -1,7 +1,7 @@
 module CallDirectives {
   export function call(): ng.IDirective {
     return {
-      restrict: 'EA',
+      restrict: 'E',
       scope: {
         id: '@',
         workflowId: '@'

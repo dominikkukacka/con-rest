@@ -8,17 +8,21 @@ module CallVMS {
 
     constructor($scope, callDAO: CallDAO) {
       $scope.vm = this;
-      callDAO.getById($scope.id)
-        .then((call) => {
+      if (!!$scope.call) {
+        this.call = $scope.call;
+      } else {
+        callDAO.getById($scope.id)
+          .then((call) => {
           this.call = call;
         });
+      }
     }
 
     convertToJSON(json: Object): string {
       if (!json) {
         return '-';
       }
-     return JSON.stringify(json, null, 4);
+      return JSON.stringify(json, null, 4);
     }
   }
 }
