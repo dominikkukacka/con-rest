@@ -1,0 +1,47 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <h2 ng-if="!id">
+      Add API Call
+    </h2>
+    <h2 ng-if="!!id">
+      Edit API Call
+    </h2>
+  </div>
+</md-toolbar>
+<md-content layout-padding>
+  <div layout="column" layout-margin>
+    <md-input-container flex>
+      <label>name</label>
+      <input ng-model="vm.call.name">
+    </md-input-container>
+    <section layout-sm="column" layout-gt-sm="row">
+      <md-select placeholder="method" ng-model="vm.call.method" flex-sm flex-gt-sm="25">
+        <md-option ng-value="method" ng-repeat="method in vm.methods">{{ method }}</md-option>
+      </md-select>
+      <md-input-container flex>
+        <label>url</label>
+        <input ng-model="vm.call.url">
+      </md-input-container>
+    </section>
+    <md-select placeholder="type" ng-model="vm.call.type">
+      <md-option ng-value="type" ng-repeat="type in vm.types">{{ type }}</md-option>
+    </md-select>
+    <md-input-container flex>
+      <label>headers</label>
+      <textarea ng-model="vm.call.headers"></textarea>
+    </md-input-container>
+    <md-input-container flex>
+      <label>data</label>
+      <textarea ng-model="vm.call.data"></textarea>
+    </md-input-container>
+  </div>
+  <div layout="row">
+    <md-button class="md-primary md-raised"
+               ng-click="save()">Submit
+    </md-button>
+    <md-button ng-if="id"
+               class="md-primary md-raised"
+               ng-click="requestCancelEditing()">Cancel
+    </md-button>
+  </div>
+</md-content>

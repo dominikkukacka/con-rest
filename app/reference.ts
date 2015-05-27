@@ -27,6 +27,7 @@
 /// <reference path="core/modules/appConfig.ts" />
 /// <reference path="widgets/call/src/call.ts" />
 /// <reference path="widgets/call/src/callItem.ts" />
+/// <reference path="widgets/call/src/callRegister.ts" />
 /// <reference path="widgets/call/src/callVM.ts" />
 /// <reference path="widgets/callOverview/src/callOverview.ts" />
 /// <reference path="widgets/callOverview/src/callOverviewVM.ts" />
