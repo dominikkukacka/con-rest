@@ -33,6 +33,7 @@ module ConREST {
     'con-rest.call-overview',
     'con-rest.call',
     'con-rest.connector',
+    'con-rest.execution',
     'ngRoute',
     'ngMaterial'
   ])

@@ -31,7 +31,7 @@
   function getExecutionsFromWorkflowId(req, res) {
     var workflowExecutionId = mongoose.Types.ObjectId(req.params.workflowExecutionId);
     return WorkflowExecution
-      .find({
+      .findOne({
         _id: workflowExecutionId
       })
       .populate('executions')

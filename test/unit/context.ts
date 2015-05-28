@@ -3,6 +3,7 @@ module StepLibrary {
   import ICall = Models.ICall;
   import IConnector = Models.IConnector;
   import IMapper = Models.IMapper;
+  import IExecution = Models.IExecution;
   import Session = Models.Session;
 
   class Context {
@@ -19,6 +20,8 @@ module StepLibrary {
     workflow: IWorkflow;
     connector: IConnector;
     mapper: IMapper;
+    execution: IExecution;
+    executions: Array<IExecution>;
 
     constructor() {
       this.renew();
@@ -36,6 +39,7 @@ module StepLibrary {
         this.workflow = null;
         this.call = null;
         this.connector = null;
+        this.execution = null;
       });
     }
 
