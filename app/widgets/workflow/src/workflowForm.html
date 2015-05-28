@@ -20,7 +20,12 @@
       <input type="text"
         id="name-{{ $id }}"
         ng-model="vm.workflow.name"
+        name="name"
         required>
+      <div ng-messages="workflowForm.name.$error"
+        ng-if="workflowForm.name.$touched">
+        <div ng-message="required">Please name your workflow</div>
+      </div>
     </md-input-container>
     <div layout="row">
       <md-autocomplete md-items="call in vm.searchCall()"
