@@ -24,6 +24,8 @@ module.exports = function(config) {
       'app/bower_components/angular-aria/angular-aria.js',
       'app/bower_components/angular-animate/angular-animate.js',
       'app/bower_components/angular-material/angular-material.js',
+      'app/bower_components/ace-builds/src-min-noconflict/ace.js',
+      'app/bower_components/angular-ui-ace/ui-ace.js',
       '.tmp/js/test/unit/*.js',
       '.tmp/js/app/core/models/serializable.js',
       '.tmp/js/app/core/models/**/*.js',

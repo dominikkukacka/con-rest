@@ -8,6 +8,7 @@
 @import 'app/bower_components/bootstrap-material-design/less/roboto.less';
 @import 'app/bower_components/bootstrap-material-design/less/_icons-material-design.less';
 @import ".tmp/less/styles.less";
+@import "app/styles/themes/theme-con-rest.less";
 body {
   background-color: rgb(66,66,66);
 }
@@ -24,8 +25,10 @@ md-content p.label {
 [ng-click] {
   cursor: pointer;
 }
-p,
-pre {
+p, pre {
   text-overflow: ellipsis;
   overflow-x: auto;
+}
+.ace_editor {
+  min-height: 100px;
 }

@@ -15,29 +15,37 @@
       <input ng-model="vm.call.name">
     </md-input-container>
     <section layout-sm="column" layout-gt-sm="row">
-      <md-select placeholder="method" ng-model="vm.call.method" flex-sm flex-gt-sm="25">
-        <md-option ng-value="method" ng-repeat="method in vm.methods">{{ method }}</md-option>
+      <md-select placeholder="method"
+                 ng-model="vm.call.method"
+                 flex-sm
+                 flex-gt-sm="25">
+        <md-option ng-value="method"
+                   ng-repeat="method in vm.methods">{{ method }}</md-option>
       </md-select>
       <md-input-container flex>
         <label>url</label>
         <input ng-model="vm.call.url">
       </md-input-container>
     </section>
-    <md-select placeholder="type" ng-model="vm.call.type">
-      <md-option ng-value="type" ng-repeat="type in vm.types">{{ type }}</md-option>
+    <md-select placeholder="type"
+               ng-model="vm.call.type">
+      <md-option ng-value="type"
+                 ng-repeat="type in vm.types">{{ type }}</md-option>
     </md-select>
     <md-input-container flex>
-      <label>headers</label>
-      <textarea ng-model="vm.call.headers"></textarea>
+      <p>headers</p>
+      <div ui-ace="vm.aceConfig"
+           ng-model="vm.headers"></div>
     </md-input-container>
     <md-input-container flex>
-      <label>data</label>
-      <textarea ng-model="vm.call.data"></textarea>
+      <p>data</p>
+      <div ui-ace="vm.aceConfig"
+           ng-model="vm.data"></div>
     </md-input-container>
   </div>
   <div layout="row">
     <md-button class="md-primary md-raised"
-               ng-click="save()">Submit
+               ng-click="vm.save()">Submit
     </md-button>
     <md-button ng-if="id"
                class="md-primary md-raised"
