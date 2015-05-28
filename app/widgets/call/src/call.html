@@ -1,49 +1,54 @@
 <md-toolbar md-scroll-schrink>
   <div class="md-toolbar-tools">
-    <md-button class="md-icon-button"
-      aria-label="back">
-      <a ng-href="#/workflows/{{ workflowId }}">
-        <md-icon md-font-icon="Material-Design-Icons"
-          class="mdi-navigation-arrow-back"></md-icon>
-      </a>
-    </md-button>
+    <a class="md-icon-button md-button"
+      aria-label="back"
+      ng-href="#/workflows/{{ workflowId }}">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-navigation-arrow-back"></md-icon>
+    </a>
     <h2>
       Call Details
     </h2>
   </div>
 </md-toolbar>
 <md-content layout-padding>
-  <div layout="row" layout-margin>
+  <div layout="row"
+    layout-margin>
     <p flex="25"
       class="label"
       layout-align="end">name</p>
     <p flex="65">{{ vm.call.name }}</p>
   </div>
-  <div layout="row" layout-margin>
+  <div layout="row"
+    layout-margin>
     <p flex="25"
       class="label"
       layout-align="end">url</p>
     <p flex="65">{{ vm.call.url }}</p>
   </div>
-  <div layout="row" layout-margin>
+  <div layout="row"
+    layout-margin>
     <p flex="25"
       class="label"
       layout-align="end">method</p>
     <p flex="65">{{ vm.call.method }}</p>
   </div>
-  <div layout="row" layout-margin>
+  <div layout="row"
+    layout-margin>
     <p flex="25"
       class="label"
       layout-align="end">type</p>
     <p flex="65">{{ vm.call.type }}</p>
   </div>
-  <div layout="row" layout-margin>
+  <div layout="row"
+    layout-margin>
     <p flex="25"
       class="label"
       layout-align="end">data</p>
     <pre flex="65">{{ vm.convertToJSON(vm.call.data) }}</pre>
   </div>
-  <div layout="row" layout-margin>
+  <div layout="row"
+    layout-margin>
     <p flex="25"
       class="label"
       layout-align="end">headers</p>
