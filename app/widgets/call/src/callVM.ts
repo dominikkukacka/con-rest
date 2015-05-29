@@ -1,17 +1,18 @@
 module CallVMS {
   import CallDAO = DAO.CallDAO;
   import Call = Models.Call;
+  import aceConfig = Modules.aceConfig;
+  import IAceConfig = Modules.IAceConfig;
+  import ILocationService = ng.ILocationService;
 
   export class CallVM {
-    static $inject = ['$scope', 'callDAO'];
-    aceConfig: Object = {
-      theme: 'con-rest',
-      mode: 'json'
-    };
+    static $inject = ['$scope', 'callDAO', '$location'];
+    $location: ILocationService;
+    aceConfig: IAceConfig = aceConfig;
     call: Call;
     callDAO: CallDAO;
-    headers: string;
     data: string;
+    headers: string;
     methods: Array<string> = [
       'GET',
       'POST',
@@ -25,7 +26,8 @@ module CallVMS {
       'formData'
     ];
 
-    constructor($scope, callDAO: CallDAO) {
+    constructor($scope, callDAO: CallDAO, $location: ILocationService) {
+      this.$location = $location;
       this.callDAO = callDAO;
       $scope.vm = this;
       if (!!$scope.call) {
@@ -39,6 +41,8 @@ module CallVMS {
             this.headers = this.convertToString(call.headers);
             this.data = this.convertToString(call.data);
         });
+      } else {
+        this.call = new Call();
       }
     }
 
@@ -56,28 +60,14 @@ module CallVMS {
         return null;
       }
     }
-    registerCall(): void {
-      this.callDAO.create(this.call)
-        .then((id) => {
-          this.call._id = id;
-        });
-    }
-
-    updateCall(): void {
-      this.callDAO.update(this.call._id, this.call)
-        .then((response) => {
-
-        });
-    }
 
     save(): void {
       this.call.headers = this.convertToJSON(this.headers);
       this.call.data = this.convertToJSON(this.data);
-      if(!this.call._id) {
-        this.registerCall();
-      } else {
-        this.updateCall();
-      }
+      this.callDAO.save(this.call)
+        .then(() => {
+          this.$location.path('/calls/' + this.call._id);
+      });
     }
   }
 }

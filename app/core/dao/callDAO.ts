@@ -29,22 +29,31 @@ module DAO {
       return deferred.promise;
     }
 
-    create(call: Call): ng.IPromise<string> {
+    create(call: Call): ng.IPromise<Call> {
       var deferred = this.$q.defer();
       this.post('/api/requests/', call)
         .then((response: any) => {
-          deferred.resolve(response.data);
+          call._id = response.data;
+          deferred.resolve(call);
         }, deferred.reject);
       return deferred.promise;
     }
 
-    update(id: string, call: Call): ng.IPromise<string> {
+    update(call: Call): ng.IPromise<Call> {
       var deferred = this.$q.defer();
-      this.put('/api/requests/' + id, call.toJSON())
+      this.put('/api/requests/' + call._id, call.toJSON())
         .then((response: any) => {
-          deferred.resolve(response.data);
+          deferred.resolve(call);
         }, deferred.reject);
       return deferred.promise;
+    }
+
+    save(call: Call): ng.IPromise<Call> {
+      if(!!call._id) {
+        return this.update(call);
+      } else {
+        return this.create(call);
+      }
     }
 
     search(name: string): ng.IPromise<Array<Call>> {

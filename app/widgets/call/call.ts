@@ -4,7 +4,8 @@ module ConREST {
     'con-rest.templates',
     'con-rest.dao',
     'ui.ace',
-    'ngMaterial'
+    'ngMaterial',
+    'ngMessages'
   ])
     .config(appConfig)
     .controller(CallVMS)

@@ -8,7 +8,7 @@ module Models {
     data: Object;
     headers: Object;
 
-    constructor(json: ICall) {
+    constructor(json?: ICall) {
       super(json);
     }
   }

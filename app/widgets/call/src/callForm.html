@@ -9,47 +9,64 @@
   </div>
 </md-toolbar>
 <md-content layout-padding>
-  <div layout="column" layout-margin>
-    <md-input-container flex>
-      <label>name</label>
-      <input ng-model="vm.call.name">
-    </md-input-container>
-    <section layout-sm="column" layout-gt-sm="row">
-      <md-select placeholder="method"
-                 ng-model="vm.call.method"
-                 flex-sm
-                 flex-gt-sm="25">
-        <md-option ng-value="method"
-                   ng-repeat="method in vm.methods">{{ method }}</md-option>
+  <form ng-submit="vm.save()"
+        novalidate
+        name="callForm">
+    <div layout="column">
+      <md-input-container flex>
+        <label>name</label>
+        <input name="name"
+               required
+               minlength="3"
+               aria-label="name"
+               ng-model="vm.call.name">
+        <div ng-messages="callForm.name.$error"
+             ng-if="callForm.name.$touched">
+          <div ng-message="required">Please name your REST calls</div>
+          <div ng-message="minlength">Name must be at least 3 characters!</div>
+        </div>
+      </md-input-container>
+      <section layout-sm="column"
+               layout-gt-sm="row">
+        <md-select placeholder="method"
+                   ng-model="vm.call.method"
+                   flex-sm
+                   flex-gt-sm="25">
+          <md-option ng-value="method"
+                     ng-repeat="method in vm.methods">{{ method }}</md-option>
+        </md-select>
+        <md-input-container flex>
+          <label>url</label>
+          <input name="url"
+                 required
+                 type="url"
+                 aria-label="url"
+                 ng-model="vm.call.url">
+          <div ng-messages="callForm.url.$error"
+               ng-if="callForm.url.$touched">
+            <div ng-message="required">Please specify the URL of your REST call</div>
+            <div ng-message="url">Tis is not a valid URL!</div>
+          </div>
+        </md-input-container>
+      </section>
+      <md-select placeholder="type"
+                 ng-model="vm.call.type">
+        <md-option ng-value="type"
+                   ng-repeat="type in vm.types">{{ type }}</md-option>
       </md-select>
       <md-input-container flex>
-        <label>url</label>
-        <input ng-model="vm.call.url">
+        <p>headers</p>
+        <div ui-ace="vm.aceConfig"
+             ng-model="vm.headers"></div>
       </md-input-container>
-    </section>
-    <md-select placeholder="type"
-               ng-model="vm.call.type">
-      <md-option ng-value="type"
-                 ng-repeat="type in vm.types">{{ type }}</md-option>
-    </md-select>
-    <md-input-container flex>
-      <p>headers</p>
-      <div ui-ace="vm.aceConfig"
-           ng-model="vm.headers"></div>
-    </md-input-container>
-    <md-input-container flex>
-      <p>data</p>
-      <div ui-ace="vm.aceConfig"
-           ng-model="vm.data"></div>
-    </md-input-container>
-  </div>
-  <div layout="row">
+      <md-input-container flex>
+        <p>data</p>
+        <div ui-ace="vm.aceConfig"
+             ng-model="vm.data"></div>
+      </md-input-container>
+    </div>
     <md-button class="md-primary md-raised"
-               ng-click="vm.save()">Submit
-    </md-button>
-    <md-button ng-if="id"
-               class="md-primary md-raised"
-               ng-click="requestCancelEditing()">Cancel
-    </md-button>
-  </div>
+               ng-disabled="!callForm.$valid"
+               type="submit">Submit</md-button>
+  </form>
 </md-content>
