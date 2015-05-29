@@ -9,9 +9,16 @@
     <h2>
       {{ vm.workflow.name }}
     </h2>
+    <span flex></span>
+    <a class="md-icon-button md-button"
+      aria-label="edit"
+      ng-href="#/workflows/{{vm.workflow._id}}/edit">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-editor-mode-edit"></md-icon>
+    </a>
   </div>
 </md-toolbar>
-<md-content>
+<md-content ng-if="!!vm.workflow">
   <section>
     <md-subheader class="md-primary">calls</md-subheader>
     <md-list>

@@ -59,6 +59,7 @@
 /// <reference path="widgets/mapper/test/definitions/viewMapper.step.ts" />
 /// <reference path="widgets/workflow/test/definitions/registerWorkflow.step.ts" />
 /// <reference path="widgets/workflow/test/definitions/searchCall.step.ts" />
+/// <reference path="widgets/workflow/test/definitions/updateWorkflow.step.ts" />
 /// <reference path="widgets/workflow/test/definitions/viewWorkflowDetails.step.ts" />
 /// <reference path="widgets/workflow/workflow.ts" />
 /// <reference path="widgets/workflowOverview/test/definitions/selectWorkflow.step.ts" />

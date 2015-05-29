@@ -13,7 +13,17 @@
   }
 
   function getWorkflowById(req, res) {
-    return helper.getById(Workflow, req, res);
+    return Workflow.findById(req.params.id)
+      .populate('calls')
+      .exec()
+      .then(function returnWorkflow(workflow) {
+        if (!!workflow) {
+          res.send(workflow);
+        } else {
+          res.status(404).send('not found');
+        }
+        return workflow;
+      }, helper.sendAndResolve);
   }
 
   function deleteWorkflow(req, res) {

@@ -30,20 +30,31 @@ module DAO {
       return deferred.promise;
     }
 
-    create(workflow: Workflow): ng.IPromise<string> {
+    create(workflow: Workflow): ng.IPromise<Workflow> {
       var deferred = this.$q.defer();
-      var callIds: Array<String> = [];
-      workflow.calls.forEach((call) => {
-        callIds.push(call._id);
-      });
-      this.post('/api/workflows/', {
-        name: workflow.name,
-        calls: callIds
-      }).then((response: any) => {
-        workflow._id = response.data;
-        deferred.resolve(workflow);
-      }, deferred.reject);
+      this.post('/api/workflows/', workflow.toJSON())
+        .then((response: any) => {
+          workflow._id = response.data;
+          deferred.resolve(workflow);
+        }, deferred.reject);
       return deferred.promise;
+    }
+
+    update(workflow: Workflow): ng.IPromise<Workflow> {
+      var deferred = this.$q.defer();
+      this.put('/api/workflows/' + workflow._id, workflow.toJSON())
+        .then((response: any) => {
+          deferred.resolve(workflow);
+        }, deferred.reject);
+      return deferred.promise;
+    }
+
+    save(workflow: Workflow): ng.IPromise<Workflow> {
+      if (!!workflow._id) {
+        return this.update(workflow);
+      } else {
+        return this.create(workflow);
+      }
     }
   }
 

@@ -10,6 +10,13 @@ module Models {
       this.calls = this.convertContentToClass(json.calls, Call);
       this.connectors = this.convertContentToClass(json.connectors, Connector);
     }
+
+    toJSON() {
+      var json: any = super.toJSON();
+      json.calls = this.extractIds(this.calls);
+      json.connectors = this.extractIds(this.connectors);
+      return json;
+    }
   }
 
   export interface IWorkflow {

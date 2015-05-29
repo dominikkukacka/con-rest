@@ -21,7 +21,8 @@ module ConRESTTest {
       });
       ctx.$httpBackend.expect('POST', '/api/workflows/', {
         name: workflowVM.workflow.name,
-        calls: calls
+        calls: calls,
+        connectors: []
       }).respond(200, id);
     })
     .then('I should navigate to the workflow view with id "(.*)"', (id) => {

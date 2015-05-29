@@ -12,7 +12,7 @@ module DAO {
       this.get('/api/requests/', null)
         .then((response: any) => {
           var calls = [];
-          for(var i = 0; i < response.data.length; i++ ) {
+          for (var i = 0; i < response.data.length; i++) {
             calls.push(new Call(response.data[i]));
           }
           deferred.resolve(calls);
@@ -35,7 +35,7 @@ module DAO {
         search: name
       }).then((response: any) => {
         var calls = [];
-        for(var i = 0; i < response.data.length; i++ ) {
+        for (var i = 0; i < response.data.length; i++) {
           calls.push(new Call(response.data[i]));
         }
         deferred.resolve(calls);

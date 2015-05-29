@@ -53,6 +53,15 @@ module Models {
         }
         json[prop] = value;
       });
+      return json;
+    }
+
+    extractIds(objects: Array<any> = []) {
+      var ids: Array<string> = [];
+      objects.forEach((object: any) => {
+        ids.push(object._id);
+      });
+      return ids;
     }
   }
 }

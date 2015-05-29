@@ -7,7 +7,7 @@ module WorkflowVMS {
 
   export class WorkflowVM {
     static $inject = ['$scope', 'workflowDAO', 'callDAO', '$location'];
-    workflow: Workflow = new Workflow();
+    workflow: Workflow;
     $location: ILocationService;
     workflowDAO: WorkflowDAO;
     callDAO: CallDAO;
@@ -23,8 +23,10 @@ module WorkflowVMS {
       if (!!$scope.id) {
         workflowDAO.getById($scope.id)
           .then((workflow: Workflow) => {
-          this.workflow = workflow;
-        });
+            this.workflow = workflow;
+          });
+      } else {
+        this.workflow = new Workflow();
       }
     }
 
@@ -44,10 +46,10 @@ module WorkflowVMS {
     }
 
     save() {
-      this.workflowDAO.create(this.workflow)
+      this.workflowDAO.save(this.workflow)
         .then(() => {
-        this.$location.path('/workflows/' + this.workflow._id);
-      });
+          this.$location.path('/workflows/' + this.workflow._id);
+        });
     }
 
     goToCall(callId: string) {

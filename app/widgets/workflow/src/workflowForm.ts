@@ -2,7 +2,9 @@ module WorkflowDirectives {
   export function workflowForm(): ng.IDirective {
     return {
       restrict: 'EA',
-      scope: {},
+      scope: {
+        id: '@'
+      },
       controller: 'WorkflowVM',
       templateUrl: 'workflowForm'
     };
