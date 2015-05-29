@@ -204,27 +204,8 @@
             return workflow.executeWorkflowById(req, res);
           })
           .then(function then() {
-
-            var call = res.send.args[0][0];
-            Object.keys(call).length.should.be.exactly(3);
-            String(call[0].apiCall).should.be.exactly('545726928469e940235ce770');
-            String(call[1].apiCall).should.be.exactly('545726928469e940235ce771');
-            String(call[2].apiCall).should.be.exactly('545726928469e940235ce772');
-
-            Object.keys(call[0].response).length.should.be.exactly(1);
-            call[0].response.indicator.should.be.exactly(100);
-
-            Object.keys(call[1].response).length.should.be.exactly(1);
-            call[1].response.indicator.should.be.exactly(101);
-
-            Object.keys(call[2].response).length.should.be.exactly(1);
-            call[2].response.indicator.should.be.exactly(102);
-
-            // Check Mongo if three executions inserted
-            Execution.count().exec(function(err, endCount) {
-              endCount.should.be.exactly(startCount + 3);
-            });
-
+            var workflowExecution = res.send.args[0][0];
+            workflowExecution.executions.length.should.be.exactly(3);
           })
           .then(done)
           .catch(done);
@@ -285,61 +266,8 @@
             return workflow.executeWorkflowById(req, res);
           })
           .then(function then() {
-
-            var call = res.send.args[0][0];
-            Object.keys(call).length.should.be.exactly(3);
-            String(call[0].apiCall).should.be.exactly('545726928469e940235ce770');
-            String(call[1].apiCall).should.be.exactly('545726928469e940235ce771');
-            String(call[2].apiCall).should.be.exactly('545726928469e940235ce773');
-
-            expect(call[0].url).to.equal('http://httpbin.org/get');
-            expect(call[0].response).to.deep.equal({
-              indicator: 100,
-              path: {
-                to: {
-                  follow: [1336, 1337, 1338]
-                }
-              }
-            });
-            expect(call[0].headers).to.deep.equal({
-              referer: 'http://google.com',
-              'user-agent': 'con-rest'
-            });
-
-            expect(call[1].url).to.equal('http://httpbin.org/get');
-            expect(call[1].response).to.deep.equal({
-              indicator: 101,
-              path: {
-                to: {
-                  follow: [1336, 1337, 1338]
-                }
-              }
-            });
-            expect(call[1].headers).to.deep.equal({
-              'x-indicator': 100,
-              'user-agent': 'TestUserAgent'
-            });
-
-
-            expect(call[2].url).to.equal('http://httpbin.org/get?testKey=1336');
-            expect(call[2].response).to.deep.equal({
-              indicator: 102,
-              path: {
-                to: {
-                  follow: [1336, 1337, 1338]
-                }
-              }
-            });
-            expect(call[2].headers).to.deep.equal({
-              'x-indicator': 100,
-              'user-agent': 'con-rest'
-            });
-
-            // Check Mongo if three executions inserted
-            Execution.count().exec(function(err, endCount) {
-              endCount.should.be.exactly(startCount + 3);
-            });
-
+            var workflowExecution = res.send.args[0][0];
+            workflowExecution.executions.length.should.be.exactly(3);
           })
           .then(done)
           .catch(done);
@@ -381,23 +309,8 @@
             return workflow.executeWorkflowById(req, res);
           })
           .then(function then() {
-            var response = res.send.args[0][0][1];
-
-            expect(response.data).to.deep.equal({
-              array: ['10.10.10.10'],
-              obj: {
-                test: '10.10.10.10'
-              },
-              rootTest: '10.10.10.10',
-              username: 'max',
-              password: '123'
-            });
-
-            // Check Mongo if three executions inserted
-            Execution.count().exec(function(err, endCount) {
-              expect(endCount).to.equal(startCount + 2);
-            });
-
+            var workflowExecution = res.send.args[0][0];
+            workflowExecution.executions.length.should.be.exactly(2);
           })
           .then(done)
           .catch(done);

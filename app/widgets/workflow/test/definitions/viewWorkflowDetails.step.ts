@@ -4,7 +4,7 @@ module ConRESTTest {
   var expect = chai.expect;
 
   library
-    .given('the server finds the workflow', () => {
+    .given('^the server finds the workflow$', () => {
       ctx.workflow = {
         _id: 'w1o2r3k4f5l6o7w8',
         name: 'Awesome Workflow',

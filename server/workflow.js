@@ -92,8 +92,8 @@
           .then(function saveExecution() {
             return saveWorkflowExecution(workflow, results);
           })
-          .then(function() {
-            res.send(results);
+          .then(function(workflowExecution) {
+            res.send(workflowExecution);
           });
       }, function error(err) {
         if (res.status) {

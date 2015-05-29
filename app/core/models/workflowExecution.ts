@@ -3,13 +3,13 @@ module Models {
 
   export class WorkflowExecution extends Serializable {
     _id: string;
-    workflow: string;
+    workflow: Workflow;
     executedAt: Date;
     executions: Array<Execution>;
 
     constructor(json: IWorkflowExecution) {
       super(json);
-      this.workflow = this.convertIdToClass(json.workflow, Workflow)
+      this.workflow = this.instantiateClass(json.workflow, Workflow)
       this.executedAt = new Date(json.executedAt);
       this.executions = this.convertContentToClass(json.executions, Execution);
     }
@@ -17,7 +17,7 @@ module Models {
 
   export interface IWorkflowExecution {
     _id: string;
-    workflow: string;
+    workflow: IWorkflow;
     executedAt: number;
     executions: Array<IExecution>;
   }

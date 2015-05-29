@@ -5,5 +5,5 @@
     <h3>{{ vm.connector.source.name }} to {{ vm.connector.destination.name }}</h3>
     <p>{{ vm.connector.mapper.maps.length }} map(s)</p>
   </div>
-  <md-divider ng-if="!$last"></md-divider>
+  <md-divider ng-if="!$parent.$parent.$last"></md-divider>
 </md-list-item>

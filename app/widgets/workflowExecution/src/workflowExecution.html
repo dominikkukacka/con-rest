@@ -1,0 +1,32 @@
+<md-toolbar class="md-tall"
+  md-scroll-schrink>
+  <div class="md-toolbar-tools">
+    <a class="md-icon-button md-button"
+      aria-label="back"
+      ng-href="#/workflows/{{ vm.workflowExection._id }}">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-navigation-arrow-back"></md-icon>
+    </a>
+    <h2>
+      {{ vm.workflowExecution.workflow.name }}
+    </h2>
+    <span flex></span>
+  </div>
+  <div class="md-toolbar-tools">
+    <p class="md-subhead">Executed at: {{ vm.workflowExecution.executedAt | date: 'medium' }}</p>
+  </div>
+</md-toolbar>
+<md-content ng-if="!!vm.workflowExecution">
+  <md-subheader class="md-primary">executed calls</md-subheader>
+  <md-list>
+    <execution-item ng-repeat="execution in vm.workflowExecution.executions"
+      ng-click="vm.goToExecution(execution._id)"
+      execution="execution"></execution-item>
+  </md-list>
+  <md-subheader class="md-primary">calls</md-subheader>
+  <md-list>
+    <call-item ng-repeat="call in vm.workflowExecution.workflow.calls"
+      ng-click="vm.goToCall(call._id)"
+      id="{{ call._id }}"></call-item>
+  </md-list>
+</md-content>

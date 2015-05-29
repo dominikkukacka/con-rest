@@ -39,9 +39,11 @@ module Models {
       }
     }
 
-    instantiateClass(json: Object, Class) {
+    instantiateClass(json: any, Class) {
       if(json instanceof Object) {
         return new Class(json);
+      } else {
+        return this.convertIdToClass(json, Class);
       }
     }
 

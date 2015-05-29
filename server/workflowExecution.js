@@ -13,7 +13,16 @@
   }
 
   function getWorkflowExecutionById(req, res) {
-    return helper.getById(WorkflowExecution, req, res);
+    var workflowExecutionId = mongoose.Types.ObjectId(req.params.workflowExecutionId);
+    return WorkflowExecution
+      .findOne({
+        _id: workflowExecutionId
+      })
+      .populate('executions workflow')
+      .exec()
+      .then(function returnCall(workflowExecution) {
+        res.send(workflowExecution);
+      });
   }
 
   function getWorkflowExecutionsByWorkflowId(req, res) {
@@ -34,7 +43,7 @@
       .findOne({
         _id: workflowExecutionId
       })
-      .populate('executions')
+      .populate('executions workflow')
       .exec()
       .then(function returnCall(call) {
         res.send(call);

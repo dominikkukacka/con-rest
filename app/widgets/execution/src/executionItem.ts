@@ -1,13 +1,14 @@
 module ExecutionDirectives {
-  export function execution(): ng.IDirective {
+  export function executionItem(): ng.IDirective {
     return {
       restrict: 'E',
       scope: {
         workflowId: '@',
+        executionId: '@',
         execution: '='
       },
       controller: 'ExecutionVM',
-      templateUrl: 'execution'
+      templateUrl: 'executionItem'
     };
   }
 }

@@ -33,6 +33,15 @@ module DAO {
         }, deferred.reject);
       return deferred.promise;
     }
+
+    executeWorkflow(workflowId: string): ng.IPromise<WorkflowExecution> {
+      var deferred = this.$q.defer();
+      this.post('/api/workflows/' + workflowId + '/executions', null)
+        .then((response: any) => {
+          deferred.resolve(new WorkflowExecution(response.data));
+        }, deferred.reject);
+      return deferred.promise;
+    }
   }
 
   export function workflowExecutionDAO($injector: IInjectorService) {
