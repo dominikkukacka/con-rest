@@ -40,7 +40,7 @@ module DAO {
 
     update(id: string, call: Call): ng.IPromise<string> {
       var deferred = this.$q.defer();
-      this.put('/api/requests/' + id, call)
+      this.put('/api/requests/' + id, call.toJSON())
         .then((response: any) => {
           deferred.resolve(response.data);
         }, deferred.reject);
