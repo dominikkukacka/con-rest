@@ -33,10 +33,8 @@ module DAO {
     }
   }
 
-  var instance = null;
-
   export function mapperDAO($injector: IInjectorService) {
-    return instance = new MapperDAO($injector);
+    return new MapperDAO($injector);
   }
 
   callDAO.$inject = ['$injector'];

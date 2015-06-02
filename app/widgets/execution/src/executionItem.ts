@@ -4,6 +4,7 @@ module ExecutionDirectives {
       restrict: 'E',
       scope: {
         workflowId: '@',
+        workflowExecutionId: '@',
         executionId: '@',
         execution: '='
       },

@@ -21,6 +21,7 @@
 /// <reference path="core/dao/callDAO.ts" />
 /// <reference path="core/dao/connectorDAO.ts" />
 /// <reference path="core/dao/dao.ts" />
+/// <reference path="core/dao/executionDAO.ts" />
 /// <reference path="core/dao/mapperDAO.ts" />
 /// <reference path="core/dao/workflowDAO.ts" />
 /// <reference path="core/dao/workflowExecutionDAO.ts" />
