@@ -16,13 +16,13 @@
     <md-select placeholder="select source"
       required
       ng-model="vm.connector.source._id">
-      <md-option ng-repeat="call in vm.calls"
+      <md-option ng-repeat="call in vm.getSources()"
         value="{{ call._id }}">{{ call.name }}</md-option>
     </md-select>
     <md-select placeholder="select destination"
       required
       ng-model="vm.connector.destination._id">
-      <md-option ng-repeat="call in vm.calls"
+      <md-option ng-repeat="call in vm.getDestinations()"
         value="{{ call._id }}">{{ call.name }}</md-option>
     </md-select>
     <md-select ng-model="vm.connector.mapper._id"

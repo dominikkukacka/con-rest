@@ -43,6 +43,39 @@ module ConnectorVMS {
         });
     }
 
+    getDestinations() {
+      var destinations: Array<Call> = [];
+      var index = this.findIndex(this.calls, this.connector.source);
+      index = index === -1 ? 0 : index;
+      for (index = index + 1; index < this.calls.length; index++) {
+        destinations.push(this.calls[index]);
+      }
+      return destinations;
+    }
+
+    getSources() {
+      var sources: Array<Call> = [];
+      var index = this.findIndex(this.calls, this.connector.destination);
+      index = index === -1 ? this.calls.length - 1 : index;
+      for (var i = 0; i < index; i++) {
+        sources.push(this.calls[i]);
+      }
+      return sources;
+    }
+
+    findIndex(calls: Array<Call>, searchCall: Call): number {
+      var callIndex = -1;
+      if (!searchCall) {
+        return callIndex;
+      }
+      calls.forEach((call: Call, index: number) => {
+        if (call._id === searchCall._id) {
+          callIndex = index;
+        }
+      });
+      return callIndex;
+    }
+
     save() {
       this.connectorDAO.save(this.workflowId, this.connector);
     }

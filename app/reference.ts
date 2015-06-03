@@ -58,6 +58,7 @@
 /// <reference path="widgets/callOverview/callOverview.ts" />
 /// <reference path="widgets/callOverview/test/definitions/viewCalls.step.ts" />
 /// <reference path="widgets/connector/connector.ts" />
+/// <reference path="widgets/connector/test/definitions/filterCalls.step.ts" />
 /// <reference path="widgets/connector/test/definitions/registerConnector.step.ts" />
 /// <reference path="widgets/connector/test/definitions/viewConnector.step.ts" />
 /// <reference path="widgets/conrest/conrest.ts" />
