@@ -86,6 +86,8 @@
     <md-list>
       <connector-item connector-id="{{ connector._id }}"
         workflow-id="{{ vm.workflow._id }}"
+        connector="connector"
+        edit-mode="true"
         ng-if="!!connector._id"
         ng-repeat="connector in vm.workflow.connectors"></connector-item>
     </md-list>

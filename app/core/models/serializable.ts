@@ -67,5 +67,9 @@ module Models {
       });
       return ids;
     }
+
+    extractId(object: any = {}) {
+      return object._id;
+    }
   }
 }

@@ -1,9 +1,17 @@
-<md-list-item class="md-2-line"
+<md-list-item class="md-2-line md-no-proxy"
   layout="column"
   ng-if="!!vm.connector">
   <div class="md-list-item-text">
     <h3>{{ vm.connector.source.name }} to {{ vm.connector.destination.name }}</h3>
     <p>{{ vm.connector.mapper.maps.length }} map(s)</p>
   </div>
+  <md-button ng-click="vm.connector._id = null"
+    class="md-icon-button md-secondary"
+    type="button"
+    ng-if="!!editMode"
+    aria-label="remove connector">
+    <md-icon md-font-icon="Material-Design-Icons"
+      class="mdi-content-remove-circle"></md-icon>
+  </md-button>
   <md-divider ng-if="!$parent.$parent.$last"></md-divider>
 </md-list-item>

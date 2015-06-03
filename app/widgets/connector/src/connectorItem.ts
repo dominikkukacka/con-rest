@@ -4,7 +4,9 @@ module ConnectorDirectives {
       restrict: 'EA',
       scope: {
         workflowId: '@',
-        connectorId: '@'
+        connectorId: '@',
+        connector: '=',
+        editMode: '@'
       },
       controller: 'ConnectorVM',
       templateUrl: 'connectorItem'

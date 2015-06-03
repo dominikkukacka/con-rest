@@ -16,9 +16,10 @@ module Models {
 
     toJSON() {
       var json: any = {};
-      json.source = this.source._id;
-      json.destination = this.destination._id;
-      json.mapper = this.mapper._id;
+      json._id = this._id;
+      json.source = this.extractId(this.source);
+      json.destination = this.extractId(this.destination);
+      json.mapper = this.extractId(this.mapper);
       return json;
     }
   }

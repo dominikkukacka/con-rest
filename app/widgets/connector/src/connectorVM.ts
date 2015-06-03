@@ -20,7 +20,7 @@ module ConnectorVMS {
       this.$location = $location;
       this.workflowId = $scope.workflowId;
       this.calls = $scope.calls;
-      this.connector = $scope.connector;
+      this.connector = $scope.connector || new Connector();
       this.connectorDAO = connectorDAO;
       this.mapperDAO = mapperDAO;
       $scope.vm = this;
@@ -28,7 +28,10 @@ module ConnectorVMS {
       if (!!$scope.connectorId) {
         connectorDAO.getById($scope.workflowId, $scope.connectorId)
           .then((connector) => {
-            this.connector = connector;
+            this.connector._id = connector._id;
+            this.connector.source = connector.source;
+            this.connector.destination = connector.destination;
+            this.connector.mapper = connector.mapper;
           });
       }
     }

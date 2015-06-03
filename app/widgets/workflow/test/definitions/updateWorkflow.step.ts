@@ -17,7 +17,7 @@ module ConRESTTest {
       });
       var connectors = [];
       workflowVM.workflow.connectors.forEach((connector: Connector) => {
-        connectors.push(connector._id);
+        connectors.push(connector);
       });
       ctx.$httpBackend.expect('PUT', '/api/workflows/w1o2r3k4f5l6o7w8', {
         _id: 'w1o2r3k4f5l6o7w8',

@@ -14,7 +14,12 @@ module Models {
     toJSON() {
       var json: any = super.toJSON();
       json.calls = this.extractIds(this.calls);
-      json.connectors = this.extractIds(this.connectors);
+      json.connectors = [];
+      this.connectors.forEach((connector: Connector) => {
+        if (!!connector._id) {
+          json.connectors.push(connector.toJSON());
+        }
+      });
       return json;
     }
   }
