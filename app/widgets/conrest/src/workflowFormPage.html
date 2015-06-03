@@ -5,7 +5,13 @@
   </div>
 </md-toolbar>
 <section hide-gt-sm>
-  <workflow-form id="{{ vm.$routeParams.workflowId }}"></workflow-form>
+  <workflow-form id="{{ vm.$routeParams.workflowId }}"
+    ng-if="!vm.session.connector"></workflow-form>
+  <md-card ng-if="!!vm.session.connector">
+    <connector-form workflow-id="{{ vm.$routeParams.workflowId }}"
+      connector="vm.session.connector"
+      calls="vm.session.calls"></connector-form>
+  </md-card>
 </section>
 <section hide-sm
   layout-wrap
@@ -23,5 +29,11 @@
     <connector-form workflow-id="{{ vm.$routeParams.workflowId }}"
       connector="vm.session.connector"
       calls="vm.session.calls"></connector-form>
+  </md-card>
+  <span flex="35"
+    layout-margin></span>
+  <md-card flex="60"
+    ng-if="!!vm.session.mapper">
+    <mapper-form mapper="vm.session.mapper"></mapper-form>
   </md-card>
 </section>

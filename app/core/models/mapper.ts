@@ -4,9 +4,11 @@ module Models {
     name: string;
     maps: Array<Map>;
 
-    constructor(json: IMapper) {
-      super(json);
-      this.maps = this.convertContentToClass(json.maps, Map);
+    constructor(json?: IMapper) {
+      if (!!json) {
+        super(json);
+        this.maps = this.convertContentToClass(json.maps, Map);
+      }
     }
   }
 

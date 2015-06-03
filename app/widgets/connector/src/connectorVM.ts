@@ -5,19 +5,23 @@ module ConnectorVMS {
   import Call = Models.Call;
   import Mapper = Models.Mapper;
   import ILocationService = ng.ILocationService;
+  import Session = Models.Session;
 
   export class ConnectorVM {
-    static $inject = ['$scope', 'connectorDAO', 'mapperDAO', '$location'];
+    static $inject = ['$scope', 'connectorDAO', 'mapperDAO', '$location', 'session'];
     connector: Connector = null;
     $location: ILocationService;
+    session: Session;
     workflowId: string;
     calls: Array<Call>;
     mappers: Array<Mapper>;
     connectorDAO: ConnectorDAO;
     mapperDAO: MapperDAO;
 
-    constructor($scope, connectorDAO: ConnectorDAO, mapperDAO: MapperDAO, $location: ILocationService) {
+    constructor($scope, connectorDAO: ConnectorDAO, mapperDAO: MapperDAO, $location: ILocationService,
+      session: Session) {
       this.$location = $location;
+      this.session = session;
       this.workflowId = $scope.workflowId;
       this.calls = $scope.calls;
       this.connector = $scope.connector || new Connector();
@@ -34,6 +38,10 @@ module ConnectorVMS {
             this.connector.mapper = connector.mapper;
           });
       }
+    }
+
+    addMapper() {
+      this.session.mapper = new Mapper();
     }
 
     getMappers() {
