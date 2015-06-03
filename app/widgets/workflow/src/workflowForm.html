@@ -6,13 +6,16 @@
       <md-icon md-font-icon="Material-Design-Icons"
         class="mdi-navigation-arrow-back"></md-icon>
     </a>
-    <h2>
+    <h2 ng-if="!vm.workflow._id">
       Register Workflow
+    </h2>
+    <h2 ng-if="!!vm.workflow._id">
+      Edit Workflow
     </h2>
   </div>
 </md-toolbar>
 <md-content layout-padding>
-  <form ng-submit="save()"
+  <form ng-submit="vm.save()"
     novalidate
     name="workflowForm">
     <md-input-container>
@@ -44,7 +47,7 @@
         </md-not-found>
       </md-autocomplete>
       <md-button ng-click="vm.addCall()"
-        class="md-icon-button"
+        class="md-icon-button secondary-btn"
         aria-label="add call"
         ng-disabled="!vm.selectedCall">
         <md-icon md-font-icon="Material-Design-Icons"
@@ -53,7 +56,7 @@
     </div>
     <md-list>
       <md-list-item layout="row"
-        class="md-2-line"
+        class="md-2-line md-no-proxy"
         ng-repeat="call in vm.workflow.calls">
         <div class="md-list-item-text">
           <h3>{{ call.name }}</h3>
@@ -67,6 +70,24 @@
         </md-button>
         <md-divider ng-if="!$last"></md-divider>
       </md-list-item>
+    </md-list>
+    <div layout="row">
+      <md-subheader flex>
+        <span>connectors</span>
+      </md-subheader>
+      <md-button ng-click="vm.addConnector()"
+        class="md-icon-button secondary-btn"
+        type="button"
+        aria-label="add connector">
+        <md-icon md-font-icon="Material-Design-Icons"
+          class="mdi-content-add-circle"></md-icon>
+      </md-button>
+    </div>
+    <md-list>
+      <connector-item connector-id="{{ connector._id }}"
+        workflow-id="{{ vm.workflow._id }}"
+        ng-if="!!connector._id"
+        ng-repeat="connector in vm.workflow.connectors"></connector-item>
     </md-list>
     <md-button class="md-raised md-primary"
       ng-disabled="!workflowForm.$valid"

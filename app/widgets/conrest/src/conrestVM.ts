@@ -10,6 +10,9 @@ module ConRESTVMS {
       this.session = session;
       this.$routeParams = $routeParams;
       $scope.vm = this;
+      session.workflow = null;
+      session.calls = null;
+      session.connector = null;
     }
   }
 }

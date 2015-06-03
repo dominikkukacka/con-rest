@@ -1,0 +1,39 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <h2 ng-if="!vm.connector._id">
+      Add Connector
+    </h2>
+    <h2 ng-if="!!vm.connector._id">
+      Edit Connector
+    </h2>
+  </div>
+</md-toolbar>
+<md-content layout-padding>
+  <form ng-submit="vm.save()"
+    novalidate
+    layout="column"
+    name="connectorForm">
+    <md-select placeholder="select source"
+      required
+      ng-model="vm.connector.source._id">
+      <md-option ng-repeat="call in vm.calls"
+        value="{{ call._id }}">{{ call.name }}</md-option>
+    </md-select>
+    <md-select placeholder="select destination"
+      required
+      ng-model="vm.connector.destination._id">
+      <md-option ng-repeat="call in vm.calls"
+        value="{{ call._id }}">{{ call.name }}</md-option>
+    </md-select>
+    <md-select ng-model="vm.connector.mapper._id"
+      required
+      placeholder="select mapper"
+      md-on-open="vm.getMappers()">
+      <md-option value="{{ map._id }}"
+        ng-repeat="map in vm.mappers">{{ map.name }}</md-option>
+    </md-select>
+    <md-button class="md-primary md-raised"
+      ng-disabled="!connectorForm.$valid"
+      type="submit">Submit</md-button>
+  </form>
+</md-content>

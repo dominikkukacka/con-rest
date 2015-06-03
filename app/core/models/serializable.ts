@@ -20,7 +20,7 @@ module Models {
       if (array instanceof Array) {
         array.forEach((value: any) => {
           var json = value;
-          if(typeof value === 'string') {
+          if (typeof value === 'string') {
             json = {
               _id: value
             };
@@ -40,7 +40,7 @@ module Models {
     }
 
     instantiateClass(json: any, Class) {
-      if(json instanceof Object) {
+      if (json instanceof Object) {
         return new Class(json);
       } else {
         return this.convertIdToClass(json, Class);
@@ -61,7 +61,9 @@ module Models {
     extractIds(objects: Array<any> = []) {
       var ids: Array<string> = [];
       objects.forEach((object: any) => {
-        ids.push(object._id);
+        if (!!object._id) {
+          ids.push(object._id);
+        }
       });
       return ids;
     }

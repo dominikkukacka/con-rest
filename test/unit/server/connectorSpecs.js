@@ -99,10 +99,10 @@
         then(function when() {
           return connector.addConnectorToWorkflow(req, res);
         }).
-        then(function then() {
+        then(function then(connector) {
           res.send.calledOnce.should.be.true;
           var data = res.send.args[0][0];
-          expect(data.connectors).to.have.length(1);
+          expect(data).to.equal(connector._id);
         }).
         then(done).
         catch(done);
@@ -129,10 +129,10 @@
         then(function when() {
           return connector.addConnectorToWorkflow(req, res);
         }).
-        then(function then() {
+        then(function then(connector) {
           res.send.calledOnce.should.be.true;
           var data = res.send.args[0][0];
-          expect(data.connectors).to.have.length(4);
+          expect(data).to.equal(connector._id);
         }).
         then(done).
         catch(done);

@@ -18,8 +18,9 @@
       })
       .exec()
       .then(function returnWorkflow(workflow) {
-        res.send(workflow);
-        return workflow;
+        var connector = workflow.connectors[workflow.connectors.length - 1];
+        res.send(connector._id);
+        return connector;
       }, function error(err) {
         res.status(500).send(err.toString());
       });

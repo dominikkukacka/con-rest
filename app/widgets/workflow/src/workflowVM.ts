@@ -6,33 +6,44 @@ module WorkflowVMS {
   import Call = Models.Call;
   import WorkflowExecution = Models.WorkflowExecution;
   import ILocationService = ng.ILocationService;
+  import Session = Models.Session;
+  import Connector = Models.Connector;
 
   export class WorkflowVM {
-    static $inject = ['$scope', 'workflowDAO', 'callDAO', 'workflowExecutionDAO', '$location'];
+    static $inject = ['$scope', 'workflowDAO', 'callDAO', 'workflowExecutionDAO', '$location', 'session'];
     workflow: Workflow;
     $location: ILocationService;
     workflowDAO: WorkflowDAO;
     callDAO: CallDAO;
     workflowExecutionDAO: WorkflowExecutionDAO;
+    session: Session;
 
     callQuery: string;
     selectedCall: Call;
 
     constructor($scope, workflowDAO: WorkflowDAO, callDAO: CallDAO, workflowExecutionDAO: WorkflowExecutionDAO,
-      $location: ILocationService) {
+      $location: ILocationService, session: Session) {
       this.$location = $location;
       this.workflowDAO = workflowDAO;
       this.workflowExecutionDAO = workflowExecutionDAO;
       this.callDAO = callDAO;
+      this.session = session;
       $scope.vm = this;
       if (!!$scope.id) {
         workflowDAO.getById($scope.id)
           .then((workflow: Workflow) => {
             this.workflow = workflow;
+            this.session.calls = workflow.calls;
           });
       } else {
         this.workflow = new Workflow();
       }
+    }
+
+    addConnector() {
+      var connector = new Connector();
+      this.workflow.connectors.push(connector);
+      this.session.connector = connector;
     }
 
     addCall() {

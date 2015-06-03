@@ -1,7 +1,7 @@
 module ConnectorDirectives {
   export function connector(): ng.IDirective {
     return {
-      restrict: 'EA',
+      restrict: 'E',
       scope: {
         workflowId: '@',
         connectorId: '@'

@@ -16,6 +16,35 @@ module DAO {
         }, deferred.reject);
       return deferred.promise;
     }
+
+    create(workflowId: string, connector: Connector): ng.IPromise<Connector> {
+      var deferred = this.$q.defer();
+      this.post('/api/workflows/' + workflowId +
+        '/connectors/', connector.toJSON())
+        .then((response: any) => {
+          connector._id = response.data;
+          deferred.resolve(connector);
+        }, deferred.reject);
+      return deferred.promise;
+    }
+
+    update(workflowId: string, connector: Connector): ng.IPromise<Connector> {
+      var deferred = this.$q.defer();
+      this.put('/api/workflows/' + workflowId +
+        '/connectors/' + connector._id, connector.toJSON())
+        .then((response: any) => {
+          deferred.resolve(connector);
+        }, deferred.reject);
+      return deferred.promise;
+    }
+
+    save(workflowId: string, connector: Connector): ng.IPromise<Connector> {
+      if (!!connector._id) {
+        return this.update(workflowId, connector);
+      } else {
+        return this.create(workflowId, connector);
+      }
+    }
   }
 
   var instance = null;
