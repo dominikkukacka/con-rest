@@ -19,19 +19,16 @@
   <md-card flex-gt-sm="35">
     <workflow-overview></workflow-overview>
   </md-card>
-  <md-card flex-gt-sm="60">
+  <md-card flex-gt-sm="60"
+    ng-if="!vm.session.connector && !vm.session.mapper">
     <workflow-form id="{{ vm.$routeParams.workflowId }}"></workflow-form>
   </md-card>
-  <span flex="35"
-    layout-margin></span>
   <md-card flex="60"
-    ng-if="!!vm.session.connector">
+    ng-if="!!vm.session.connector && !vm.session.mapper">
     <connector-form workflow-id="{{ vm.$routeParams.workflowId }}"
       connector="vm.session.connector"
       calls="vm.session.calls"></connector-form>
   </md-card>
-  <span flex="35"
-    layout-margin></span>
   <md-card flex="60"
     ng-if="!!vm.session.mapper">
     <mapper-form mapper="vm.session.mapper"></mapper-form>

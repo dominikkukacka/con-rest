@@ -5,19 +5,22 @@ module MapperVMS {
   import MapperDAO = DAO.MapperDAO;
   import Mapper = Models.Mapper;
   import Map = Models.Map;
+  import Session = Models.Session;
 
   export class MapperVM {
-    static $inject = ['$scope', 'mapperDAO'];
+    static $inject = ['$scope', 'mapperDAO', 'session'];
     mapper: Mapper = null;
     mapperDAO: MapperDAO;
+    session: Session;
     places: Array<string> = [
       'url',
       'header',
       'data'
     ];
 
-    constructor($scope, mapperDAO: MapperDAO) {
+    constructor($scope, mapperDAO: MapperDAO, session: Session) {
       this.mapperDAO = mapperDAO;
+      this.session = session;
       $scope.vm = this;
       if (!!$scope.mapper) {
         this.mapper = $scope.mapper;
@@ -39,7 +42,10 @@ module MapperVMS {
     }
 
     save() {
-      this.mapperDAO.save(this.mapper);
+      this.mapperDAO.save(this.mapper)
+        .then(() => {
+          this.session.mapper = null;
+        });
     }
   }
 }

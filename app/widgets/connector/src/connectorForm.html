@@ -35,7 +35,8 @@
       required
       placeholder="select mapper"
       md-on-open="vm.getMappers()">
-      <md-option value="vm.session.mapper._id">{{ vm.session.mapper.name || 'Add New Mapper' }}</md-option>
+      <md-option value="vm.session.mapper._id"
+        ng-click="vm.addMapper()">{{ vm.session.mapper.name || 'Add New Mapper' }}</md-option>
       <md-option value="{{ map._id }}"
         ng-repeat="map in vm.mappers">{{ map.name }}</md-option>
     </md-select>

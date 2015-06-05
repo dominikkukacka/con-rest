@@ -13,6 +13,7 @@ module ConRESTVMS {
       session.workflow = null;
       session.calls = null;
       session.connector = null;
+      session.mapper = null;
     }
   }
 }
