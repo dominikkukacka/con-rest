@@ -64,5 +64,5 @@ module DAO {
     return new MapperDAO($injector);
   }
 
-  callDAO.$inject = ['$injector'];
+  mapperDAO.$inject = ['$injector'];
 }

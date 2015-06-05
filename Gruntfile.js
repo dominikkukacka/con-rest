@@ -66,26 +66,29 @@ module.exports = function(grunt) {
         }]
       }
     },
+    compress: {
+      main: {
+        options: {
+          archive: 'conrest.tar'
+        },
+        files: [{
+          expand: true,
+          cwd: 'dist',
+          src: ['**/*'],
+          dest: '/'
+        }]
+      }
+    },
     concat: {
       dist: {
         files: {
           '<%= app.dist %>/js/con-rest.min.js': [
-            '<%= app.app %>/bower_components/angular/angular.min.js',
-            '.tmp/pre.con-rest.js'
-          ]
-        }
-      },
-      dev: {
-        options: {
-          sourceMap: true
-        },
-        files: {
-          '<%= app.tmp %>/js/con-rest.js': [
-            '<%= app.app %>/dao/*.js',
-            '<%= app.app %>/models/*.js',
-            '<%= app.app %>/modules/*.js',
-            '<%= app.app %>/viewModels/*.js',
-            '<%= app.app %>/widgets/**/*.js'
+            '.tmp/js/angular.min.js',
+            'app/bower_components/ace-builds/src-min-noconflict/ace.js',
+            'app/bower_components/ace-builds/src-min-noconflict/mode-json.js',
+            'app/bower_components/angular-ui-ace/ui-ace.min.js',
+            '.tmp/js/build.min.js',
+            '.tmp/js/templates.min.js'
           ]
         }
       },
@@ -120,6 +123,30 @@ module.exports = function(grunt) {
           src: [
             '*.css'
           ]
+        }, {
+          expand: true,
+          cwd: '<%= app.app %>/bower_components/bootstrap-material-design/fonts/',
+          dest: '<%= app.dist %>/fonts/',
+          src: [
+            '*.eot',
+            '*.svg',
+            '*.ttf',
+            '*.woff',
+            '*.woff2'
+          ]
+        }, {
+          src: 'app/dist.html',
+          dest: 'dist/index.html'
+        }, {
+          expand: true,
+          cwd: 'server',
+          src: [
+            '**/*.js'
+          ],
+          dest: 'dist/server'
+        }, {
+          src: 'config.json',
+          dest: 'dist/config.json'
         }]
       }
     },
@@ -134,6 +161,14 @@ module.exports = function(grunt) {
             req.url = req.url.replace(/\/app\//, '/');
             next();
           }]
+        }
+      },
+      dist: {
+        options: {
+          port: 9000,
+          hostname: '0.0.0.0',
+          server: 'server/server',
+          bases: ['dist'],
         }
       }
     },
@@ -238,7 +273,7 @@ module.exports = function(grunt) {
       },
       dist: {
         src: '<%= app.app %>/widgets/**/*.html',
-        dest: '<%= app.tmp %>/scripts/templates.js',
+        dest: '<%= app.tmp %>/js/templates.min.js',
         options: {
           module: 'con-rest',
           htmlmin: {
@@ -252,9 +287,15 @@ module.exports = function(grunt) {
             removeStyleLinkTypeAttributes: true
           },
           url: function(url) {
-            return url.replace(/(app\/widgets\/([\s\S]*?)\/)/, '').replace(/.html/, '');
+            return url.replace(/(([\s\S]*?)\/widgets\/([\s\S]*?)\/src\/)|.html/g, '').replace(/.html/, '');
           }
         }
+      }
+    },
+    packageModules: {
+      dist: {
+        src: 'package.json',
+        dest: 'dist'
       }
     },
     'protractor_webdriver': {
@@ -355,32 +396,27 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
-      options: {
-        mangle: {
-          except: []
+      conrest: {
+        options: {
+          wrap: 'exports'
         },
-        compress: {
-          /* jshint ignore:start */
-          global_defs: {
-            "DEBUG": false
-          },
-          dead_code: true
-            /* jshint ignore:end */
-        },
-        banner: '/* con-rest: v<%= pkg.version %> by EnoF */'
+        files: [{
+          src: ['app/styles/themes/theme-con-rest.js', '.tmp/js/build.js'],
+          dest: '.tmp/js/build.min.js'
+        }]
       },
-      dist: {
-        files: {
-          '<%= app.tmp %>/pre.con-rest.js': [
-            '.tmp/ngmin/app.js',
-            '.tmp/scripts/ngtemplates.js',
-            '.tmp/ngmin/widgets/**/*.js',
-            '.tmp/ngmin/viewModels/*.js',
-            '.tmp/ngmin/modules/*.js',
-            '.tmp/ngmin/directives/*.js',
-            '.tmp/ngmin/models/**/*.js'
-          ]
-        }
+      angular: {
+        files: [{
+          src: [
+            'app/bower_components/angular/angular.js',
+            'app/bower_components/angular-animate/angular-animate.js',
+            'app/bower_components/angular-aria/angular-aria.js',
+            'app/bower_components/angular-material/angular-material.js',
+            'app/bower_components/angular-route/angular-route.js',
+            'app/bower_components/angular-messages/angular-messages.js'
+          ],
+          dest: '.tmp/js/angular.min.js'
+        }]
       }
     },
     version: {
@@ -492,14 +528,14 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('package', [
-    'version',
-    'test:e2e',
-    'e2e:ci',
+    'test',
     'ngtemplates:dist',
     'ngAnnotate',
     'uglify',
     'copy',
-    'concat'
+    'concat',
+    'packageModules',
+    'compress'
   ]);
 
   var seleniumChildProcesses = {};

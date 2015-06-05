@@ -181,3 +181,4 @@ certificates/**/*
 tsconfig.json
 .tscache
 .baseDir.ts
+*.tar
