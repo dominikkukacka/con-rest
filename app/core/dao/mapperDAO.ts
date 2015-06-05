@@ -31,6 +31,33 @@ module DAO {
         }, deferred.reject);
       return deferred.promise;
     }
+
+    create(mapper: Mapper): ng.IPromise<Mapper> {
+      var deferred = this.$q.defer();
+      this.post('/api/mappers/', mapper.toJSON())
+        .then((response: any) => {
+          mapper._id = response.data;
+          deferred.resolve(mapper);
+        }, deferred.reject);
+      return deferred.promise;
+    }
+
+    update(mapper: Mapper): ng.IPromise<Mapper> {
+      var deferred = this.$q.defer();
+      this.put('/api/mappers/' + mapper._id, mapper.toJSON())
+        .then((response: any) => {
+          deferred.resolve(mapper);
+        }, deferred.reject);
+      return deferred.promise;
+    }
+
+    save(mapper: Mapper): ng.IPromise<Mapper> {
+      if (!!mapper._id) {
+        return this.update(mapper);
+      } else {
+        return this.create(mapper);
+      }
+    }
   }
 
   export function mapperDAO($injector: IInjectorService) {

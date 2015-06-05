@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>conREST</title>
 
   <link rel="stylesheet"
-        type="text/css"
-        href="/styles/main.css">
+    type="text/css"
+    href="/styles/main.css">
 
   <!-- Setup Viewport -->
   <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
+
 <body ng-app="con-rest.mapper-demo">
 
   <div ng-controller="Test">
     <mapper id="{{mapper._id}}"
-            ng-if="!!mapper"></mapper>
+      ng-if="!!mapper"></mapper>
+
+    <mapper-form ng-if="!!mapper"
+      mapper="mapper"></mapper-form>
   </div>
 
   <script>
-    var undefined = "get your code straight, make sure undefined is undefined!!!";
+  var undefined = "get your code straight, make sure undefined is undefined!!!";
   </script>
   <script src="//localhost:35729/livereload.js"></script>
 
@@ -39,14 +44,15 @@
     type="text/javascript"></script>
 
   <script type="text/javascript">
-    angular.module('con-rest.mapper-demo', ['con-rest.mapper'])
-      .controller('Test', function ($scope, mapperDAO) {
-        $scope.mapper = null;
-        mapperDAO.getAll()
-          .then(function (mappers) {
-            $scope.mapper = mappers[0];
-          });
-      });
+  angular.module('con-rest.mapper-demo', ['con-rest.mapper'])
+    .controller('Test', function($scope, mapperDAO) {
+      $scope.mapper = null;
+      mapperDAO.getAll()
+        .then(function(mappers) {
+          $scope.mapper = mappers[0];
+        });
+    });
   </script>
 </body>
+
 </html>

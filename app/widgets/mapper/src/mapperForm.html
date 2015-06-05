@@ -1,0 +1,103 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <md-button class="md-icon-button md-button"
+      aria-label="back"
+      ng-click="vm.session.mapper = null">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-navigation-arrow-back"></md-icon>
+    </md-button>
+    <h2 ng-if="!vm.mapper._id">
+      Add Mapper
+    </h2>
+    <h2 ng-if="!!vm.mapper._id">
+      Edit Mapper
+    </h2>
+  </div>
+</md-toolbar>
+<md-content layout-padding>
+  <form ng-submit="vm.save()"
+    novalidate
+    layout="column"
+    name="mapperForm">
+    <md-input-container>
+      <label for="name-{{ $id }}">name</label>
+      <input type="text"
+        id="name-{{ $id }}"
+        ng-model="vm.mapper.name"
+        name="name"
+        required>
+      <div ng-messages="mapperForm.name.$error"
+        ng-if="mapperForm.name.$touched">
+        <div ng-message="required">Please name your mapper</div>
+      </div>
+    </md-input-container>
+    <div layout="row">
+      <md-subheader flex>maps</md-subheader>
+      <md-button ng-click="vm.addMap()"
+        class="md-icon-button secondary-btn"
+        type="button"
+        aria-label="add mapper">
+        <md-icon md-font-icon="Material-Design-Icons"
+          class="mdi-content-add-circle"></md-icon>
+      </md-button>
+    </div>
+    <section ng-repeat="map in vm.mapper.maps"
+      layout-gt-sm="row"
+      layout-sm="column">
+      <div layout="row" flex>
+        <md-input-container flex>
+          <md-select placeholder="select place"
+            id="place-{{ $id }}"
+            required
+            ng-model="map.place">
+            <md-option ng-repeat="place in vm.places"
+              value="{{ place }}">{{ place }}</md-option>
+          </md-select>
+        </md-input-container>
+        <md-button ng-click="vm.removeMap(map)"
+          class="md-icon-button secondary-btn"
+          type="button"
+          hide-gt-sm
+          aria-label="add mapper">
+          <md-icon md-font-icon="Material-Design-Icons"
+            class="mdi-content-remove-circle"></md-icon>
+        </md-button>
+      </div>
+      <md-input-container flex>
+        <label for="source-{{ $id }}">source</label>
+        <input type="text"
+          ng-model="map.source"
+          required
+          id="source-{{ $id }}"
+          name="source{{ $id }}">
+        <div ng-messages="{{ 'mapperForm.source' + $parent.$id + '.$error' }}"
+          ng-if="mapperForm['source' + $id].$touched">
+          <div ng-message="required">Please define the source</div>
+        </div>
+      </md-input-container>
+      <md-input-container flex>
+        <label for="destination-{{ $id }}">destination</label>
+        <input type="text"
+          ng-model="map.destination"
+          required
+          id="destination-{{ $id }}"
+          name="destination{{ $id }}">
+        <div ng-messages="{{ 'mapperForm.destination' + $parent.$id + '.$error' }}"
+          ng-if="mapperForm['destination' + $id].$touched">
+          <div ng-message="required">Please define the destination</div>
+        </div>
+      </md-input-container>
+      <md-button ng-click="vm.removeMap(map)"
+        class="md-icon-button secondary-btn"
+        type="button"
+        hide-sm
+        aria-label="add mapper">
+        <md-icon md-font-icon="Material-Design-Icons"
+          class="mdi-content-remove-circle"></md-icon>
+      </md-button>
+    </section>
+    <md-button class="md-primary md-raised"
+      ng-disabled="!mapperForm.$valid"
+      type="submit">Submit</md-button>
+  </form>
+</md-content>

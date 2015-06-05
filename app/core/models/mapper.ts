@@ -5,6 +5,7 @@ module Models {
     maps: Array<Map>;
 
     constructor(json?: IMapper) {
+      this.maps = [];
       if (!!json) {
         super(json);
         this.maps = this.convertContentToClass(json.maps, Map);

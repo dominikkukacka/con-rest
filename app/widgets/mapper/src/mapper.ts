@@ -4,7 +4,7 @@
 module MapperDirectives {
   export function mapper(): ng.IDirective {
     return {
-      restrict: 'EA',
+      restrict: 'E',
       scope: {
         id: '@',
         connectorId: '@',

@@ -5,8 +5,10 @@ module Models {
     source: string;
     destination: string;
 
-    constructor(json: IMap) {
-      super(json);
+    constructor(json?: IMap) {
+      if (!!json) {
+        super(json);
+      }
     }
   }
 
