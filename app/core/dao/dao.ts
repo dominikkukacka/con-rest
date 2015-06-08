@@ -24,7 +24,8 @@ module DAO {
         url: url,
         data: data,
         params: params,
-        headers: {}
+        transformRequest: angular.identity,
+        headers: { 'Content-Type': undefined }
       };
       return this.$http(config);
     }
@@ -33,16 +34,35 @@ module DAO {
       return this.execute(this.GET, url, null, params);
     }
 
-    post(url: string, data: Object) {
-      return this.execute(this.POST, url, data);
+    post(url: string, data: Object, fileBoundaryName?: string, file?: any) {
+      if (!!fileBoundaryName && !!file) {
+        return this.execute(this.POST, url, this.createFormData(data, fileBoundaryName, file));
+      } else {
+        return this.execute(this.POST, url, data);
+      }
     }
 
-    put(url: string, data: Object) {
-      return this.execute(this.PUT, url, data);
+    put(url: string, data: Object, fileBoundaryName?: string, file?: any) {
+      if (!!fileBoundaryName && !!file) {
+        return this.execute(this.PUT, url, this.createFormData(data, fileBoundaryName, file));
+      } else {
+        return this.execute(this.PUT, url, data);
+      }
     }
 
     del(url: string) {
       return this.execute(this.DELETE, url);
+    }
+
+    createFormData(data: Object, fileBoundaryName: string, file: any) {
+      var formData = new FormData();
+      for (var prop in data) {
+        if (data.hasOwnProperty(prop)) {
+          formData.append(prop, data[prop]);
+        }
+      }
+      formData.append(fileBoundaryName, file);
+      return formData;
     }
   }
 }

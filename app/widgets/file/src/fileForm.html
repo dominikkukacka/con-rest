@@ -1,0 +1,26 @@
+<form ng-submit="vm.save()"
+  novalidate
+  name="fileForm">
+  <section layout="row">
+    <md-input-container flex>
+      <label for="name-{{ $id }}">name</label>
+      <input type="text"
+        ng-model="vm.file.name"
+        name="name"
+        minlength="3"
+        required
+        id="name-{{ $id }}">
+    </md-input-container>
+    <div>
+      <label for="file-{{ $id }}"
+        class="md-button md-default-theme md-hue-2 md-primary md-raised">{{ vm.file.file.name || 'select file' }}</label>
+      <input id="file-{{ $id }}"
+        type="file"
+        file-model="vm.file.file"
+        name="file">
+    </div>
+  </section>
+  <md-button type="submit"
+    ng-disabled="!fileForm.$valid || !vm.file.file"
+    class="md-primary md-raised">save</md-button>
+</form>

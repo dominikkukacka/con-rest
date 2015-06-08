@@ -71,10 +71,8 @@ module DAO {
     }
   }
 
-  var instance = null;
-
   export function callDAO($injector: IInjectorService) {
-    return instance = new CallDAO($injector);
+    return new CallDAO($injector);
   }
   callDAO.$inject = ['$injector'];
 }
