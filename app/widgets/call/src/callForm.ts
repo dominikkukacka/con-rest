@@ -7,6 +7,7 @@ module CallDirectives {
       restrict: 'EA',
       scope: {
         id: '@?',
+        workflowId: '@?'
       },
       controller: 'CallVM',
       templateUrl: 'callForm'

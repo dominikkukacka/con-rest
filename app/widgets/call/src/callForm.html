@@ -1,5 +1,19 @@
 <md-toolbar>
   <div class="md-toolbar-tools">
+    <a class="md-icon-button md-button"
+      aria-label="back"
+      ng-if="!!workflowId"
+      ng-href="#/workflows/{{ workflowId }}/calls/{{ id }}">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-navigation-arrow-back"></md-icon>
+    </a>
+    <a class="md-icon-button md-button"
+      aria-label="back"
+      ng-if="!workflowId"
+      ng-href="#/workflows">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-navigation-arrow-back"></md-icon>
+    </a>
     <h2 ng-if="!id">
       Add API Call
     </h2>
@@ -10,63 +24,89 @@
 </md-toolbar>
 <md-content layout-padding>
   <form ng-submit="vm.save()"
-        novalidate
-        name="callForm">
+    novalidate
+    name="callForm">
     <div layout="column">
       <md-input-container flex>
         <label>name</label>
         <input name="name"
-               required
-               minlength="3"
-               aria-label="name"
-               ng-model="vm.call.name">
+          required
+          minlength="3"
+          aria-label="name"
+          ng-model="vm.call.name">
         <div ng-messages="callForm.name.$error"
-             ng-if="callForm.name.$touched">
+          ng-if="callForm.name.$touched">
           <div ng-message="required">Please name your REST calls</div>
           <div ng-message="minlength">Name must be at least 3 characters!</div>
         </div>
       </md-input-container>
       <section layout-sm="column"
-               layout-gt-sm="row">
+        layout-gt-sm="row">
         <md-select placeholder="method"
-                   ng-model="vm.call.method"
-                   flex-sm
-                   flex-gt-sm="25">
+          ng-model="vm.call.method"
+          flex-sm
+          flex-gt-sm="25">
           <md-option ng-value="method"
-                     ng-repeat="method in vm.methods">{{ method }}</md-option>
+            ng-repeat="method in vm.methods">{{ method }}</md-option>
         </md-select>
         <md-input-container flex>
           <label>url</label>
           <input name="url"
-                 required
-                 type="url"
-                 aria-label="url"
-                 ng-model="vm.call.url">
+            required
+            type="url"
+            aria-label="url"
+            ng-model="vm.call.url">
           <div ng-messages="callForm.url.$error"
-               ng-if="callForm.url.$touched">
+            ng-if="callForm.url.$touched">
             <div ng-message="required">Please specify the URL of your REST call</div>
             <div ng-message="url">Tis is not a valid URL!</div>
           </div>
         </md-input-container>
       </section>
       <md-select placeholder="type"
-                 ng-model="vm.call.type">
+        ng-model="vm.call.type">
         <md-option ng-value="type"
-                   ng-repeat="type in vm.types">{{ type }}</md-option>
+          ng-repeat="type in vm.types">{{ type }}</md-option>
       </md-select>
       <md-input-container flex>
         <p>headers</p>
         <div ui-ace="vm.aceConfig"
-             ng-model="vm.headers"></div>
+          ng-model="vm.headers"></div>
       </md-input-container>
       <md-input-container flex>
         <p>data</p>
         <div ui-ace="vm.aceConfig"
-             ng-model="vm.data"></div>
+          ng-model="vm.data"></div>
       </md-input-container>
+      <section>
+        <div layout="row">
+          <md-subheader flex>
+            <span>files</span>
+          </md-subheader>
+          <md-button ng-click="vm.addFile()"
+            class="md-icon-button secondary-btn"
+            type="button"
+            aria-label="add new file">
+            <md-icon md-font-icon="Material-Design-Icons"
+              class="mdi-content-add-circle"></md-icon>
+          </md-button>
+        </div>
+        <div ng-repeat="file in vm.call.files"
+          layout="row">
+          <file-selector file-id="file._id"
+            flex></file-selector>
+          <md-button ng-click="vm.removeFile(file)"
+            class="md-icon-button secondary-btn remove-file"
+            type="button"
+            aria-label="remove file">
+            <md-icon md-font-icon="Material-Design-Icons"
+              class="mdi-content-remove-circle"></md-icon>
+          </md-button>
+        </div>
+      </section>
     </div>
     <md-button class="md-primary md-raised"
-               ng-disabled="!callForm.$valid"
-               type="submit">Submit</md-button>
+      ng-disabled="!callForm.$valid"
+      type="submit">Submit</md-button>
   </form>
 </md-content>

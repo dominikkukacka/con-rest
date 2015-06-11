@@ -1,6 +1,7 @@
 module CallVMS {
   import CallDAO = DAO.CallDAO;
   import Call = Models.Call;
+  import File = Models.File;
   import aceConfig = Modules.aceConfig;
   import IAceConfig = Modules.IAceConfig;
   import ILocationService = ng.ILocationService;
@@ -44,6 +45,15 @@ module CallVMS {
       } else {
         this.call = new Call();
       }
+    }
+
+    addFile() {
+      this.call.files.push(new File());
+    }
+
+    removeFile(file: File) {
+      var index = this.call.files.indexOf(file);
+      this.call.files.splice(index, 1);
     }
 
     convertToString(json: Object): string {
