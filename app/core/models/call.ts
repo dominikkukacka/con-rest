@@ -7,9 +7,17 @@ module Models {
     type: string;
     data: Object;
     headers: Object;
+    files: Array<File> = [];
 
     constructor(json?: ICall) {
       super(json);
+    }
+
+    toJSON() {
+      var json: any = super.toJSON();
+      json.files = [];
+      this.files.forEach((file) => json.files.push(file._id));
+      return json;
     }
   }
 
@@ -21,5 +29,6 @@ module Models {
     type?: string;
     data?: Object;
     headers?: Object;
+    files?: Array<string>;
   }
 }

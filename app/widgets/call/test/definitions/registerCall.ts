@@ -18,7 +18,8 @@ module ConRESTTest {
         url: callVM.call.url,
         type: callVM.call.type,
         headers: null,
-        data: null
+        data: null,
+        files: []
       }).respond(200, callId);
     })
     .then('I should navigate to the call form with id "(.*)"', (callId: string) => {
