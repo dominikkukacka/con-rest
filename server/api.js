@@ -274,8 +274,8 @@
 
       for (var i = 0; i < apiCall.files.length; i++) {
         var file = apiCall.files[i];
-        form.append(file.name, file.file.buffer, {
-          filename: file.name,
+        form.append(file.boundaryName, file.file.buffer, {
+          filename: file.boundaryName,
           contentType: file.file.mime
         });
 

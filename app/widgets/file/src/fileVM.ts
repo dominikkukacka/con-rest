@@ -17,10 +17,19 @@ module FileVMS {
       this.file = $scope.file;
       this.$scope = $scope;
       this.fileDAO = fileDAO;
+      if (!!$scope.fileId) {
+        this.loadFiles().then(() => {
+          this.files.forEach((file) => {
+            if ($scope.fileId === file._id) {
+              this.selectedFile = file;
+            }
+          });
+        });
+      }
     }
 
     loadFiles() {
-      this.fileDAO.getAll()
+      return this.fileDAO.getAll()
         .then((files: Array<File>) =>
           this.files = files);
     }
