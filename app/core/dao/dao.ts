@@ -24,9 +24,14 @@ module DAO {
         url: url,
         data: data,
         params: params,
-        transformRequest: angular.identity,
-        headers: { 'Content-Type': undefined }
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }
       };
+      if (data instanceof FormData) {
+        config.transformRequest = angular.identity;
+        config.headers['Content-Type'] = undefined;
+      }
       return this.$http(config);
     }
 

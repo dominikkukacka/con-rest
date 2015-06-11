@@ -48,10 +48,13 @@ module CallVMS {
     }
 
     addFile() {
-      this.call.files.push(new File());
+      this.call.files.push({
+        boundaryName: '',
+        file: new File()
+      });
     }
 
-    removeFile(file: File) {
+    removeFile(file) {
       var index = this.call.files.indexOf(file);
       this.call.files.splice(index, 1);
     }

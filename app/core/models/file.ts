@@ -14,7 +14,7 @@ module Models {
 
   export interface IFile {
     _id: string;
-    name: string;
-    mime: string;
+    name?: string;
+    mime?: string;
   }
 }

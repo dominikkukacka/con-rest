@@ -91,17 +91,25 @@
               class="mdi-content-add-circle"></md-icon>
           </md-button>
         </div>
-        <div ng-repeat="file in vm.call.files"
-          layout="row">
-          <file-selector file-id="file._id"
-            flex></file-selector>
-          <md-button ng-click="vm.removeFile(file)"
-            class="md-icon-button secondary-btn remove-file"
-            type="button"
-            aria-label="remove file">
-            <md-icon md-font-icon="Material-Design-Icons"
-              class="mdi-content-remove-circle"></md-icon>
-          </md-button>
+        <div ng-repeat="file in vm.call.files">
+          <md-input-container flex>
+            <label for="boundaryName-{{ $id }}">boundary name</label>
+            <input type="text"
+              required
+              ng-model="file.boundaryName"
+              id="boundaryName-{{ $id }}">
+          </md-input-container>
+          <div layout="row">
+            <file-selector file-id="file.file._id"
+              flex></file-selector>
+            <md-button ng-click="vm.removeFile(file)"
+              class="md-icon-button secondary-btn remove-file"
+              type="button"
+              aria-label="remove file">
+              <md-icon md-font-icon="Material-Design-Icons"
+                class="mdi-content-remove-circle"></md-icon>
+            </md-button>
+          </div>
         </div>
       </section>
     </div>

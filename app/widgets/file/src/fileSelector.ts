@@ -6,7 +6,14 @@ module FileDirectives {
         fileId: '='
       },
       controller: 'FileVM',
-      templateUrl: 'fileSelector'
+      templateUrl: 'fileSelector',
+      link: (scope: any) => {
+        scope.$watch('vm.selectedFile', (file) => {
+          if (!!file) {
+            scope.fileId = file._id;
+          }
+        });
+      }
     };
   }
 }
