@@ -1,0 +1,27 @@
+<md-toolbar md-scroll-schrink>
+  <div class="md-toolbar-tools">
+    <h2>
+      Workflows
+    </h2>
+    <span flex></span>
+    <a class="md-icon-button md-button"
+      aria-label="add workflow"
+      href="#/register/workflow">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-content-add-circle"></md-icon>
+    </a>
+  </div>
+</md-toolbar>
+<md-content>
+  <md-list>
+    <md-list-item class="md-2-line"
+      ng-repeat="workflow in vm.workflows"
+      ng-click="vm.select(workflow)">
+      <div class="md-list-item-text">
+        <h3>{{ workflow.name }}</h3>
+        <p>Calls: {{ workflow.calls.length }}</p>
+      </div>
+      <md-divider ng-if="!$last"></md-divider>
+    </md-list-item>
+  </md-list>
+</md-content>

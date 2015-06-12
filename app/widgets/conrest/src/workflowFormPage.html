@@ -1,0 +1,36 @@
+<md-toolbar md-scroll-schrink
+  class="md-hue-2">
+  <div class="md-toolbar-tools">
+    <h1>[conREST]</h1>
+  </div>
+</md-toolbar>
+<section hide-gt-sm>
+  <workflow-form id="{{ vm.$routeParams.workflowId }}"
+    ng-if="!vm.session.connector"></workflow-form>
+  <md-card ng-if="!!vm.session.connector">
+    <connector-form workflow-id="{{ vm.$routeParams.workflowId }}"
+      connector="vm.session.connector"
+      calls="vm.session.calls"></connector-form>
+  </md-card>
+</section>
+<section hide-sm
+  layout-wrap
+  layout="row">
+  <md-card flex-gt-sm="35">
+    <workflow-overview></workflow-overview>
+  </md-card>
+  <md-card flex-gt-sm="60"
+    ng-if="!vm.session.connector && !vm.session.mapper">
+    <workflow-form id="{{ vm.$routeParams.workflowId }}"></workflow-form>
+  </md-card>
+  <md-card flex="60"
+    ng-if="!!vm.session.connector && !vm.session.mapper">
+    <connector-form workflow-id="{{ vm.$routeParams.workflowId }}"
+      connector="vm.session.connector"
+      calls="vm.session.calls"></connector-form>
+  </md-card>
+  <md-card flex="60"
+    ng-if="!!vm.session.mapper">
+    <mapper-form mapper="vm.session.mapper"></mapper-form>
+  </md-card>
+</section>

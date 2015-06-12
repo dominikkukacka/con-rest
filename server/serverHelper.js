@@ -112,6 +112,7 @@
     getById: getById,
     getBy: getBy,
     sendAndResolve: sendAndResolve,
+    errorHandler: errorHandler,
     updateById: updateById
   };
 }());

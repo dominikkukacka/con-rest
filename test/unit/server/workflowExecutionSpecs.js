@@ -38,7 +38,6 @@
           return workflowExecution.getWorkflowExecutions(req, res);
         }).
         then(function then(workflowExecutions) {
-          var call = res.send.args[0][0];
           workflowExecutions.length.should.be.above(0);
           res.send.args[0][0].length.should.be.above(0);
         }).
@@ -53,7 +52,7 @@
         then(function given() {
           req = {
             params: {
-              id: '5464b1e2f8243a3c32170001'
+              workflowExecutionId: '5464b1e2f8243a3c32170001'
             }
           };
           res = {};
@@ -63,9 +62,9 @@
           return workflowExecution.getWorkflowExecutionById(req, res);
         }).
         then(function then() {
-          var call = res.send.args[0][0];
-          call.id.should.be.exactly('5464b1e2f8243a3c32170001');
-          call.executions.length.should.be.exactly(3);
+          var workflowExecution = res.send.args[0][0];
+          workflowExecution._id.toString().should.be.exactly('5464b1e2f8243a3c32170001');
+          workflowExecution.executions.length.should.be.exactly(3);
         }).
         then(done).
         catch(done);

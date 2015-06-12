@@ -72,6 +72,31 @@
         then(done).
         catch(done);
       });
+
+      it('should find apis based on name', function findApiWithName(done) {
+        var req;
+        var res;
+        queue()
+          .then(function given() {
+            req = {
+              query: {
+                search: 'data test'
+              }
+            };
+            res = {
+              send: sinon.spy()
+            };
+          })
+          .then(function when() {
+            return api.searchByName(req, res);
+          })
+          .then(function then(apis) {
+            var calls = res.send.args[0][0];
+            calls.should.be.exactly(apis);
+          })
+          .then(done)
+          .catch(done);
+      });
     });
 
     describe('registration', function registrationScope() {

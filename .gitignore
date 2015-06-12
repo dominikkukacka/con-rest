@@ -165,7 +165,6 @@ npm-debug.log
 node_modules
 bower_components
 target
-node
 
 #############
 ## Coverage
@@ -177,3 +176,8 @@ coverageMidway
 test-results.xml
 
 certificates/**/*
+
+tsconfig.json
+.tscache
+.baseDir.ts
+*.tar

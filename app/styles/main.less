@@ -3,45 +3,56 @@
 //
 // Author: Andy Tang
 // Fork me on Github: https://github.com/EnoF/con-rest
+@material-font-path: '/fonts';
 @import (inline) "app/bower_components/angular-material/angular-material.css";
-@import (inline) "app/bower_components/angular-material/themes/light-green-theme.css";
+@import 'app/bower_components/bootstrap-material-design/less/roboto.less';
+@import 'app/bower_components/bootstrap-material-design/less/_icons-material-design.less';
 @import ".tmp/less/styles.less";
-@import "app/widgets/callRegistrator/callRegistrator.less";
-@import "app/widgets/callSelector/callSelector.less";
-@import "app/widgets/mapperRegistrator/mapperRegistrator.less";
-@import "app/widgets/workflowRegistrator/workflowRegistrator.less";
-@import "app/widgets/workflowOverview/workflowOverview.less";
-@import "app/widgets/workflow/workflow.less";
-@import "app/widgets/restCall/restCall.less";
-@import "app/widgets/response/response.less";
-
-md-input-group {
-  margin-left: 10px;
-  margin-right: 10px;
+@import "app/styles/themes/theme-con-rest.less";
+body {
+  background-color: rgb(66,66,66);
 }
-
-.menu-item {
-  background: none;
-  border-width: 0;
+md-content p, pre, md-select-menu, md-select-label {
+  color: #ffffff;
+}
+md-option:focus {
+  color: #000000;
+}
+md-content p.label {
+  color: #ccc;
+  text-align: end;
+}
+[ng-click] {
   cursor: pointer;
-  display: block;
-  color: #333;
-  font-size: inherit;
-  line-height: 40px;
-  max-height: 40px;
-  opacity: 1;
-  margin: 0;
-  outline: none;
-  padding: 0px 28px;
+}
+p, pre {
+  text-overflow: ellipsis;
+  overflow-x: auto;
+}
+.ace_editor {
+  min-height: 100px;
+}
+md-list-item {
   position: relative;
-  text-align: left;
-  text-decoration: none;
-  width: 100%;
-  z-index: 1;
-  -webkit-transition: 0.2s ease-in-out;
-  -webkit-transition-property: max-height, background-color, opacity;
-  -moz-transition: 0.2s ease-in-out;
-  -moz-transition-property: max-height, background-color, opacity;
-  transition: 0.2s ease-in-out;
-  transition-property: max-height, background-color, opacity;
+}
+.md-button.secondary-btn {
+  margin-right: 22px;
+}
+md-input-container > md-select {
+  margin-top: 5px;
+}
+md-icon[md-font-icon] > span{
+  display: none;
+}
+md-select > md-select-label {
+  box-sizing: border-box;
+  -webkit-flex:1;
+  -ms-flex: 1;
+  flex: 1;
+}
+input[type=file] {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  display: block;
 }

@@ -1,0 +1,21 @@
+<md-input-container ng-if="!vm.selectedFile || !!vm.selectedFile._id"
+  layout="row"
+  layout-align="start center">
+  <md-select placeholder="File"
+    ng-model="vm.selectedFile"
+    md-on-open="vm.loadFiles()"
+    flex>
+    <md-select-label>{{ vm.selectedFile.name || 'add new file'}}</md-select-label>
+    <md-option ng-repeat="file in vm.files"
+      ng-value="file">{{ file.name }}</md-option>
+  </md-select>
+  <md-button ng-click="vm.addFile()"
+    class="md-icon-button secondary-btn"
+    type="button"
+    aria-label="add new file">
+    <md-icon md-font-icon="Material-Design-Icons"
+      class="mdi-content-add-circle"></md-icon>
+  </md-button>
+</md-input-container>
+<file-form ng-if="!!vm.selectedFile && !vm.selectedFile._id"
+  file="vm.selectedFile"></file-form>

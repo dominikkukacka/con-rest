@@ -1,0 +1,69 @@
+<md-toolbar md-scroll-schrink>
+  <div class="md-toolbar-tools">
+    <a class="md-icon-button md-button"
+      aria-label="back"
+      ng-href="#/workflows/{{ workflowId }}">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-navigation-arrow-back"></md-icon>
+    </a>
+    <h2>
+      Call Details
+    </h2>
+    <span flex></span>
+    <a class="md-icon-button md-button"
+      aria-label="edit"
+      ng-href="#/workflows/{{ workflowId }}/calls/{{ id }}/edit">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-editor-mode-edit"></md-icon>
+    </a>
+  </div>
+</md-toolbar>
+<md-content layout-padding>
+  <div layout="row"
+    layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">name</p>
+    <p flex="65">{{ vm.call.name }}</p>
+  </div>
+  <div layout="row"
+    layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">url</p>
+    <p flex="65">{{ vm.call.url }}</p>
+  </div>
+  <div layout="row"
+    layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">method</p>
+    <p flex="65">{{ vm.call.method }}</p>
+  </div>
+  <div layout="row"
+    layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">type</p>
+    <p flex="65">{{ vm.call.type }}</p>
+  </div>
+  <div layout="row"
+    layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">data</p>
+  </div>
+  <div ui-ace="vm.aceConfig"
+    readonly
+    ng-model="vm.data"></div>
+  <div layout="row"
+    layout-margin>
+    <p flex="25"
+      class="label"
+      layout-align="end">headers</p>
+  </div>
+  <div ui-ace="vm.aceConfig"
+    readonly
+    ng-model="vm.headers"></div>
+  <file-item ng-repeat="file in vm.call.files"></file-item>
+</md-content>

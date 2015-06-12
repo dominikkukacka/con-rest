@@ -8,6 +8,32 @@
 
 module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
+  var fs = require('fs');
+
+  function addFeatures(baseFolder, features) {
+    try {
+      var featureFiles = fs.readdirSync(baseFolder + '/test/features/');
+      featureFiles.forEach(function(feature) {
+        this.push(fs.readFileSync(baseFolder +
+          '/test/features/' + feature, {
+            encoding: 'utf8'
+          }));
+      }, features);
+    } catch (e) {
+      console.warn(baseFolder + ' does not contain any tests');
+    }
+  }
+
+  function addWidgetFeatures(baseFolder, features) {
+    try {
+      var widgets = fs.readdirSync(baseFolder);
+      widgets.forEach(function(widget) {
+        addFeatures(baseFolder + widget, features);
+      });
+    } catch (e) {
+      console.warn(baseFolder + ' does not exist');
+    }
+  }
 
   var pkg = grunt.file.readJSON('package.json');
 
@@ -40,26 +66,29 @@ module.exports = function(grunt) {
         }]
       }
     },
+    compress: {
+      main: {
+        options: {
+          archive: 'conrest.tar'
+        },
+        files: [{
+          expand: true,
+          cwd: 'dist',
+          src: ['**/*'],
+          dest: '/'
+        }]
+      }
+    },
     concat: {
       dist: {
         files: {
           '<%= app.dist %>/js/con-rest.min.js': [
-            '<%= app.app %>/bower_components/angular/angular.min.js',
-            '.tmp/pre.con-rest.js'
-          ]
-        }
-      },
-      dev: {
-        options: {
-          sourceMap: true
-        },
-        files: {
-          '<%= app.tmp %>/js/con-rest.js': [
-            '<%= app.app %>/dao/*.js',
-            '<%= app.app %>/models/*.js',
-            '<%= app.app %>/modules/*.js',
-            '<%= app.app %>/viewModels/*.js',
-            '<%= app.app %>/widgets/**/*.js'
+            '.tmp/js/angular.min.js',
+            'app/bower_components/ace-builds/src-min-noconflict/ace.js',
+            'app/bower_components/ace-builds/src-min-noconflict/mode-json.js',
+            'app/bower_components/angular-ui-ace/ui-ace.min.js',
+            '.tmp/js/build.min.js',
+            '.tmp/js/templates.min.js'
           ]
         }
       },
@@ -72,6 +101,20 @@ module.exports = function(grunt) {
       }
     },
     copy: {
+      dev: {
+        files: [{
+          expand: true,
+          cwd: '<%= app.app %>/bower_components/bootstrap-material-design/fonts/',
+          dest: '<%= app.tmp %>/fonts/',
+          src: [
+            '*.eot',
+            '*.svg',
+            '*.ttf',
+            '*.woff',
+            '*.woff2'
+          ]
+        }]
+      },
       dist: {
         files: [{
           expand: true,
@@ -80,6 +123,30 @@ module.exports = function(grunt) {
           src: [
             '*.css'
           ]
+        }, {
+          expand: true,
+          cwd: '<%= app.app %>/bower_components/bootstrap-material-design/fonts/',
+          dest: '<%= app.dist %>/fonts/',
+          src: [
+            '*.eot',
+            '*.svg',
+            '*.ttf',
+            '*.woff',
+            '*.woff2'
+          ]
+        }, {
+          src: 'app/dist.html',
+          dest: 'dist/index.html'
+        }, {
+          expand: true,
+          cwd: 'server',
+          src: [
+            '**/*.js'
+          ],
+          dest: 'dist/server'
+        }, {
+          src: 'config.json',
+          dest: 'dist/config.json'
         }]
       }
     },
@@ -87,7 +154,21 @@ module.exports = function(grunt) {
       dev: {
         options: {
           port: 9000,
-          script: './devServer.js'
+          hostname: '0.0.0.0',
+          server: 'server/server',
+          bases: ['app', '.tmp'],
+          middleware: [function(req, res, next) {
+            req.url = req.url.replace(/\/app\//, '/');
+            next();
+          }]
+        }
+      },
+      dist: {
+        options: {
+          port: 9000,
+          hostname: '0.0.0.0',
+          server: 'server/server',
+          bases: ['dist'],
         }
       }
     },
@@ -182,17 +263,17 @@ module.exports = function(grunt) {
     ngtemplates: {
       dev: {
         src: '<%= app.app %>/widgets/**/*.html',
-        dest: '<%= app.tmp %>/scripts/templates.js',
+        dest: '<%= app.tmp %>/js/templates.js',
         options: {
-          module: 'con-rest',
+          module: 'con-rest.templates',
           url: function(url) {
-            return url.replace(/(app\/widgets\/([\s\S]*?)\/)/, '').replace(/.html/, '');
+            return url.replace(/(([\s\S]*?)\/widgets\/([\s\S]*?)\/src\/)|.html/g, '').replace(/.html/, '');
           }
         }
       },
       dist: {
         src: '<%= app.app %>/widgets/**/*.html',
-        dest: '<%= app.tmp %>/scripts/templates.js',
+        dest: '<%= app.tmp %>/js/templates.min.js',
         options: {
           module: 'con-rest',
           htmlmin: {
@@ -206,9 +287,15 @@ module.exports = function(grunt) {
             removeStyleLinkTypeAttributes: true
           },
           url: function(url) {
-            return url.replace(/(app\/widgets\/([\s\S]*?)\/)/, '').replace(/.html/, '');
+            return url.replace(/(([\s\S]*?)\/widgets\/([\s\S]*?)\/src\/)|.html/g, '').replace(/.html/, '');
           }
         }
+      }
+    },
+    packageModules: {
+      dist: {
+        src: 'package.json',
+        dest: 'dist'
       }
     },
     'protractor_webdriver': {
@@ -248,33 +335,82 @@ module.exports = function(grunt) {
         src: ['test/unit/server/**/*.js']
       }
     },
-    uglify: {
+    template: {
       options: {
-        mangle: {
-          except: []
-        },
-        compress: {
-          /* jshint ignore:start */
-          global_defs: {
-            "DEBUG": false
-          },
-          dead_code: true
-            /* jshint ignore:end */
-        },
-        banner: '/* con-rest: v<%= pkg.version %> by EnoF */'
-      },
-      dist: {
-        files: {
-          '<%= app.tmp %>/pre.con-rest.js': [
-            '.tmp/ngmin/app.js',
-            '.tmp/scripts/ngtemplates.js',
-            '.tmp/ngmin/widgets/**/*.js',
-            '.tmp/ngmin/viewModels/*.js',
-            '.tmp/ngmin/modules/*.js',
-            '.tmp/ngmin/directives/*.js',
-            '.tmp/ngmin/models/**/*.js'
-          ]
+        data: function() {
+          var features = [];
+          addWidgetFeatures('app/widgets/', features);
+          addWidgetFeatures('app/core/widgets/', features);
+          return {
+            features: features,
+            module: 'con-rest'
+          };
         }
+      },
+      template: {
+        src: 'test/unit/test.spec.template',
+        dest: '.tmp/test.spec.js'
+      }
+    },
+    ts: {
+      all: {
+        src: [
+          'typings/tsd.d.ts',
+          'app/core/models/serializable.ts',
+          'app/core/models/**/*.ts',
+          'app/core/dao/dao.ts',
+          'app/core/dao/**/*.ts',
+          'app/core/modules/**/*.ts',
+          'app/core/widgets/**/src/**/*.ts',
+          'app/core/widgets/**/*.ts',
+          '!app/core/widgets/**/test/**',
+          'app/widgets/**/src/**/*.ts',
+          'app/widgets/**/*.ts',
+          '!app/widgets/**/test/**',
+          'app/app.ts'
+        ],
+        reference: 'app/reference.ts',
+        out: '.tmp/js/build.js'
+      },
+      seperate: {
+        src: [
+	  'typings/tsd.d.ts',
+          'test/**/*.ts',
+          'app/core/models/**/*.ts',
+          'app/core/dao/**/*.ts',
+          'app/core/modules/**/*.ts',
+          'app/core/widgets/**/src/**/*.ts',
+          'app/core/widgets/**/*.ts',
+          'app/widgets/**/src/**/*.ts',
+          'app/widgets/**/*.ts',
+          'app/app.ts'
+        ],
+        reference: 'app/reference.ts',
+        outDir: '.tmp/js'
+      }
+    },
+    uglify: {
+      conrest: {
+        options: {
+          wrap: 'exports'
+        },
+        files: [{
+          src: ['app/styles/themes/theme-con-rest.js', '.tmp/js/build.js'],
+          dest: '.tmp/js/build.min.js'
+        }]
+      },
+      angular: {
+        files: [{
+          src: [
+            'app/bower_components/angular/angular.js',
+            'app/bower_components/angular-animate/angular-animate.js',
+            'app/bower_components/angular-aria/angular-aria.js',
+            'app/bower_components/angular-material/angular-material.js',
+            'app/bower_components/angular-route/angular-route.js',
+            'app/bower_components/angular-messages/angular-messages.js'
+          ],
+          dest: '.tmp/js/angular.min.js'
+        }]
       }
     },
     version: {
@@ -294,35 +430,34 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+      options: {
+        livereload: true
+      },
       less: {
         files: [
           '<%= app.app %>/styles/*.less',
           '<%= app.app %>/widgets/**/*.less'
         ],
-        tasks: ['concat:less', 'less:main'],
-        options: {
-          // Start a live reload server on the default port 35729
-          livereload: true
-        }
+        tasks: ['concat:less', 'less:main']
       },
       ngTemplates: {
         files: ['<%= app.app %>/widgets/**/*.html'],
-        tasks: ['ngtemplates'],
-        options: {
-          // Start a live reload server on the default port 35729
-          livereload: true
-        }
+        tasks: ['ngtemplates']
       },
-      testsApp: {
+      ts: {
         files: [
-          '<%= app.app %>/**/*.js',
-          '<%= app.test %>/unit/app/**/*.js'
+          'app/core/**/*.ts',
+          'app/widgets/**/*.ts',
+          'test/**/*.ts',
+          'app/app.ts'
         ],
-        tasks: ['karma:unitAuto:run', 'concat:dev'],
-        options: {
-          // Start a live reload server on the default port 35729
-          livereload: true
-        }
+        tasks: ['ts', 'karma:unitAuto:run']
+      },
+      features: {
+        files: [
+          'app/**/widgets/**/*.feature'
+        ],
+        tasks: ['template', 'karma:unitAuto:run']
       },
       testsServer: {
         files: [
@@ -336,10 +471,7 @@ module.exports = function(grunt) {
           '<%= app.server %>/**/*.js',
           '<%= app.test %>/unit/server/**/*.js'
         ],
-        tasks: ['express:dev'],
-        options: {
-          spawn: false // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded
-        }
+        tasks: ['express:dev']
       }
     }
   });
@@ -349,8 +481,10 @@ module.exports = function(grunt) {
     'jshint',
     'concat:less',
     'less',
+    'copy:dev',
     'ngtemplates:dev',
-    'concat:dev'
+    'template',
+    'ts'
   ]);
 
   grunt.registerTask('setupEnv', function env(target) {
@@ -381,7 +515,6 @@ module.exports = function(grunt) {
   grunt.registerTask('server', function serverMode(target) {
     var tasks = [
       'setupEnv:' + target,
-      'groc:dev',
       'karma:unitAuto',
       'watch'
     ];
@@ -389,14 +522,14 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('package', [
-    'version',
-    'test:e2e',
-    'e2e:ci',
+    'test',
     'ngtemplates:dist',
     'ngAnnotate',
     'uglify',
     'copy',
-    'concat'
+    'concat',
+    'packageModules',
+    'compress'
   ]);
 
   var seleniumChildProcesses = {};

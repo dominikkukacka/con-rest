@@ -1,0 +1,8 @@
+<md-list-item class="md-2-line"
+  layout="column">
+  <div class="md-list-item-text">
+    <h3>{{ vm.execution.statusCode }}</h3>
+    <p>{{ vm.execution.url }}</p>
+  </div>
+  <md-divider ng-if="!$parent.$last"></md-divider>
+</md-list-item>

@@ -16,7 +16,7 @@
     data: Schema.Types.Mixed,
     headers: Schema.Types.Mixed,
     files: [{
-      name: String,
+      boundaryName: String,
       file: {
        type: Schema.Types.ObjectId,
        ref: 'File'

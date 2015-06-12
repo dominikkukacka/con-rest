@@ -55,7 +55,7 @@
     app.get('/api/mappers', mapper.getMappers);
     app.post('/api/mappers', mapper.createMapper);
     app.get('/api/mappers/:id', mapper.getMapperById);
-    app.post('/api/mappers/:id', mapper.saveMapper);
+    app.put('/api/mappers/:id', mapper.saveMapper);
     app.delete('/api/mappers/:id', mapper.deleteMapper);
 
 

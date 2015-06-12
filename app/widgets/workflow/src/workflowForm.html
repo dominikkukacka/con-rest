@@ -1,0 +1,98 @@
+<md-toolbar md-scroll-schrink>
+  <div class="md-toolbar-tools">
+    <a href="#/workflows"
+      class="md-icon-button md-button"
+      aria-label="back">
+      <md-icon md-font-icon="Material-Design-Icons"
+        class="mdi-navigation-arrow-back"></md-icon>
+    </a>
+    <h2 ng-if="!vm.workflow._id">
+      Register Workflow
+    </h2>
+    <h2 ng-if="!!vm.workflow._id">
+      Edit Workflow
+    </h2>
+  </div>
+</md-toolbar>
+<md-content layout-padding>
+  <form ng-submit="vm.save()"
+    novalidate
+    name="workflowForm">
+    <md-input-container>
+      <label for="name-{{ $id }}">name</label>
+      <input type="text"
+        id="name-{{ $id }}"
+        ng-model="vm.workflow.name"
+        name="name"
+        required>
+      <div ng-messages="workflowForm.name.$error"
+        ng-if="workflowForm.name.$touched">
+        <div ng-message="required">Please name your workflow</div>
+      </div>
+    </md-input-container>
+    <div layout="row">
+      <md-autocomplete md-items="call in vm.searchCall()"
+        md-search-text="vm.callQuery"
+        md-item-text="call.name"
+        md-selected-item="vm.selectedCall"
+        md-min-length="2"
+        placeholder="select call"
+        flex>
+        <md-item-template>
+          <span md-highlight-text="vm.callQuery"
+            md-highlight-flags="^i">{{ call.name }}</span>
+        </md-item-template>
+        <md-not-found>
+          call is not found
+        </md-not-found>
+      </md-autocomplete>
+      <md-button ng-click="vm.addCall()"
+        class="md-icon-button secondary-btn"
+        aria-label="add call"
+        ng-disabled="!vm.selectedCall">
+        <md-icon md-font-icon="Material-Design-Icons"
+          class="mdi-content-add-circle"></md-icon>
+      </md-button>
+    </div>
+    <md-list>
+      <md-list-item layout="row"
+        class="md-2-line md-no-proxy"
+        ng-repeat="call in vm.workflow.calls">
+        <div class="md-list-item-text">
+          <h3>{{ call.name }}</h3>
+          <p>{{ call.method }} - {{ call.url}}</p>
+        </div>
+        <md-button ng-click="vm.removeCall(call)"
+          class="md-icon-button md-secondary"
+          aria-label="remove call">
+          <md-icon md-font-icon="Material-Design-Icons"
+            class="mdi-content-remove-circle"></md-icon>
+        </md-button>
+        <md-divider ng-if="!$last"></md-divider>
+      </md-list-item>
+    </md-list>
+    <div layout="row">
+      <md-subheader flex>
+        <span>connectors</span>
+      </md-subheader>
+      <md-button ng-click="vm.addConnector()"
+        class="md-icon-button secondary-btn"
+        type="button"
+        aria-label="add connector">
+        <md-icon md-font-icon="Material-Design-Icons"
+          class="mdi-content-add-circle"></md-icon>
+      </md-button>
+    </div>
+    <md-list>
+      <connector-item connector-id="{{ connector._id }}"
+        workflow-id="{{ vm.workflow._id }}"
+        connector="connector"
+        edit-mode="true"
+        ng-if="!!connector._id"
+        ng-repeat="connector in vm.workflow.connectors"></connector-item>
+    </md-list>
+    <md-button class="md-raised md-primary"
+      ng-disabled="!workflowForm.$valid"
+      type="submit">save</md-button>
+  </form>
+</md-content>
