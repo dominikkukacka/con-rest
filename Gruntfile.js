@@ -355,8 +355,7 @@ module.exports = function(grunt) {
     ts: {
       all: {
         src: [
-          'app/bower_components/type-def/angularjs/angular.d.ts',
-          'app/bower_components/type-def/angular-material/angular-material.d.ts',
+          'typings/tsd.d.ts',
           'app/core/models/serializable.ts',
           'app/core/models/**/*.ts',
           'app/core/dao/dao.ts',
@@ -375,12 +374,7 @@ module.exports = function(grunt) {
       },
       seperate: {
         src: [
-          'app/bower_components/type-def/angularjs/angular.d.ts',
-          'app/bower_components/type-def/angular-material/angular-material.d.ts',
-          'app/bower_components/type-def/node/node.d.ts',
-          'app/bower_components/type-def/mocha/mocha.d.ts',
-          'app/bower_components/type-def/sinon-chai/sinon-chai.d.ts',
-          'test/angular-mocks.d.ts',
+	  'typings/tsd.d.ts',
           'test/**/*.ts',
           'app/core/models/**/*.ts',
           'app/core/dao/**/*.ts',
