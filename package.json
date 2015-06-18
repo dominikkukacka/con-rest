@@ -4,7 +4,7 @@
   "description": "Configurable and Chainable REST services",
   "authors": [
     "Andy Tang (EnoF)<andyt@live.nl>",
-    "Dominik Kukacka <dominik@creativebrains.net"
+    "Dominik Kukacka <dominik@creativebrains.net>"
   ],
   "contributors": [],
   "devDependencies": {
@@ -12,6 +12,7 @@
     "chai": "^1.10.0",
     "chai-as-promised": "^4.1.1",
     "connect-livereload": "~0.2.0",
+    "express-params": "0.0.3",
     "grunt": "~0.4.1",
     "grunt-angular-templates": "~0.4.7",
     "grunt-bower-task": "^0.4.0",
@@ -41,6 +42,7 @@
     "grunt-string-replace": "^0.2.7",
     "grunt-template": "^0.2.3",
     "grunt-ts": "^4.1.0",
+    "grunt-tslint": "^2.0.0",
     "grunt-version": "~0.3.0",
     "karma": "~0.12.16",
     "karma-chai": "^0.1.0",
@@ -59,13 +61,14 @@
     "karma-requirejs": "~0.2.0",
     "karma-script-launcher": "~0.1.0",
     "karma-sinon-chai": "^0.3.0",
+    "load-grunt-config": "^0.17.1",
     "load-grunt-tasks": "~0.3.0",
     "mocha": "^2.1.0",
-    "mockgoose": "^1.10.7",
     "phantomjs": "~1.9.7-6",
     "protractor": "^1.6.1",
     "should": "^4.1.0",
     "sinon": "^1.11.1",
+    "tslint": "^2.0.1",
     "yadda": "^0.11.4"
   },
   "engines": {
@@ -78,14 +81,12 @@
   },
   "repository": "ssh://git@github.com:EnoF/con-rest.git",
   "dependencies": {
-    "body-parser": "^1.8.1",
-    "express": "~4.10.7",
-    "express-params": "0.0.3",
-    "mongoose": "^3.8.18",
+    "mongoose": "^4.0.5",
     "multer": "^0.1.7",
     "nock": "~0.48.2",
     "q": "^1.0.1",
     "request": "~2.47.0",
+    "rest-io": "^2.0.0",
     "tmp": "0.0.23",
     "underscore": "~1.6.0"
   }
