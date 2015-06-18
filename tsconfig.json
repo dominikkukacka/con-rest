@@ -7,14 +7,13 @@
         "noImplicitAny": false,
         "removeComments": true,
         "noLib": false,
-        "outDir": "./tmp/js/"
+        "outDir": "./.tmp/js/"
     },
     "filesGlob": [
         "./app/*.ts",
         "./app/core/**/*.ts",
         "./app/widgets/**/*.ts",
         "./app/server/**/*.ts",
-        "./server/**/*.ts",
         "./test/**/*.ts",
         "./app/bower_components/type-def/angularjs/angular.d.ts",
         "./app/bower_components/type-def/angular-material/angular-material.d.ts",

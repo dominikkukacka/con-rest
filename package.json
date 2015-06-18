@@ -79,7 +79,8 @@
   },
   "scripts": {
     "install": "node node_modules/protractor/bin/webdriver-manager update",
-    "test": "grunt test"
+    "test": "grunt test",
+    "test-watch": "mocha .tmp/js/app/server/test/server.specs.js -R mocha-better-spec-reporter --reporter-options stack-exclude=**/yadda/lib/** -w"
   },
   "repository": "ssh://git@github.com:EnoF/con-rest.git",
   "dependencies": {

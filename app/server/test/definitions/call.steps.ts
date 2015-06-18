@@ -20,13 +20,26 @@ library
     supertest('http://localhost:1111')
       .get('/api/requests/' + globals.createIdBasedOnName(name))
       .end((req, res) => {
-        this.result = res;
-        expect(this.result.status).to.equal(200);
+        this.call = res.body;
+        expect(res.status).to.equal(200);
         done();
       });
   })
+  .when('I view all calls', (done) => {
+    supertest('http://localhost:1111')
+      .get('/api/requests/')
+      .end((req, res) => {
+        this.result = res.body;
+        expect(res.status).to.equal(200);
+        done();
+      });
+  })
+  .when('I inspect call (.*)', (pos: string, done) => {
+    this.call = this.result[parseInt(pos, 10)];
+    done();
+  })
   .then('I expect to see "(.*)" as (.*)', (url: string, prop: string, done) => {
-    expect(this.result.body[prop]).to.equal(url);
+    expect(this.call[prop]).to.equal(url);
     done();
   });
 
