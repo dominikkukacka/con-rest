@@ -11,3 +11,6 @@
 /// <reference path="express/express.d.ts" />
 /// <reference path="mongoose/mongoose.d.ts" />
 /// <reference path="rest-io/rest-io.d.ts" />
+/// <reference path="yadda/yadda.d.ts" />
+/// <reference path="supertest/supertest.d.ts" />
+/// <reference path="superagent/superagent.d.ts" />

@@ -37,6 +37,12 @@
     },
     "mongoose/mongoose.d.ts": {
       "commit": "d268d865a30b0a64a2eff93f80d8167303bacb05"
+    },
+    "supertest/supertest.d.ts": {
+      "commit": "43b6bf88758852b9ab713a9b011487f047f94f4e"
+    },
+    "superagent/superagent.d.ts": {
+      "commit": "43b6bf88758852b9ab713a9b011487f047f94f4e"
     }
   }
 }

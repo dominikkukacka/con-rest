@@ -17,7 +17,18 @@ module.exports = (grunt, config) ->
       'test/**/*.ts'
       'app/app.ts'
     ]
-    tasks: ['ts', 'karma:test_unitAuto:run']
+    tasks: ['ts:ts_all', 'ts:ts_seperate']
+  tsServer:
+    files: [
+      'app/server/**/*.ts'
+    ]
+    tasks: ['ts:ts_server']
+  testApp:
+    files: [
+      '.tmp/js/app/core/**/*.js'
+      '.tmp/js/app/widgets/**/*.js'
+    ]
+    tasks: ['karma:test_unitAuto:run']
   features:
     files: [
       'app/**/widgets/**/*.feature'
@@ -25,11 +36,12 @@ module.exports = (grunt, config) ->
     tasks: ['template', 'karma:test_unitAuto:run']
   testsServer:
     files: [
-      'server/**/*.js'
+      '.tmp/js/app/server/**/*.js'
+      'app/server/**/*.feature'
       'test/unit/server/**/*.js'
     ]
     tasks: ['simplemocha']
-  serverReload: 
+  serverReload:
     files: [
       'server/**/*.js'
       'test/unit/server/**/*.js'

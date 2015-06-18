@@ -64,10 +64,12 @@
     "load-grunt-config": "^0.17.1",
     "load-grunt-tasks": "~0.3.0",
     "mocha": "^2.1.0",
+    "mocha-better-spec-reporter": "^2.1.0",
     "phantomjs": "~1.9.7-6",
     "protractor": "^1.6.1",
     "should": "^4.1.0",
     "sinon": "^1.11.1",
+    "supertest": "^1.0.1",
     "tslint": "^2.0.1",
     "yadda": "^0.11.4"
   },

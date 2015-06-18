@@ -31,5 +31,8 @@ module.exports = (grunt, config) ->
       keepAlive: true
       noColor: false
   simplemocha:
-    all:
-      src: ['test/unit/server/**/*.js']
+    options:
+      reporter: 'mocha-better-spec-reporter'
+    src: [
+      '.tmp/js/app/server/test/server.specs.js'
+    ]
