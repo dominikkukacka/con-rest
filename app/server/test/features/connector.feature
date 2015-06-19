@@ -8,17 +8,21 @@ Feature: Connector
   Given <Call><Name><Url><Method><Type>
     And <Call><Google><http://google.com><GET><formData>
     And <Call><Yahoo><http://yahoo.com><GET><payLoad>
-    And <Call><Bing><http://bing.com><DELETE><payLoad>
-  Given <Workflow><Connector><Source><Destination><Mapper>
-    And <Workflow><GtoY><Google><Yahoo><Mapper>
+    And <Workflow><Name><Calls>
+    And <Workflow><Search><Google,Yahoo>
+    And <Mapper><Name>
+    And <Mapper><headAuth>
+    And <Map><OfMapper><Place><Source><Destination>
+    And <Map><headAuth><header><sourceHeaderAuth><destinationHeaderAuth>
+    And <Connector><Workflow><ID><Source><Destination><Mapper>
+    And <Connector><Search><GtoY><Google><Yahoo><headAuth>
 
-  @pending
   Scenario: View connector [Connector] of [Workflow]
-    When I view connector "[Connector]"
-    Then I expect to see "[Source]" as source
-      And I expect to see "[Destination]" as destination
-      And I expect to see "[Mapper]" as mapper
+    When I view connector "[Connector]" of workflow "[Workflow]"
+    Then I expect to see source with id "[Source]"
+      And I expect to see destination with id "[Destination]"
+      And I expect to see mapper with id "[Mapper]"
 
     Where:
       | Workflow | Connector  | Source | Destination   | Mapper        |
-      | Search   | GtoY       | Google | Yahoo         | EngineWrapper |
+      | Search   | GtoY       | Google | Yahoo         | headAuth      |

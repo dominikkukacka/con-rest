@@ -34,11 +34,27 @@ library
   .given('<Map><OfMapper><Place><Source><Destination>', (done) => done())
   .given('<Map><(.*)><(.*)><(.*)><(.*)>', (mapper: string, place: string, source: string, dest: string, done) => {
     mongoose.model('Mapper').findByIdAndUpdate(globals.createIdBasedOnName(mapper), {
-      maps: [{
-        place: place,
-        source: source,
-        destination: dest
-      }]
+      $push: {
+        maps: {
+          place: place,
+          source: source,
+          destination: dest
+        }
+      }
+    }).exec()
+      .then(() => done());
+  })
+  .given('<Connector><Workflow><Source><Destination><Mapper>', (done) => done())
+  .given('<Connector><(.*)><(.*)><(.*)><(.*)><(.*)>', (workflow: string, id: string, source: string, dest: string, mapper: string, done) => {
+    mongoose.model('Workflow').findByIdAndUpdate(globals.createIdBasedOnName(workflow), {
+      $push: {
+        connectors: {
+          _id: globals.createIdBasedOnName(id),
+          source: globals.createIdBasedOnName(source),
+          destination: globals.createIdBasedOnName(dest),
+          mapper: globals.createIdBasedOnName(mapper),
+        }
+      }
     }).exec()
       .then(() => done());
   })
@@ -96,6 +112,16 @@ library
         done();
       });
   })
+  .when('I view connector "(.*)" of workflow "(.*)"', (cname: string, wname: string, done) => {
+    supertest('http://localhost:1111')
+      .get('/api/workflows/' + globals.createIdBasedOnName(wname) +
+        '/connectors/' + globals.createIdBasedOnName(cname))
+      .end((req, res) => {
+        this.inspect = res.body;
+        expect(res.status).to.equal(200);
+        done();
+      });
+  })
   .when('I inspect the map on position "(.*)"', (pos: string, done) => {
     this.map = this.inspect.maps[parseInt(pos, 10)];
     done();
@@ -106,6 +132,10 @@ library
   })
   .then('I expect to see "(.*)" as (.*)', (value: string, prop: string, done) => {
     expect(this.inspect[prop]).to.equal(value);
+    done();
+  })
+  .then('I expect to see (.*) with id "(.*)"', (prop: string, value: string, done) => {
+    expect(this.inspect[prop]._id).to.equal(globals.createIdBasedOnName(value));
     done();
   })
   .then('I expect to see ids "(.*)" as (.*)', (idsCSV: string, prop: string, done) => {
