@@ -24,6 +24,19 @@ library
       calls: globals.convertCSVToIds(callsCSV)
     }).then(() => done());
   })
+  .given('<Mapper><Name>', (done) => done())
+  .given('<Mapper><(.*)>', (name: string, done) => {
+    mongoose.model('Mapper').create({
+      _id: new ObjectId(globals.createIdBasedOnName(name)),
+      name: name
+    });
+  })
+  .given('<Map><OfMapper><Place><Source><Destination>', (done) => done())
+  .given('<Map><(.*)><(.*)><(.*)><(.*)>', (mapper: string, place: string, source: string, dest: string, done) => {
+    mongoose.model('Mapper').findByIdAndUpdate(globals.createIdBasedOnName(mapper), {
+
+    });
+  })
   .when('I view call "(.*)"', (name: string, done) => {
     supertest('http://localhost:1111')
       .get('/api/requests/' + globals.createIdBasedOnName(name))
