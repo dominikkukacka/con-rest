@@ -1,7 +1,7 @@
 module globals {
   var English = require('yadda').localisation.English;
   export var library = English.library();
-  
+
   export function createIdBasedOnName(name: string) {
     var id = convertToHex(name);
     var i = 0;

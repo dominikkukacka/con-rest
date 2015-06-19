@@ -7,7 +7,7 @@ process.env.MONGO_CONNECTION = 'mongodb://localhost:27017/testConrest';
 process.env.CON_REST_PORT = 1111;
 
 require('../../../../../server/index');
-var library = require('./definitions/call.steps');
+var library = require('./definitions/steps');
 new Yadda.FeatureFileSearch('app/server/test').each(function(file) {
   featureFile(file, function(feature) {
     var yadda = Yadda.createInstance(library);

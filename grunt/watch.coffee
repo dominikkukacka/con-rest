@@ -22,7 +22,7 @@ module.exports = (grunt, config) ->
     files: [
       'app/server/**/*.ts'
     ]
-    tasks: ['ts:ts_server']
+    tasks: ['ts:ts_server', 'mochacli']
   testApp:
     files: [
       '.tmp/js/app/core/**/*.js'
@@ -36,11 +36,9 @@ module.exports = (grunt, config) ->
     tasks: ['template', 'karma:test_unitAuto:run']
   testsServer:
     files: [
-      '.tmp/js/app/server/**/*.js'
       'app/server/**/*.feature'
-      'test/unit/server/**/*.js'
     ]
-    tasks: ['simplemocha']
+    tasks: ['mochacli']
   serverReload:
     files: [
       'server/**/*.js'

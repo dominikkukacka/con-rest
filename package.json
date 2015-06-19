@@ -30,6 +30,7 @@
     "grunt-express": "^1.4.1",
     "grunt-groc": "^0.4.5",
     "grunt-karma": "~0.8.0",
+    "grunt-mocha-cli": "^1.13.0",
     "grunt-ng-annotate": "^0.3.0",
     "grunt-open": "~0.2.0",
     "grunt-package-modules": "^0.1.2",
@@ -38,7 +39,6 @@
     "grunt-protractor-webdriver": "^0.2.0",
     "grunt-selenium-server": "^0.1.2",
     "grunt-shell": "~0.7.0",
-    "grunt-simple-mocha": "^0.4.0",
     "grunt-string-replace": "^0.2.7",
     "grunt-template": "^0.2.3",
     "grunt-ts": "^4.1.0",
@@ -80,7 +80,7 @@
   "scripts": {
     "install": "node node_modules/protractor/bin/webdriver-manager update",
     "test": "grunt test",
-    "test-watch": "mocha .tmp/js/app/server/test/server.specs.js -R mocha-better-spec-reporter --reporter-options stack-exclude=**/yadda/lib/** -w"
+    "mocha": "mocha .tmp/js/app/server/test/server.specs.js -R mocha-better-spec-reporter --reporter-options stack-exclude=\"**/+(supertest|superagent|yadda)/**\""
   },
   "repository": "ssh://git@github.com:EnoF/con-rest.git",
   "dependencies": {

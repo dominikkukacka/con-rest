@@ -20,7 +20,7 @@ module.exports = (grunt, options) ->
     grunt.task.run [
       'setupEnv:' + target
       'karma:test_unit'
-      'simplemocha'
+      'mochacli'
     ]
   e2e: (target) ->
     grunt.task.run [

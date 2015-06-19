@@ -30,9 +30,9 @@ module.exports = (grunt, config) ->
       configFile: 'test/e2e.conf.js'
       keepAlive: true
       noColor: false
-  simplemocha:
+  mochacli:
     options:
       reporter: 'mocha-better-spec-reporter'
-    src: [
-      '.tmp/js/app/server/test/server.specs.js'
-    ]
+      files: [
+        '.tmp/js/app/server/test/server.specs.js'
+      ]
