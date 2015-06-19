@@ -29,13 +29,18 @@ library
     mongoose.model('Mapper').create({
       _id: new ObjectId(globals.createIdBasedOnName(name)),
       name: name
-    });
+    }).then(() => done());
   })
   .given('<Map><OfMapper><Place><Source><Destination>', (done) => done())
   .given('<Map><(.*)><(.*)><(.*)><(.*)>', (mapper: string, place: string, source: string, dest: string, done) => {
     mongoose.model('Mapper').findByIdAndUpdate(globals.createIdBasedOnName(mapper), {
-
-    });
+      maps: [{
+        place: place,
+        source: source,
+        destination: dest
+      }]
+    }).exec()
+      .then(() => done());
   })
   .when('I view call "(.*)"', (name: string, done) => {
     supertest('http://localhost:1111')
@@ -73,6 +78,28 @@ library
         done();
       });
   })
+  .when('I view mapper "(.*)"', (name: string, done) => {
+    supertest('http://localhost:1111')
+      .get('/api/mappers/' + globals.createIdBasedOnName(name))
+      .end((req, res) => {
+        this.inspect = res.body;
+        expect(res.status).to.equal(200);
+        done();
+      });
+  })
+  .when('I view all mappers', (done) => {
+    supertest('http://localhost:1111')
+      .get('/api/mappers')
+      .end((req, res) => {
+        this.result = res.body;
+        expect(res.status).to.equal(200);
+        done();
+      });
+  })
+  .when('I inspect the map on position "(.*)"', (pos: string, done) => {
+    this.map = this.inspect.maps[parseInt(pos, 10)];
+    done();
+  })
   .when('I inspect (.*) (.*)', (anything: string, pos: string, done) => {
     this.inspect = this.result[parseInt(pos, 10)];
     done();
@@ -95,6 +122,10 @@ library
     ids.forEach((id) => {
       expect(stringIds).to.include(id.toString());
     });
+    done();
+  })
+  .then('I expect the map to have "(.*)" as (.*)', (value: string, prop: string, done) => {
+    expect(this.map[prop]).to.equal(value);
     done();
   });
 

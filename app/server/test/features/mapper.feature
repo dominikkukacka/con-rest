@@ -23,8 +23,10 @@ Feature: Mapper
       And I expect the map to have "[Destination]" as destination
 
     Where:
-      | Name      | MapPosition | Place  | Source            | Destination             |
-      | headAuth  | 0           | header | sourceHeaderAuth  | destinationHeaderAuth   |
+      | Name          | MapPosition | Place  | Source            | Destination             |
+      | bodyAuth      | 0           | data   | sourceDataAuth    | destinationDataAuth     |
+      | fallbackAuth  | 0           | url    | sourceUrlAuth     | destinationUrlAuth      |
+      | headAuth      | 0           | header | sourceHeaderAuth  | destinationHeaderAuth   |
 
   Scenario: View Mapper [Name] from all registered mappers
     When I view all mappers
@@ -36,5 +38,7 @@ Feature: Mapper
       And I expect the map to have "[Destination]" as destination
 
     Where:
-      | Name      | MapPosition | Place  | Source            | Destination             | Position |
-      | headAuth  | 0           | header | sourceHeaderAuth  | destinationHeaderAuth   | 0        |
+      | Name          | MapPosition | Place  | Source            | Destination             | Position |
+      | bodyAuth      | 0           | data   | sourceDataAuth    | destinationDataAuth     | 0        |
+      | fallbackAuth  | 0           | url    | sourceUrlAuth     | destinationUrlAuth      | 1        |
+      | headAuth      | 0           | header | sourceHeaderAuth  | destinationHeaderAuth   | 2        |
