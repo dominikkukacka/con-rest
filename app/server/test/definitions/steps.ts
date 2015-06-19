@@ -51,7 +51,16 @@ library
         done();
       });
   })
-  .when('I inspect call (.*)', (pos: string, done) => {
+  .when('I view all workflows', (done) => {
+    supertest('http://localhost:1111')
+      .get('/api/workflows')
+      .end((req, res) => {
+        this.result = res.body;
+        expect(res.status).to.equal(200);
+        done();
+      });
+  })
+  .when('I inspect (.*) (.*)', (anything: string, pos: string, done) => {
     this.inspect = this.result[parseInt(pos, 10)];
     done();
   })

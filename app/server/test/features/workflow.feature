@@ -11,6 +11,7 @@ Feature: Workflow
     And <Call><Bing><http://bing.com><DELETE><payLoad>
     And <Workflow><Name><Calls>
     And <Workflow><Search><Google,Yahoo>
+    And <Workflow><Round><Google,Yahoo,Bing>
 
   Scenario: View Workflow [Name]
     When I view workflow "[Name]"
@@ -18,5 +19,17 @@ Feature: Workflow
       And I expect to see ids "[Calls]" as calls
 
     Where:
-      | Name    | Calls         |
-      | Search  | Google,Yahoo  |
+      | Name    | Calls             |
+      | Search  | Google,Yahoo      |
+      | Round   | Google,Yahoo,Bing |
+
+  Scenario: View Workflow [Name] from all registered workflows
+    When I view all workflows
+      And I inspect workflow [Position]
+    Then I expect to see "[Name]" as name
+      And I expect to see ids "[Calls]" as calls
+
+    Where:
+      | Name    | Calls             | Position  |
+      | Search  | Google,Yahoo      | 0         |
+      | Round   | Google,Yahoo,Bing | 1         |
