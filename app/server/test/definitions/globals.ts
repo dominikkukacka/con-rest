@@ -1,3 +1,6 @@
+import mongoose = require('mongoose');
+import ObjectId = mongoose.Types.ObjectId;
+
 module globals {
   var English = require('yadda').localisation.English;
   export var library = English.library();
@@ -20,6 +23,13 @@ module globals {
       hex += '' + str.charCodeAt(i).toString(16);
     }
     return hex;
+  }
+
+  export function convertCSVToIds(csv: string) {
+    var ids = [];
+    csv.split(',').forEach((id: string) =>
+      ids.push(new ObjectId(createIdBasedOnName(id))));
+    return ids;
   }
 }
 
