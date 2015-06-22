@@ -130,8 +130,21 @@ library
     this.inspect = this.result[parseInt(pos, 10)];
     done();
   })
+  .when('I execute call (.*)', (call: string, done) => {
+    supertest(`http://localhost:1111`)
+      .post(`/api/requests/${globals.createIdBasedOnName(call)}/executions`)
+      .end((req, res) => {
+        this.inspect = res.body;
+        expect(res.status).to.equal(200);
+        done();
+      });
+  })
   .then('I expect to see "(.*)" as (.*)', (value: string, prop: string, done) => {
     expect(this.inspect[prop]).to.equal(value);
+    done();
+  })
+  .then('I expect to see number "(.*)" as (.*)', (value: string, prop: string, done) => {
+    expect(this.inspect[prop]).to.equal(parseInt(value, 10));
     done();
   })
   .then('I expect to see (.*) with id "(.*)"', (prop: string, value: string, done) => {
