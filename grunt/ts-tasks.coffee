@@ -35,11 +35,12 @@ module.exports = (grunt, options) ->
   ts__server:
     options:
       module: 'commonjs'
+      sourcemap: false
     src: [
       'typings/tsd.d.ts'
       'app/server/**/*.ts'
     ]
-    outDir: '.tmp/js/app/server/test'
+    outDir: '.tmp/js/app/server'
   tslint:
     options:
       configuration: grunt.file.readJSON 'tslint.json'

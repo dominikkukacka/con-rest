@@ -7,7 +7,7 @@
         "noImplicitAny": false,
         "removeComments": true,
         "noLib": false,
-        "outDir": "./tmp/js/"
+        "outDir": "./.tmp/js/"
     },
     "filesGlob": [
         "./app/*.ts",
@@ -114,6 +114,16 @@
         "./app/widgets/workflowOverview/test/definitions/selectWorkflow.step.ts",
         "./app/widgets/workflowOverview/test/definitions/viewWorkflow.step.ts",
         "./app/widgets/workflowOverview/workflowOverview.ts",
+        "./app/server/app.ts",
+        "./app/server/config.ts",
+        "./app/server/resourceTypes/fileResource.ts",
+        "./app/server/resources/connector.ts",
+        "./app/server/resources/execution.ts",
+        "./app/server/resources/file.ts",
+        "./app/server/resources/mapper.ts",
+        "./app/server/resources/request.ts",
+        "./app/server/resources/workflow.ts",
+        "./app/server/resources/workflowExecution.ts",
         "./app/server/test/definitions/globals.ts",
         "./app/server/test/definitions/steps.ts",
         "./app/server/test/server.specs.ts",
