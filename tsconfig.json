@@ -116,6 +116,7 @@
         "./app/widgets/workflowOverview/workflowOverview.ts",
         "./app/server/app.ts",
         "./app/server/config.ts",
+        "./app/server/resourceTypes/executionResource.ts",
         "./app/server/resourceTypes/fileResource.ts",
         "./app/server/resources/connector.ts",
         "./app/server/resources/execution.ts",

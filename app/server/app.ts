@@ -4,7 +4,6 @@ import config = require('./config');
 var restIO = require('rest-io');
 var multer = require('multer');
 var app = express();
-var port = 3000;
 restIO(app, {
   resources: __dirname + '/resources'
 });
@@ -18,8 +17,8 @@ app.use(multer({
 
 mongoose.connect(connect.uri, connect.options);
 
-app.listen(port, () => {
-  console.log('Server has started under port: ' + port);
+app.listen(serverConfig.port, () => {
+  console.log('Server has started under port: ' + serverConfig.port);
 });
 
 export = app;

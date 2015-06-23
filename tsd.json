@@ -43,6 +43,12 @@
     },
     "superagent/superagent.d.ts": {
       "commit": "43b6bf88758852b9ab713a9b011487f047f94f4e"
+    },
+    "request/request.d.ts": {
+      "commit": "3e117d8c9ddf6443d7ed71a74f6bc8b6bcd36077"
+    },
+    "form-data/form-data.d.ts": {
+      "commit": "3e117d8c9ddf6443d7ed71a74f6bc8b6bcd36077"
     }
   }
 }

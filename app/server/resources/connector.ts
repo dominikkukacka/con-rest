@@ -4,6 +4,7 @@ import workflow = require('./workflow');
 
 var connector = new SubResource({
   name: 'connector',
+  populate: 'connectors.source connectors.destination connectors.mapper',
   parentResource: workflow
 });
 

@@ -1,8 +1,8 @@
-import {Resource} from 'rest-io';
+import ExecutionResource = require('../resourceTypes/executionResource');
 import {Schema} from 'mongoose';
 var request = require('./request');
 
-var execution = new Resource({
+var execution = new ExecutionResource({
   name: 'execution',
   model: {
     workflow: {

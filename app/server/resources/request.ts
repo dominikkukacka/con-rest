@@ -18,8 +18,7 @@ var request = new Resource({
         ref: 'File'
       }
     }]
-  },
-  parentResource: workflow
+  }
 });
 
 export = request;

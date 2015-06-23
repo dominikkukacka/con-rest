@@ -9,7 +9,7 @@ import ObjectId = mongoose.Types.ObjectId;
 library
   .given('<Call><Name><Url><Method><Type>', (done) => done())
   .given('<Call><(.*)><(.*)><(.*)><(.*)>', (name: string, url: string, method: string, type: string, done) =>
-    mongoose.model('APICall').create({
+    mongoose.model('Request').create({
       _id: new ObjectId(globals.createIdBasedOnName(name)),
       url: url,
       name: name,

@@ -6,7 +6,7 @@ import mongoose = require('mongoose');
 process.env.MONGO_CONNECTION = 'mongodb://localhost:27017/testConrest';
 process.env.CON_REST_PORT = 1111;
 
-require('../../../../../server/index');
+require('../app');
 var library = require('./definitions/steps');
 new Yadda.FeatureFileSearch('app/server/test').each(function(file) {
   featureFile(file, function(feature) {
