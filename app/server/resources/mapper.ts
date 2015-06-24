@@ -1,7 +1,8 @@
 import {Schema} from 'mongoose';
 import {Resource} from 'rest-io';
+import MapperResource = require('../resourceTypes/mapperResource');
 
-var mapper = new Resource({
+var mapper = new MapperResource({
   name: 'mapper',
   model: {
     name: String,
